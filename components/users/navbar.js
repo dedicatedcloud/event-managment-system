@@ -8,7 +8,7 @@ import Image from "next/image";
 import logo from '../../public/assets/logo.png';
 import MenuIcon from '@mui/icons-material/Menu';
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
 import Link from "next/link";
 import DropDown from "./dropdown";
 import { useTheme } from '@mui/material/styles';
@@ -55,16 +55,16 @@ const Navbar = ({ session, status }) => {
         <Box component={"div"} sx={{ width: "100%",}} role="presentation" >
             <List>
                 {links.map((link, i) => (
-                    <ListItem button key={i} onClick={ () => toggleDrawer(false) }>
+                    <ListItemButton key={i} onClick={ () => toggleDrawer(false) }>
                         <Link href={link.href}><Typography variant={"subtitle1"} color={"primary"} gutterBottom>{link.text}</Typography></Link>
-                    </ListItem>
+                    </ListItemButton>
                 ))}
-                {status === "unauthenticated" && <ListItem button onClick={ () => toggleDrawer(false) }>
+                {status === "unauthenticated" && <ListItemButton onClick={ () => toggleDrawer(false) }>
                     <Link href={"/login"}><Typography variant={"subtitle1"} color={"primary"}>Login</Typography></Link>
-                </ListItem>}
-                {status === "authenticated" && <ListItem  button>
+                </ListItemButton>}
+                {status === "authenticated" && <ListItemButton>
                     <DropDown toggleDrawer={toggleDrawer}/>
-                </ListItem>}
+                </ListItemButton>}
             </List>
         </Box>
     );

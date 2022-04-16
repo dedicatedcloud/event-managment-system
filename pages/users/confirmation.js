@@ -4,7 +4,7 @@ import {useRouter} from "next/router";
 export default function Confirmation(props) {
     const { query } = useRouter();
 
-    console.log(query);
+    //console.log(query);
 
     useEffect(() => {
         console.log(JSON.parse(sessionStorage.getItem('info')));

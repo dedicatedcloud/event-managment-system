@@ -14,8 +14,12 @@ a {
 * {
   box-sizing: border-box;
 }
-.borderRounded{
-  border-radius: 50%;
+.borderRounded {
+    border-radius: 50%;
+    transition: 0.5s ease-in-out;
+}
+.borderRounded:hover {
+    transform: scale(1.2);
 }
 .ImageSize{
   width: 100px;
