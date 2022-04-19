@@ -11,11 +11,12 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  name     String
-  email    String   @unique
-  password String
-  role     String   @default("user")
+  id            Int      @id @default(autoincrement())
+  name          String
+  email         String   @unique
+  password      String
+  role          String   @default("user")
+  events        Events[]
 }
 
 model Guest {
@@ -23,6 +24,7 @@ model Guest {
   min           Int
   max           Int
   venues        Venues[]
+  events        Events[]
 }
 
 model Venues {
@@ -33,6 +35,7 @@ model Venues {
   guest         Guest     @relation(fields : [guestCountId], references : [id])
   guestCountId  Int
   picture       String
+  events        Events[]
 }
 
 model Food {
@@ -41,14 +44,49 @@ model Food {
   category      String
   price         Int
   picture       String
-
+  event_foods   Event_foods[]
 }
 
 model Equipment {
-  id            Int       @id @default(autoincrement())
-  name          String    @unique
-  price         Int
-  picture       String
-
+  id                  Int       @id @default(autoincrement())
+  name                String    @unique
+  price               Int
+  picture             String
+  event_equipment     Event_equipment[]
 }
 
+model Events {
+  id                    Int       @id @default(autoincrement())
+  event_type            String
+  guest                 Guest     @relation(fields : [guestCountId], references : [id])
+  guestCountId          Int
+  event_environment     String
+  venue                 Venues    @relation(fields : [venueId], references : [id])
+  venueId               Int
+  user                  User      @relation(fields : [userId], references : [id])
+  userId                Int
+  phone_number          String
+  date                  DateTime
+  total_price           Int
+  advance_payment       Int
+  payment_status        String
+  event_status          String
+  event_foods           Event_foods[]
+  event_equipment       Event_equipment[]
+}
+
+model Event_foods {
+  id            Int       @id @default(autoincrement())
+  event         Events    @relation(fields : [eventId], references : [id])
+  eventId       Int
+  food          Food      @relation(fields : [foodId], references : [id])
+  foodId        Int
+}
+
+model Event_equipment {
+  id            Int         @id @default(autoincrement())
+  event         Events      @relation(fields : [eventId], references : [id])
+  eventId       Int
+  equipment     Equipment   @relation(fields : [equipmentId], references : [id])
+  equipmentId   Int
+}

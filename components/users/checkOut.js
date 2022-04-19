@@ -98,8 +98,8 @@ export default function CheckOut({ next, back, data, props}) {
                         <FormHelperText>To avoid fraud, we'll ask for a small payment before confirming the Event Registration</FormHelperText>
                     </Grid>
                     <Grid item xs={12} sm={12} md={12} lg={12} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between" }}>
-                        <Button onClick={ back } variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white"}}>Back</Button>
-                        <Button type={"submit"} variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white"}}>Next</Button>
+                        <Button onClick={ back } variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white" }}>Back</Button>
+                        <Button type={"submit"} variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white" }}>Next</Button>
                     </Grid>
                 </Grid>
             </form>

@@ -16,7 +16,7 @@ import IconButton from "@mui/material/IconButton";
 import Close from "@mui/icons-material/Close";
 import moment from 'moment';
 
-//validate date input, maintain checks for it
+// Todo: validate date input, maintain checks for it
 
 
 export default function EventDetails({ next, props, data }){
@@ -27,13 +27,27 @@ export default function EventDetails({ next, props, data }){
     const dessert = props.food.filter(food => food.category === "Dessert");
 
     const [date, setDate] = useState(new Date());
-    const [ newEvent, setNewEvent ] = useState({
-        title : "",
+    const [ events, setEvents ] = useState([]);
 
-    });
+    // Todo: same date must not be allowed to be selected
+    useEffect(() => {
+        const fetchEvents = async () => {
+            const res = await fetch(`/api/events/getEvents`);
+            const data = await res.json();
+            let _events = data.events.map(event => ({
+                title : `Event-${event.id}`,
+                allDay : true,
+                start : event.date,
+                end : event.date
+            }));
+            setEvents(_events);
+        }
+        fetchEvents();
+    }, [])
+
     const localizer = momentLocalizer(moment);
 
-    const events = [
+    /*const events = [
         {
           title : "event1",
             allDay: true,
@@ -52,7 +66,7 @@ export default function EventDetails({ next, props, data }){
             start: new Date(2022, 2, 26),
             end: new Date(2022, 2, 26),
         }
-    ]
+    ]*/
 
     //state for setting the venues after the guest count has been selected
     const [ venues, setVenues ] = useState([]);

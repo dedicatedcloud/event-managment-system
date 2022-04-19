@@ -158,6 +158,17 @@ export default function Event(props) {
         nextStep();
     }
 
+    // TODO: write a function to handle the event insertion
+    const handleEvents = async () => {
+        const res = await fetch("/api/events/addEvent", {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+        const json = await res.json();
+        console.log(json);
+    }
+
+
     const Form = () => {
         return activeStep === 0 ? <EventDetails data={data} next={next} props={props} /> : activeStep === 1 ? <CustomerDetails next={next} back={backStep} props={props}  /> : <CheckOut next={ next } back={ backStep } props={props} data={data}/>;
     };
@@ -183,7 +194,7 @@ export default function Event(props) {
                         <Typography variant={"subtitle1"} color={"danger"} gutterBottom>By Clicking Confirm, you are affirming the validation of the Info you provided!</Typography>
                         <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between", alignItems : "center" }}>
                             <Button onClick={ backStep } variant={"contained"} sx={{ color : "white"}} color={"primary"}>Back</Button>
-                            <Button variant={"contained"} sx={{ color : "white"}} type={"submit"} onClick={ () => { setIsOpen(true); loadIframe() } } color={"primary"}>Confirm</Button>
+                            <Button variant={"contained"} sx={{ color : "white"}} type={"submit"} onClick={ () => { setIsOpen(true); {/*loadIframe()*/} handleEvents()  } } color={"primary"}>Confirm</Button>
                         </Box>
                         {/*  Backdrop for payment  */}
                         <Backdrop
