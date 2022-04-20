@@ -171,6 +171,12 @@ export default function EventDetails({ next, props, data }){
         setOpen(!open);
     };
 
+    const handleDateChange = (date) => {
+        const filteredDate = events.filter((d) => new Date(d.start) === date);
+        console.log(filteredDate);
+        // Todo: compare the dates
+    }
+
     return (
         <Box>
             <form onSubmit={ (e) => next({eventType, guest, venue, environment, starterFood, mainFood, dessertFood, equipment, date, totalPrice}, e) }>
@@ -281,7 +287,7 @@ export default function EventDetails({ next, props, data }){
                     </Grid>
                     <Grid item xs={12} sm={6} lg={12}>
                         <FormControl  sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }} required >
-                            <DatePicker selected={date} onChange={(date) => setDate(date)}/>
+                            <DatePicker selected={date} onChange={handleDateChange}/>
                             <FormHelperText>Select the date of the event.</FormHelperText>
                         </FormControl>
                     </Grid>
