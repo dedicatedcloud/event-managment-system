@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {getSession} from "next-auth/react";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -17,7 +17,7 @@ import CheckOut from "../../components/users/checkOut";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import  MobileStepper from "@mui/material/MobileStepper";
+import MobileStepper from "@mui/material/MobileStepper";
 import Backdrop from "@mui/material/Backdrop";
 import $ from "jquery";
 import param from "jquery-param";
@@ -223,21 +223,62 @@ export async function getServerSideProps(context){
         }
     }
     if(session){
-        const resGuests = await fetch("http://localhost:3000/api/guest/getGuestCount");
-        const {guests} = await resGuests.json();
-        const resVenues = await fetch("http://localhost:3000/api/venues/getVenues");
-        const {venues} = await resVenues.json();
-        const resFood = await fetch("http://localhost:3000/api/food/getFoods");
-        const {food} = await resFood.json();
-        const resEquipment = await fetch("http://localhost:3000/api/equipment/getEquipments");
-        const {equipment} = await resEquipment.json();
+        const fetchGuests = async () => {
+            const resGuests = await fetch("http://localhost:3000/api/guest/getGuestCount");
+            const {guests} = await resGuests.json();
+            return new Promise((resolve, reject) => {
+                resolve(guests);
+            });
+        }
+
+        const fetchVenues = async () => {
+            const resVenues = await fetch("http://localhost:3000/api/venues/getVenues")
+            const {venues} = await resVenues.json()
+            return new Promise((resolve, reject) => {
+                resolve(venues);
+            });
+        }
+
+        const fetchFoods = async () => {
+            const resFood = await fetch("http://localhost:3000/api/food/getFoods")
+            const {food} = await resFood.json()
+            return new Promise((resolve, reject) => {
+                resolve(food);
+            });
+        }
+
+        const fetchEquipment = async () => {
+            const resEquipment = await fetch("http://localhost:3000/api/equipment/getEquipments")
+            const {equipment} = await resEquipment.json()
+            return new Promise((resolve, reject) => {
+                resolve(equipment);
+            });
+        }
+
+        let data = await Promise.all([
+        fetchGuests(),
+        fetchVenues(),
+        fetchFoods(),
+        fetchEquipment()
+        ])
+            .then(result => {
+                return {
+                    guests: result[0],
+                    venues: result[1],
+                    food: result[2],
+                    equipment: result[3]
+                };
+
+            })
+            .catch(err => console.log(err));
+
         return {
             props : {
                 user: session.user,
-                guests,
-                venues,
-                food,
-                equipment
+                guests : data.guests,
+                venues : data.venues,
+                food : data.food,
+                equipment : data.equipment
             }
         }
     }

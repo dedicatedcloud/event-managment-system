@@ -12,6 +12,7 @@ export default async function handler(req, res){
                 email : email
             }
         });
+        prisma.$disconnect();
         if(user){
             //send password reset link
             const transporter = nodemailer.createTransport({

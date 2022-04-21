@@ -24,6 +24,7 @@ export default NextAuth({
                         email : req.body.email,
                     },
                 });
+                prisma.$disconnect();
                 // console.log(await bcrypt.compare(req.body.password, user.password), "bcrypt");
                 // If no error and we have users data, return it
                 if(user && await bcrypt.compare(req.body.password, user.password)){

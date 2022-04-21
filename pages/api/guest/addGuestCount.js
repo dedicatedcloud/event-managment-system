@@ -13,8 +13,10 @@ export default async function handler(req, res) {
                     min
                 }
             });
+            prisma.$disconnect();
             if(guest){
-                const data = await prisma.guest.findMany();
+                const data = await prisma.guest.findMany({});
+                prisma.$disconnect();
                 return res.json({
                     data
                 });

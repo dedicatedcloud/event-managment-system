@@ -4,27 +4,17 @@ import { getSession } from "next-auth/react";
 export default async function handler(req, res) {
     try {
         const session = await getSession({ req });
-        if(session){
-            const events = await prisma.events.findFirst({
-                where : {
-                    userId : session.user.id
-                }
-            });
-            if(events){
-                return res.json({
-                    events
-                });
-            }else{
-                return res.json({
-                    message : "Events not found!"
-                });
+        prisma.$connect();
+        const events = await prisma.events.find({
+            where : {
+                userId : session.user.id
             }
-        }
-        else {
-            return res.status(401).json({
-                message: 'Unauthorized'
-            });
-        }
+        });
+        console.log(events, "on server");
+        prisma.$disconnect();
+        return res.json({
+            events
+        });
     }catch (e){
         return res.json({
             message : e.message

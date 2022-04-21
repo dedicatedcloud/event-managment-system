@@ -7,6 +7,7 @@ export default async function handler(req, res) {
                 guest : true
             }
         });
+        prisma.$disconnect();
         return res.json({
             venues
         });

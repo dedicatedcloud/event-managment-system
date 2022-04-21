@@ -46,6 +46,7 @@ const handler = nc({
                         picture : filename
                     }
                 });
+                prisma.$disconnect();
                 if(!venue){
                     res.json({
                         error : "Error Occurred while Inserting!"

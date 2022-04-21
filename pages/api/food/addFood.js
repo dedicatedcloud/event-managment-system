@@ -45,12 +45,14 @@ const handler = nc({
                         picture : filename
                     }
                 });
+                prisma.$disconnect();
                 if(!food){
                     res.json({
                         error : "Error Occurred while Inserting!"
                     })
                 }else {
                     const equipment = await prisma.food.findMany({});
+                    prisma.$disconnect();
                     res.json({
                         food
                     })

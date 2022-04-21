@@ -14,6 +14,7 @@ export default async function handler(req, res){
                 password : hashedPassword
             }
         });
+        prisma.$disconnect();
         if(user){
             res.json({
                 status : 200,

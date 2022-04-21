@@ -7,6 +7,7 @@ export default async function handler(req, res) {
                 role : "admin"
             }
         });
+        prisma.$disconnect();
         return res.json({
             admins
         });

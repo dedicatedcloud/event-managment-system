@@ -25,6 +25,7 @@ export default async function handler(req, res) {
                 event_status : "pending",
             }
         });
+        prisma.$disconnect();
         // TODO: add foods
         console.log(event);
         if(event){
@@ -39,6 +40,7 @@ export default async function handler(req, res) {
                     });
                 }
             }
+            prisma.$disconnect();
             let equipment = "";
             for(let i = 0; i < equipments.length; i++){
                 equipment = await prisma.event_equipment.create({
@@ -48,6 +50,7 @@ export default async function handler(req, res) {
                     }
                 });
             }
+            prisma.$disconnect();
             if(food && equipment){
                 res.json({
                     message : "Event created successfully",

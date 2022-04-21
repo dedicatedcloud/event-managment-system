@@ -18,6 +18,7 @@ export default async function handler(req, res) {
                             max : value,
                         },
                     });
+                    prisma.$disconnect();
                 }catch(e){
                     return  res.json({
                         message : e.message
@@ -34,6 +35,7 @@ export default async function handler(req, res) {
                             min : value,
                         },
                     });
+                    prisma.$disconnect();
                 }catch(e){
                     return  res.json({
                         message : e.message

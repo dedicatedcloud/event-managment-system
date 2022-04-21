@@ -11,6 +11,7 @@ export default async function handler(req, res) {
         email : email
       }
     });
+    prisma.$disconnect();
     if(data){
       return res.json({
         error : "Email already exists! Try a different One."
@@ -24,6 +25,7 @@ export default async function handler(req, res) {
           password : password
         }
       });
+      prisma.$disconnect();
       return res.json({
         user : user
       })

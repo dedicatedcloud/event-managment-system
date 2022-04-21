@@ -277,6 +277,7 @@ export default function EventDetails({ next, props, data }){
                         <Backdrop
                             sx={{ color : "#f08a5d", zIndex: (theme) => theme.zIndex.drawer + 1 }}
                             open={open}
+                            onClick={handleClose}
                         >
                             <Box component={"div"} sx={{ backgroundColor : "#ffffff", padding : '1rem', borderRadius : "0.5rem" }}>
                                 <IconButton color={"primary"} sx={{

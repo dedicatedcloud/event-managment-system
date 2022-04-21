@@ -51,6 +51,7 @@ const handler = nc({
                                 [field]: value,
                             },
                         });
+                        prisma.$disconnect();
                     } catch (e) {
                         return res.json({
                             message: e.message
@@ -67,6 +68,7 @@ const handler = nc({
                                 picture : filename,
                             },
                         });
+                        prisma.$disconnect();
                     } catch (e) {
                         return res.json({
                             message: e.message
