@@ -26,7 +26,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import EventIcon from '@mui/icons-material/Event';
-import Footer from "../components/users/footer";
+import Footer from "../components/footer";
 import Head from "next/head";
 
 const drawerWidth = 240;

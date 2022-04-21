@@ -50,7 +50,7 @@ export default function DropDown({ toggleDrawer }) {
                 TransitionComponent={Fade}
             >
                 <MenuItem sx={{color: "#f08a5d"}} onClick={ () => matches && toggleDrawer(false) }><Link href={"/users/event"}><Button startIcon={<EventIcon/>} onClick={ () => handleClose()}>Add Event</Button></Link></MenuItem>
-                <MenuItem sx={{color: "#f08a5d"}} onClick={ () => matches && toggleDrawer(false) }><Link href={"/users/eventDetails"}><Button startIcon={<SettingsIcon/>}  onClick={ () => handleClose()}>Manage Events</Button></Link></MenuItem>
+                <MenuItem sx={{color: "#f08a5d"}} onClick={ () => matches && toggleDrawer(false) }><Link href={"/users/dashboard"}><Button startIcon={<SettingsIcon/>}  onClick={ () => handleClose()}>Manage Events</Button></Link></MenuItem>
                 <MenuItem onClick={() => { matches && toggleDrawer(false); signOut({callbackUrl: "/"});
                 }} sx={{color: "#f08a5d"}}><Button startIcon={<LogoutIcon/>}  onClick={ () => handleClose()}>Logout</Button></MenuItem>
             </Menu>

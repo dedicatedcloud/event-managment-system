@@ -5,12 +5,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
 import Image from "next/image";
-import logo from '../../public/assets/logo.png';
+import logo from '../public/assets/logo.png';
 import MenuIcon from '@mui/icons-material/Menu';
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import Link from "next/link";
-import DropDown from "./dropdown";
+import DropDown from "./users/dropdown";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Typography from "@mui/material/Typography";
@@ -78,9 +78,7 @@ const Navbar = ({ session, status }) => {
                         <Link href={"/"}><Image src={logo} width={"85rem"} height={"85rem"} alt={"logo"}/></Link>
                     </Box>
                     { !matches && <Box component={motion.div}  sx={{display: "flex", flexDirection: "row"}} initial={{ x : '100vw' }} animate={{ x : 0 }} transition={{ delay : 0.6, type : 'tween', duration : 1  }}>
-                            {
-                                links.map((link, i) => (<Link href={link.href} key={i}><Typography sx={{ cursor : "pointer", borderRadius : 1, marginX : 1, paddingX: 3, paddingY : 1, fontSize: "20px", ':hover' : { backgroundColor : "#f08a5d", color : "#fff" }}} color={"primary"}>{link.text}</Typography></Link>))
-                            }
+                            {status !== "loading" &&  links.map((link, i) => (<Link href={link.href} key={i}><Typography sx={{ cursor : "pointer", borderRadius : 1, marginX : 1, paddingX: 3, paddingY : 1, fontSize: "20px", ':hover' : { backgroundColor : "#f08a5d", color : "#fff" }}} color={"primary"}>{link.text}</Typography></Link>))}
                             {status === "unauthenticated" && <Link href={"/login"}><Typography sx={{cursor : "pointer", borderRadius : 1, marginX : 1, paddingX: 3, paddingY : 1, fontSize: "20px", ':hover' : { backgroundColor : "#f08a5d", color : "#fff" }}} color={"primary"}>Login</Typography></Link>}
                             {status === "authenticated" && <DropDown/>}
                         </Box>}

@@ -1,7 +1,7 @@
 import React from 'react';
-import Navbar from "../components/users/navbar";
+import Navbar from "../components/navbar";
 import {useSession} from "next-auth/react";
-import Footer from "../components/users/footer";
+import Footer from "../components/footer";
 import Head from "next/head";
 
 const UserLayout = ({children}) => {

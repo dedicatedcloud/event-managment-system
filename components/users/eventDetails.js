@@ -16,6 +16,7 @@ import IconButton from "@mui/material/IconButton";
 import Close from "@mui/icons-material/Close";
 import moment from 'moment';
 
+
 // Todo: validate date input, maintain checks for it
 
 
@@ -47,26 +48,6 @@ export default function EventDetails({ next, props, data }){
 
     const localizer = momentLocalizer(moment);
 
-    /*const events = [
-        {
-          title : "event1",
-            allDay: true,
-            start: new Date(2022, 2, 24),
-            end: new Date(2022, 2, 24),
-        },
-        {
-            title : "event2",
-            allDay: true,
-            start: new Date(2022, 2, 25),
-            end: new Date(2022, 2, 25),
-        },
-        {
-            title : "event3",
-            allDay: true,
-            start: new Date(2022, 2, 26),
-            end: new Date(2022, 2, 26),
-        }
-    ]*/
 
     //state for setting the venues after the guest count has been selected
     const [ venues, setVenues ] = useState([]);
