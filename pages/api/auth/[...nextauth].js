@@ -19,7 +19,7 @@ export default NextAuth({
                 // You can also use the `req` object to obtain additional parameters
                 // (i.e., the request IP address)
                 //console.log(credentials);
-                const user = await prisma.user.findFirst({
+                const user = await prisma.user.findUnique({
                     where : {
                         email : req.body.email,
                     },

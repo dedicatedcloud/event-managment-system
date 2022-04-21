@@ -144,7 +144,7 @@ export default function EventDetails({ next, props, data }){
     }, [equipment]);
 
     //states and functions for the BackDrop
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const handleClose = () => {
         setOpen(false);
     };

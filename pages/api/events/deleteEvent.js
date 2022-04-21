@@ -7,15 +7,15 @@ export default async function handler(req, res) {
         if(session){
             const {id} = req.body;
             try {
-                let admin = await prisma.user.delete({
+                let event = await prisma.events.delete({
                     where : {
-                        id : id
+                        id
                     }
                 });
                 prisma.$disconnect();
-                if(admin){
+                if (event){
                     return res.json({
-                        message : "Record deleted Successfully!"
+                        message : "Event deleted Successfully!"
                     })
                 }
             }catch (e) {
