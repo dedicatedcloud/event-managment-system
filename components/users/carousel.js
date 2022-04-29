@@ -30,13 +30,13 @@ function Carousel() {
         return () => {
             clearTimeout(timerId);
         };
-    }, [current] )
+    }, [current])
 
     return (
         <div style={{ overflow : "hidden", position : "relative" }}>
             { images.map((image, index) => (
                 <div key={index}  className={index === current ? 'slide active' : 'slide'}>
-                    { index === current && <Image src={image} layout={"responsive"} height={!matches ? 550 : 600} alt={"sliderImage"}/>}
+                    { index === current && <Image src={image} placeholder={"blur"} layout={"responsive"} height={!matches ? 550 : 600} alt={"sliderImage"}/>}
                     <div className={"indicators"}>
                         <div className={ current === 0 ? "dots activeDot" : "dots" } />
                         <div className={ current === 1 ? "dots activeDot" : "dots" } />

@@ -2,7 +2,20 @@ import prisma from '../../../lib/prisma';
 
 export default async function handler(req, res) {
     try {
-        const events = await prisma.events.findMany({});
+        const events = await prisma.events.findMany({
+            include : {
+                event_foods : {
+                    include : {
+                        food : true
+                    }
+                },
+                event_equipment : {
+                    include : {
+                        equipment : true
+                    }
+                },
+            }
+        });
         prisma.$disconnect();
         return res.json({
             events

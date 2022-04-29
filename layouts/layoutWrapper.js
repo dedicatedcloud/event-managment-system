@@ -1,14 +1,12 @@
 import UserLayout from "./userLayout";
 import AdminLayout from "./adminLayout";
-import {useRouter} from "next/router";
-import Button from "@mui/material/Button";
 
 const layouts = {
     user: UserLayout,
     admin: AdminLayout
 };
 
-const NotFound = (props) => {
+/*const NotFound = (props) => {
     const router = useRouter();
     return (
         <div>
@@ -16,10 +14,9 @@ const NotFound = (props) => {
             {props.children}
         </div>
     );
-}
+}*/
 
 const LayoutWrapper = (props) => {
-    const router = useRouter();
     // to get the text value of the assigned layout of each component
     const Layout = layouts[props.children.type.layout];
     // if we have a registered layout render children with said layout

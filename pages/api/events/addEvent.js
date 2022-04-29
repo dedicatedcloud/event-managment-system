@@ -4,21 +4,22 @@ import prisma from "../../../lib/prisma";
 export default async function handler(req, res) {
     const session = await getSession({ req });
     if(session){
-        const { eventType, guest, venue, environment, starterFood, mainFood,dessertFood, equipment : equipments, date, totalPrice, phoneNumber, email, advancePayment } = JSON.parse(req.body);
+        const { event, totalPrice, phoneNumber, email, advancePayment } = JSON.parse(req.body);
         const userId = session.user.id;
-        let foods = [];
-        foods.push(starterFood);
-        foods.push(mainFood);
-        foods.push(dessertFood);
-        const event = await prisma.events.create({
+        let foods = event.starterFood.concat(event.mainFood, event.dessertFood);
+        /*foods.push(event.starterFood);
+        foods.push(event.mainFood);
+        foods.push(event.dessertFood);*/
+        //Todo : change this insert to add related ata using create
+        const _event = await prisma.events.create({
             data : {
-                event_type: eventType,
-                guestCountId : guest,
-                event_environment : environment,
-                venueId : venue,
+                event_type: event.eventType,
+                guestCountId : event.guest,
+                event_environment : event.environment,
+                venueId : event.venue,
                 userId,
                 phone_number : phoneNumber,
-                date,
+                date : event.date,
                 total_price : totalPrice,
                 advance_payment : advancePayment,
                 payment_status : "pending",
@@ -26,15 +27,13 @@ export default async function handler(req, res) {
             }
         });
         prisma.$disconnect();
-        // TODO: add foods
-        console.log(event);
-        if(event){
+        if(_event){
             let food = "";
             for(let i = 0; i < foods.length; i++){
                 for(let j = 0; j < foods[i].length; j++){
                     food = await prisma.event_foods.create({
                         data : {
-                            eventId : event.id,
+                            eventId : _event.id,
                             foodId : foods[i][j]
                         }
                     });
@@ -42,11 +41,11 @@ export default async function handler(req, res) {
             }
             prisma.$disconnect();
             let equipment = "";
-            for(let i = 0; i < equipments.length; i++){
+            for(let i = 0; i < event.equipment.length; i++){
                 equipment = await prisma.event_equipment.create({
                     data : {
-                        eventId : event.id,
-                        equipmentId : equipments[i],
+                        eventId : _event.id,
+                        equipmentId : event.equipment[i],
                     }
                 });
             }

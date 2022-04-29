@@ -30,29 +30,6 @@ export default function Event(props) {
     const matches = useMediaQuery(theme.breakpoints.down('md'));
 
     const [ data, setData ] = useState({});
-    const [ guests, setGuests ] = useState({});
-    const [ venues, setVenues ] = useState({});
-    const [ food, setFood ] = useState({});
-    const [ equipment, setEquipment ] = useState({});
-
-    //fetching all the data
-    /*useEffect( () => {
-        const fetchData = async () => {
-            const resGuests = await fetch("http://localhost:3000/api/guest/getGuestCount");
-            // const {guests} = await resGuests.json();
-            setGuests(await resGuests.json());
-            const resVenues = await fetch("http://localhost:3000/api/venues/getVenues");
-            setVenues(await resVenues.json());
-            // const {venues} = await resVenues.json();
-            const resFood = await fetch("http://localhost:3000/api/food/getFoods");
-            setFood(await resFood.json());
-            // const {food} = await resFood.json();
-            const resEquipment = await fetch("http://localhost:3000/api/equipment/getEquipments");
-            setEquipment(await resEquipment.json());
-            // const {equipment} = await resEquipment.json();
-        }
-        fetchData();
-    }, [] );*/
 
 
     const steps = [
@@ -158,19 +135,8 @@ export default function Event(props) {
         nextStep();
     }
 
-    // TODO: write a function to handle the event insertion
-    const handleEvents = async () => {
-        const res = await fetch("/api/events/addEvent", {
-            method: 'POST',
-            body: JSON.stringify(data)
-        });
-        const json = await res.json();
-        console.log(json);
-    }
-
-
     const Form = () => {
-        return activeStep === 0 ? <EventDetails data={data} next={next} props={props} /> : activeStep === 1 ? <CustomerDetails next={next} back={backStep} props={props}  /> : <CheckOut next={ next } back={ backStep } props={props} data={data}/>;
+        return activeStep === 0 ? <EventDetails next={next} eventProps={props} /> : activeStep === 1 ? <CustomerDetails next={next} back={backStep} props={props}  /> : <CheckOut next={ next } back={ backStep } props={props} data={data}/>;
     };
 
     return (
@@ -191,10 +157,10 @@ export default function Event(props) {
                 { activeStep === steps.length ? (
                     <Box component={"div"}>
                         <Typography variant={"h5"} align={"center"} color={"primary"} gutterBottom >Confirmation</Typography>
-                        <Typography variant={"subtitle1"} color={"danger"} gutterBottom>By Clicking Confirm, you are affirming the validation of the Info you provided!</Typography>
+                        <Typography variant={"subtitle1"} color={"danger"} sx={{ marginY : "1rem" }}>By Clicking Confirm, you are affirming the validation of the Info you provided!</Typography>
                         <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between", alignItems : "center" }}>
                             <Button onClick={ backStep } variant={"contained"} sx={{ color : "white"}} color={"primary"}>Back</Button>
-                            <Button variant={"contained"} sx={{ color : "white"}} type={"submit"} onClick={ () => { setIsOpen(true); {/*loadIframe()*/} handleEvents()  } } color={"primary"}>Confirm</Button>
+                            <Button variant={"contained"} sx={{ color : "white"}} type={"submit"} onClick={ () => { setIsOpen(true); loadIframe()  } } color={"primary"}>Confirm</Button>
                         </Box>
                         {/*  Backdrop for payment  */}
                         <Backdrop
@@ -226,40 +192,32 @@ export async function getServerSideProps(context){
         const fetchGuests = async () => {
             const resGuests = await fetch("http://localhost:3000/api/guest/getGuestCount");
             const {guests} = await resGuests.json();
-            return new Promise((resolve, reject) => {
-                resolve(guests);
-            });
+            return guests
         }
 
         const fetchVenues = async () => {
             const resVenues = await fetch("http://localhost:3000/api/venues/getVenues")
             const {venues} = await resVenues.json()
-            return new Promise((resolve, reject) => {
-                resolve(venues);
-            });
+            return venues;
         }
 
         const fetchFoods = async () => {
             const resFood = await fetch("http://localhost:3000/api/food/getFoods")
             const {food} = await resFood.json()
-            return new Promise((resolve, reject) => {
-                resolve(food);
-            });
+            return food;
         }
 
         const fetchEquipment = async () => {
             const resEquipment = await fetch("http://localhost:3000/api/equipment/getEquipments")
             const {equipment} = await resEquipment.json()
-            return new Promise((resolve, reject) => {
-                resolve(equipment);
-            });
+            return equipment
         }
 
         let data = await Promise.all([
-        fetchGuests(),
-        fetchVenues(),
-        fetchFoods(),
-        fetchEquipment()
+            fetchGuests(),
+            fetchVenues(),
+            fetchFoods(),
+            fetchEquipment()
         ])
             .then(result => {
                 return {

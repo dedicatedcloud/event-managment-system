@@ -28,10 +28,9 @@ export default function Foods(props) {
                         starter.map((sf, i) => {
                             return (
                                 <Grid item key={i}  xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"}>
-                                    <Card sx={{ width : "25rem" }} elevation={3}>
+                                    <Card sx={{ width : { xs : "20rem", sm : "25rem", md : "25rem", lg : "25rem" } }} elevation={3}>
                                         <CardContent>
                                             <Image src={"/Food/"+sf.picture} width={500} height={500}/>
-                                            {/*<p>{sf.picture}</p>*/}
                                             <Typography>{ sf.name }</Typography>
                                             <Typography>Rs.{ sf.price }</Typography>
                                         </CardContent>
@@ -47,7 +46,7 @@ export default function Foods(props) {
                         main.map((mf, i) => {
                             return (
                                 <Grid item key={i} xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"}>
-                                    <Card sx={{ width : "25rem" }} elevation={3}>
+                                    <Card sx={{ width : { xs : "20rem", sm : "25rem", md : "25rem", lg : "25rem" } }} elevation={3}>
                                         <CardContent>
                                             <Image src={"/Food/"+mf.picture} width={500} height={500}/>
                                             <Typography>{ mf.name }</Typography>
@@ -65,7 +64,7 @@ export default function Foods(props) {
                         dessert.map((df, i) => {
                             return (
                                 <Grid item key={i} xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"}>
-                                    <Card sx={{ width : "25rem" }} elevation={3}>
+                                    <Card sx={{ width : { xs : "20rem", sm : "25rem", md : "25rem", lg : "25rem" } }} elevation={3}>
                                         <CardContent>
                                             <Image src={"/Food/"+df.picture} width={500} height={500}/>
                                             <Typography>{ df.name }</Typography>

@@ -7,7 +7,9 @@ import FormHelperText from "@mui/material/FormHelperText";
 
 export default function CheckOut({ next, back, data, props}) {
 
-    const { eventType, guest, venue, environment, starterFood, mainFood, dessertFood, equipment, phoneNumber, totalPrice } = data;
+    const { eventType, guest, venue, environment, starterFood, mainFood, dessertFood, equipment } = data.event;
+    const { phoneNumber } = data;
+    const { totalPrice } = data;
 
     const advancePayment = totalPrice * 0.3;
 

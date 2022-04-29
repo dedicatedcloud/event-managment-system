@@ -23,7 +23,7 @@ export default function Venues(props) {
                         equipments.map((equipment, i) => {
                             return (
                                 <Grid item key={i} xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"}>
-                                    <Card sx={{ width : "25rem" }}>
+                                    <Card sx={{ width : { xs : "20rem", sm : "25rem", md : "25rem", lg : "25rem" } }}>
                                         <CardContent>
                                             <Image src={"/Equipment/"+equipment.picture} width={500} height={500}/>
                                             <Typography>{ equipment.name }</Typography>

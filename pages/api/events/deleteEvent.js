@@ -7,15 +7,31 @@ export default async function handler(req, res) {
         if(session){
             const {id} = req.body;
             try {
-                let event = await prisma.events.delete({
+                let event_foods = prisma.event_foods.deleteMany({
+                    where: {
+                        eventId: id
+                    }
+                });
+                let event_equipment = prisma.event_equipment.deleteMany({
+                    where: {
+                        eventId: id
+                    }
+                });
+                let event = prisma.events.delete({
                     where : {
                         id
                     }
                 });
+                let transaction = await prisma.$transaction([
+                    event_foods,
+                    event_equipment,
+                    event
+                ]);
+                console.log(transaction);
                 prisma.$disconnect();
-                if (event){
+                if (transaction){
                     return res.json({
-                        message : "Event deleted Successfully!"
+                        message : "Event deleted Successfully!",
                     })
                 }
             }catch (e) {

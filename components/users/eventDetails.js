@@ -15,20 +15,141 @@ import "react-datepicker/dist/react-datepicker.css";
 import IconButton from "@mui/material/IconButton";
 import Close from "@mui/icons-material/Close";
 import moment from 'moment';
+import {useRouter} from "next/router";
 
 
 // Todo: validate date input, maintain checks for it
 
 
-export default function EventDetails({ next, props, data }){
+export default function EventDetails(props) {
 
-    // get the foods by category from the props
-    const starter = props.food.filter(food => food.category === "Starter");
-    const main = props.food.filter(food => food.category === "Main Course");
-    const dessert = props.food.filter(food => food.category === "Dessert");
 
-    const [date, setDate] = useState(new Date());
+    const query = useRouter();
+
+    const localizer = momentLocalizer(moment);
+
+    // get the foods by category from the props.eventProps
+    const starter = props.eventProps.food.filter(food => food.category === "Starter");
+    const main = props.eventProps.food.filter(food => food.category === "Main Course");
+    const dessert = props.eventProps.food.filter(food => food.category === "Dessert");
+
     const [ events, setEvents ] = useState([]);
+
+    //state for setting the venues after the guest count has been selected
+    const [ venues, setVenues ] = useState([]);
+
+    //state for handling the form fields
+    const [ event, setEvent ] = useState({
+        eventType : "",
+        guest : "",
+        venue : "",
+        environment : "",
+        starterFood : [],
+        mainFood : [],
+        dessertFood : [],
+        equipment : [],
+        date : new Date()
+    });
+
+    // for handling the prices of the selected fields
+    const [ prices, setPrices] = useState({
+        venuePrice : 0,
+        starterFoodPrice : 0,
+        mainFoodPrice : 0,
+        dessertFoodPrice : 0,
+        equipmentPrice : 0
+    });
+
+    //for storing the total price of the event
+    const [ totalPrice, setTotalPrice ] = useState(0);
+
+
+    //getting the venues when the guestCount changes
+    useEffect(() => {
+        const returnedVenues = props.eventProps.venues.filter((venue) => venue.guestCountId === event.guest);
+        setVenues(returnedVenues);
+    }, [event.guest]);
+
+    //setting the venue price after the venue is selected
+    useEffect(() => {
+        venues.map((v) => {
+            if(event.venue === v.id){
+                setPrices(prevPrices => ({
+                    ...prevPrices,
+                    venuePrice : v.price
+                }));
+            }
+        });
+    }, [event.venue]);
+
+    //iterating over starterFood array to get the selected items prices, adding them and setting the state
+    useEffect(() => {
+        let total = 0;
+        starter.map((s) => {
+            event.starterFood.map((sf) => {
+                if(sf === s.id){
+                    total = total+s.price
+                }
+            });
+        });
+        setPrices(prevPrices => ({
+            ...prevPrices,
+            starterFoodPrice : total
+        }));
+    }, [event.starterFood]);
+
+    //iterating over MainFood array to get the selected items prices, adding them and setting the state
+    useEffect(() => {
+        let total = 0;
+        main.map((m) => {
+            event.mainFood.map((mf) => {
+                if(mf === m.id){
+                    total = total+m.price
+                }
+            });
+        });
+        setPrices(prevPrices => ({
+            ...prevPrices,
+            mainFoodPrice : total
+        }));
+    }, [event.mainFood]);
+
+    //iterating over DesertFood array to get the selected items prices, adding them and setting the state
+    useEffect(() => {
+        let total = 0;
+        dessert.map((d) => {
+            event.dessertFood.map((df) => {
+                if(df === d.id){
+                    total = total+d.price
+                }
+            });
+        });
+        setPrices(prevPrices => ({
+            ...prevPrices,
+            dessertFoodPrice : total
+        }));
+    }, [event.dessertFood]);
+
+    //iterating over Equipment array to get the selected items prices, adding them and setting the state
+    useEffect(() => {
+        let total = 0;
+        props.eventProps.equipment.map((e) => {
+            event.equipment.map((se) => {
+                if(se === e.id){
+                    total = total+e.price
+                }
+            });
+        });
+        setPrices(prevPrices => ({
+            ...prevPrices,
+            equipmentPrice : total
+        }));
+    }, [event.equipment]);
+
+    //for calculating price on each item change
+    useEffect( () => {
+        setTotalPrice(Object.values(prices).reduce((a, b) => a + b));
+    }, [ prices.venuePrice, prices.starterFoodPrice, prices.mainFoodPrice, prices.dessertFoodPrice, prices.equipmentPrice ]);
 
     // Todo: same date must not be allowed to be selected
     useEffect(() => {
@@ -46,103 +167,6 @@ export default function EventDetails({ next, props, data }){
         fetchEvents();
     }, [])
 
-    const localizer = momentLocalizer(moment);
-
-
-    //state for setting the venues after the guest count has been selected
-    const [ venues, setVenues ] = useState([]);
-
-
-    //states for handling the form fields
-    const [ eventType, setEventType ] = useState("");
-    const [ guest, setGuest ] = useState("");
-    const [ venue, setVenue ] = useState("");
-    const [ environment, setEnvironment ] = useState("");
-    const [ starterFood, setStarterFood ] = useState([]);
-    const [ mainFood, setMainFood ] = useState([]);
-    const [ dessertFood, setDessertFood ] = useState([]);
-    const [ equipment, setEquipment ] = useState([]);
-
-
-    //states for handling the prices of the selected fields
-    const [ venuePrice, setVenuePrice ] = useState(0);
-    const [ starterFoodPrice, setStarterFoodPrice ] = useState(0);
-    const [ mainFoodPrice, setMainFoodPrice ] = useState(0);
-    const [ dessertFoodPrice, setDessertFoodPrice ] = useState(0);
-    const [ equipmentPrice, setEquipmentPrice ] = useState([]);
-
-    //adding the prices of the selected fields on each render
-    let totalPrice = [venuePrice, starterFoodPrice, mainFoodPrice, dessertFoodPrice, equipmentPrice].reduce((partialSum, a) => partialSum + a, 0);
-
-    //getting the venues when the guestCount changes
-    useEffect(() => {
-        const returnedVenues = props.venues.filter((venue) => venue.guestCountId === guest);
-        setVenues(returnedVenues);
-    }, [guest]);
-
-    //setting the venue price after the venue is selected
-    useEffect(() => {
-        venues.map((v) => {
-            if(venue === v.id){
-                setVenuePrice(v.price);
-            }else {
-                setVenuePrice(0)
-            }
-        });
-    }, [venue]);
-
-    //iterating over starterFood array to get the selected items prices, adding them and setting the state
-    useEffect(() => {
-        let total = 0;
-        starter.map((s) => {
-            starterFood.map((sf) => {
-                if(sf === s.id){
-                    total = total+s.price
-                }
-            });
-        });
-        setStarterFoodPrice(total);
-    }, [starterFood]);
-
-    //iterating over MainFood array to get the selected items prices, adding them and setting the state
-    useEffect(() => {
-        let total = 0;
-        main.map((m) => {
-            mainFood.map((mf) => {
-                if(mf === m.id){
-                    total = total+m.price
-                }
-            });
-        });
-        setMainFoodPrice(total);
-    }, [mainFood]);
-
-    //iterating over DesertFood array to get the selected items prices, adding them and setting the state
-    useEffect(() => {
-        let total = 0;
-        dessert.map((d) => {
-            dessertFood.map((df) => {
-                if(df === d.id){
-                    total = total+d.price
-                }
-            });
-        });
-        setDessertFoodPrice(total);
-    }, [dessertFood]);
-
-    //iterating over Equipment array to get the selected items prices, adding them and setting the state
-    useEffect(() => {
-        let total = 0;
-        props.equipment.map((e) => {
-            equipment.map((se) => {
-                if(se === e.id){
-                    total = total+e.price
-                }
-            });
-        });
-        setEquipmentPrice(total);
-    }, [equipment]);
-
     //states and functions for the BackDrop
     const [open, setOpen] = useState(false);
     const handleClose = () => {
@@ -153,14 +177,109 @@ export default function EventDetails({ next, props, data }){
     };
 
     const handleDateChange = (date) => {
+        console.log(events);
         const filteredDate = events.filter((d) => new Date(d.start) === date);
         console.log(filteredDate);
+        setEvent(prevEvent => ({
+            ...prevEvent,
+            date : date,
+        }));
         // Todo: compare the dates
     }
 
+
+    const handleUpdate = async () => {
+        const eventData = {
+            id : props.event.id,
+            eventType: event.eventType,
+            guest: event.guest,
+            venue: event.venue,
+            environment: event.environment,
+            starterFood: event.starterFood,
+            mainFood: event.mainFood,
+            dessertFood: event.dessertFood,
+            equipment: event.equipment,
+            date: new Date(event.date),
+            price : totalPrice
+        }
+        console.log(eventData);
+        await fetch(`/api/events/updateEvent`, {
+            method : 'PUT',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify(eventData)
+        }).then(res => res.json())
+            .then(data => {
+                console.log(data);
+            });
+    }
+
+    //for submitting the form
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        if(query.pathname === "/users/event"){
+            props.next({event, totalPrice}, e)
+        }else{
+            e.preventDefault();
+            handleUpdate();
+
+        }
+    }
+
+
+    //if the form is being used in the dashboard for editing an event
+    useEffect( () => {
+        //Todo: equipment is not being set
+        if(props?.event){
+            const { event } = props;
+            let starter = [];
+            let main = [];
+            let dessert = [];
+            let equipment = [];
+
+            for(let i = 0; i < event.event_foods.length; i++){
+                for(let j = 0; j < props.eventProps.food.length; j++){
+                    if(event.event_foods[i] === props.eventProps.food[j].id){
+                        if(props.eventProps.food[j].category === "Starter"){
+                            starter.push(props.eventProps.food[j].id)
+                        }
+                        else if(props.eventProps.food[j].category === "Main Course"){
+                            main.push(props.eventProps.food[j].id)
+                        }
+                        else{
+                            dessert.push(props.eventProps.food[j].id)
+                        }
+                    }
+                }
+            }
+            for(let i = 0; i < event.event_equipment.length; i++){
+                for(let j = 0; j < props.eventProps.equipment.length; j++){
+                    if(event.event_equipment[i] === props.eventProps.equipment[j].id){
+                        equipment.push(props.eventProps.equipment[j].id);
+                    }
+                }
+            }
+
+            setEvent({
+                eventType: event.event_type,
+                guest: event.guestCountId,
+                venue: event.venueId,
+                environment: event.event_environment,
+                starterFood: starter,
+                mainFood: main,
+                dessertFood: dessert,
+                equipment: equipment,
+                date: new Date(event.date)
+            })
+        }
+    }, [])
+
+
+
     return (
         <Box>
-            <form onSubmit={ (e) => next({eventType, guest, venue, environment, starterFood, mainFood, dessertFood, equipment, date, totalPrice}, e) }>
+            <form onSubmit={handleSubmit}>
                 <Grid container rowSpacing={3}>
                     <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Typography variant={"h5"} color={"primary"} align={"center"} sx={{ paddingY : "1rem" }}>Guest & Venue Details:</Typography>
@@ -168,7 +287,10 @@ export default function EventDetails({ next, props, data }){
                    <Grid item xs={12} sm={6} lg={6}>
                        <FormControl required sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg : 320 } }}>
                            <InputLabel id={"eventType"}>Event Type</InputLabel>
-                           <Select value={eventType} labelId={"eventType"} fullWidth onChange={ ({target}) => setEventType(target.value) } label={"Event Type"}>
+                           <Select value={event.eventType} labelId={"eventType"} fullWidth onChange={ ({target}) => setEvent(prevEvent => ({
+                               ...prevEvent,
+                               eventType : target.value
+                           })) } label={"Event Type"}>
                                <MenuItem value={""}>None</MenuItem>
                                <MenuItem value={"Wedding"}>Wedding</MenuItem>
                                <MenuItem value={"Birthday Party"}>Birthday Party</MenuItem>
@@ -179,9 +301,12 @@ export default function EventDetails({ next, props, data }){
                    <Grid item xs={12} sm={6} lg={6}>
                        <FormControl required sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }}>
                            <InputLabel id={"Guests"}>Guests</InputLabel>
-                           <Select value={guest} labelId={"Guests"} label={"Guests"} onChange={ ({target}) => setGuest(target.value) }>
+                           <Select value={event.guest} labelId={"Guests"} label={"Guests"} onChange={ ({target}) => setEvent(prevEvent => ({
+                               ...prevEvent,
+                               guest : target.value
+                           })) }>
                                <MenuItem value={""}>None</MenuItem>
-                               { props.guests.map((g,i) => {
+                               { props.eventProps.guests.map((g,i) => {
                                    return (
                                        <MenuItem key={i} value={g.id}>{g.min} - {g.max}</MenuItem>
                                    )
@@ -193,7 +318,10 @@ export default function EventDetails({ next, props, data }){
                    <Grid item xs={12} sm={6} lg={6}>
                        <FormControl required sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }}>
                            <InputLabel id={"Venues"}>Venues</InputLabel>
-                           <Select value={venue} labelId={"Venues"} label={"Venues"} onChange={ ({target}) => setVenue(target.value) }>
+                           <Select value={event.venue} labelId={"Venues"} label={"Venues"} onChange={ ({target}) => setEvent(prevEvent => ({
+                               ...prevEvent,
+                               venue : target.value
+                           })) }>
                                <MenuItem value={""}>None</MenuItem>
                                { venues.map((v,i) => (
                                        <MenuItem key={i} value={v.id}>{v.name} - Price :{v.price}</MenuItem>
@@ -205,7 +333,10 @@ export default function EventDetails({ next, props, data }){
                     <Grid item xs={12} sm={6} lg={6}>
                         <FormControl required sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }}>
                             <InputLabel id={"Outdoor/Indoor"}>Indoor/Outdoor</InputLabel>
-                            <Select value={environment} labelId={"Outdoor/Indoor"} label={"Outdoor/Indoor"} onChange={ ({target}) => setEnvironment(target.value) }>
+                            <Select value={event.environment} labelId={"Outdoor/Indoor"} label={"Outdoor/Indoor"} onChange={ ({target}) => setEvent(prevEvent => ({
+                                ...prevEvent,
+                                environment : target.value
+                            })) }>
                                 <MenuItem value={"Indoor"}>Indoor</MenuItem>
                                 <MenuItem value={"Outdoor"}>Outdoor</MenuItem>
                             </Select>
@@ -217,7 +348,10 @@ export default function EventDetails({ next, props, data }){
                    <Grid item xs={12} sm={6} lg={6}>
                        <FormControl sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }}>
                            <InputLabel id="starter">Starter</InputLabel>
-                           <Select labelId="Starter" id="Starter" label={"Starter"} value={starterFood} multiple onChange={ ({target}) => setStarterFood(target.value) }>
+                           <Select labelId="Starter" id="Starter" label={"Starter"} value={event.starterFood} multiple onChange={ ({target}) => setEvent(prevEvent => ({
+                               ...prevEvent,
+                               starterFood : target.value
+                           })) }>
                                <MenuItem value={""}>None</MenuItem>
                                { starter.map((s, i) => (
                                    <MenuItem key={i} value={s.id}>{s.name} - Price : {s.price}</MenuItem>
@@ -228,7 +362,10 @@ export default function EventDetails({ next, props, data }){
                    <Grid item xs={12} sm={6} lg={6}>
                        <FormControl required sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }}>
                            <InputLabel id="Main">Main Course</InputLabel>
-                           <Select labelId="Main" id="Main" label={"Main Course"} value={mainFood} multiple onChange={ ({target}) => setMainFood(target.value) }>
+                           <Select labelId="Main" id="Main" label={"Main Course"} value={event.mainFood} multiple onChange={ ({target}) => setEvent(prevEvent => ({
+                               ...prevEvent,
+                               mainFood : target.value
+                           })) }>
                                <MenuItem value={""}>None</MenuItem>
                                { main.map((m, i) => (
                                    <MenuItem key={i} value={m.id}>{m.name} - Price : {m.price}</MenuItem>
@@ -239,7 +376,10 @@ export default function EventDetails({ next, props, data }){
                    <Grid item xs={12} sm={6} lg={12}>
                        <FormControl sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }}>
                            <InputLabel id="Dessert">Dessert</InputLabel>
-                           <Select labelId="Dessert" id="Dessert" label={"Desert"} value={dessertFood} multiple onChange={ ({target}) => setDessertFood(target.value) }>
+                           <Select labelId="Dessert" id="Dessert" label={"Desert"} value={event.dessertFood} multiple onChange={ ({target}) => setEvent(prevEvent => ({
+                               ...prevEvent,
+                               dessertFood : target.value
+                           })) }>
                                <MenuItem value={""}>None</MenuItem>
                                { dessert.map((d, i) => (
                                    <MenuItem key={i} value={d.id}>{d.name} - Price : {d.price}</MenuItem>
@@ -254,9 +394,12 @@ export default function EventDetails({ next, props, data }){
                    <Grid item xs={12} sm={6} lg={12}>
                        <FormControl sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }}>
                            <InputLabel id="equipment">Equipment</InputLabel>
-                           <Select labelId="equipment" id="equipment" label={"Equipment"} value={equipment} multiple onChange={ ({target}) => setEquipment(target.value) }>
+                           <Select labelId="equipment" id="equipment" label={"Equipment"} value={event.equipment} multiple onChange={ ({target}) => setEvent(prevEvent => ({
+                               ...prevEvent,
+                               equipment : target.value
+                           })) }>
                                <MenuItem value={""}>None</MenuItem>
-                               { props.equipment.map((e, i) => (
+                               { props.eventProps.equipment.map((e, i) => (
                                    <MenuItem key={i} value={e.id}>{e.name} - Price : {e.price}</MenuItem>
                                ))}
                            </Select>
@@ -268,7 +411,7 @@ export default function EventDetails({ next, props, data }){
                     </Grid>
                     <Grid item xs={12} sm={6} lg={12}>
                         <FormControl  sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }} required >
-                            <DatePicker selected={date} onChange={handleDateChange}/>
+                            <DatePicker selected={event.date} onChange={handleDateChange}/>
                             <FormHelperText>Select the date of the event.</FormHelperText>
                         </FormControl>
                     </Grid>
@@ -301,7 +444,7 @@ export default function EventDetails({ next, props, data }){
                     <Grid item xs={12} sm={12} lg={12}>
                         <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between"}}>
                             <Typography variant={"subtitle1"} fontSize={20}>Total Price (Rs): {totalPrice}</Typography>
-                            <Button type={"submit"} variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white"}} disabled={guest === "" || venue === "" || eventType === ""}>Next</Button>
+                            <Button type={"submit"} variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white"}} disabled={event.guest === "" || event.venue === "" || event.eventType === ""}>{props?.event ? "Update" : "Next"}</Button>
                         </Box>
                     </Grid>
                     <FormHelperText sx={{ fontSize : "15px" }}>Fields with * are required!</FormHelperText>

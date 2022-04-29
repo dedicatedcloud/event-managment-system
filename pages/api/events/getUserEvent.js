@@ -7,6 +7,10 @@ export default async function handler(req, res) {
         const events = await prisma.events.findMany({
             where : {
                 userId : session.user.id
+            },
+            include : {
+                event_foods : true,
+                event_equipment : true
             }
         });
         prisma.$disconnect();

@@ -53,7 +53,7 @@ export default function Venue(props) {
         let print;
         guests.map((g, i) => {
             if(g.id === props.value) {
-                print =  <Typography variant={"subtitle"} key={i}>{g.min} - {g.max}</Typography>
+                print =  <Typography variant={"subtitle1"} key={i}>{g.min} - {g.max}</Typography>
             }
         });
         return print;

@@ -85,9 +85,9 @@ export default function Guest(props) {
                 "Content-type" : "application/json"
             },
             body : JSON.stringify({
-                id : id,
-                field : field,
-                value : value
+                id,
+                field,
+                value
             })
         })
             .then(res => res.json())
