@@ -200,11 +200,11 @@ export default function Venue(props) {
         setLoading(false)
     }
 
-    const fetchGuests = async () => {
+    /*const fetchGuests = async () => {
         const res = await fetch("http://localhost:3000/api/guest/getGuestCount");
         const {guests} = await res.json();
         setGuests(guests);
-    };
+    };*/
 
     const SubmitHandler = async (data) => {
         setLoading(true);
