@@ -74,9 +74,10 @@ export default function Admins(props) {
             .then(data => {
                 if(data.error){
                     setMessage(data.error);
+                }else{
+                    setMessage(data.message);
                 }
                 getAdmins();
-
             })
             .catch(e => console.log(e.message));
     }

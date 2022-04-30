@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -24,17 +24,23 @@ function EventCards({event, data}) {
 
     let event_date = new Date(event.date);
 
+    // To calculate the time difference of two dates
+    let Difference_In_Time = event_date.getTime() - new Date().getTime();
+
+    // To calculate the no. of days between two dates
+    let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
     return (
             <>
                 <Card elevation={5} sx={{padding: "0.5rem"}}>
                     <CardContent>
                         <Typography sx={{marginY: "1rem"}} color={"primary"} variant={"subtitle1"}>Event Type: {event.id}</Typography>
                         <Typography sx={{marginY: "1rem"}} color={"primary"} variant={"subtitle1"}>Event Type: {event.event_type}</Typography>
-                        <Typography variant="subtitle1" color={"primary"} sx={{marginY: "1rem"}}>Event Planned on: {`${event_date.getDate()} - ${event_date.getMonth() + 1} - ${event_date.getFullYear()}`}</Typography>
+                        <Typography variant="subtitle1" color={"primary"} sx={{marginY: "1rem"}}>Event Planned on: {`${event_date.getDate()}/${event_date.getMonth() + 1}/${event_date.getFullYear()}`}</Typography>
                         <Typography variant="subtitle1" color={"primary"} sx={{marginY: "1rem"}}>Event Status: {event.event_status}</Typography>
                     </CardContent>
                     <CardActions>
-                        <Button variant={"contained"} color={"info"} sx={{marginBottom: 1, borderRadius: "0.5rem"}} size={"large"} onClick={handleToggle}  startIcon={<DeleteIcon/>}>Edit</Button>
+                        <Button variant={"contained"} color={"info"} sx={{marginBottom: 1, borderRadius: "0.5rem"}} size={"large"} onClick={handleToggle} disabled={Difference_In_Days < 4} startIcon={<DeleteIcon/>}>Edit</Button>
                     </CardActions>
                 </Card>
                 <Backdrop

@@ -6,19 +6,18 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import Grid  from "@mui/material/Grid";
+import Grid from "@mui/material/Grid";
 import FormHelperText from "@mui/material/FormHelperText";
 import Backdrop from "@mui/material/Backdrop";
-import { Calendar, momentLocalizer } from 'react-big-calendar'
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import {Calendar, momentLocalizer} from 'react-big-calendar'
 import IconButton from "@mui/material/IconButton";
 import Close from "@mui/icons-material/Close";
 import moment from 'moment';
 import {useRouter} from "next/router";
-
-
-// Todo: validate date input, maintain checks for it
+import TextField from "@mui/material/TextField";
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {DesktopDatePicker} from '@mui/x-date-pickers/DesktopDatePicker';
 
 
 export default function EventDetails(props) {
@@ -177,14 +176,25 @@ export default function EventDetails(props) {
     };
 
     const handleDateChange = (date) => {
-        console.log(events);
-        const filteredDate = events.filter((d) => new Date(d.start) === date);
-        console.log(filteredDate);
-        setEvent(prevEvent => ({
-            ...prevEvent,
-            date : date,
-        }));
-        // Todo: compare the dates
+        // Todo: compare the dates and show warning if same date is selected
+        const filteredDate = events.filter((d) => {
+            let temp = new Date(d.start);
+            let eventDate = new Date(`${temp.getMonth()+1}/${temp.getDate()}/${temp.getFullYear()}`);
+            console.log(eventDate.getDate() === date.getDate())
+            if(eventDate.getDate() === date.getDate()){
+                return d;
+            }
+        });
+
+        if(filteredDate.length > 0){
+            //show notification if same date is selected
+        }
+        else{
+            setEvent(prevEvent => ({
+                ...prevEvent,
+                date : date,
+            }));
+        }
     }
 
 
@@ -411,7 +421,15 @@ export default function EventDetails(props) {
                     </Grid>
                     <Grid item xs={12} sm={6} lg={12}>
                         <FormControl  sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }} required >
-                            <DatePicker selected={event.date} onChange={handleDateChange}/>
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DesktopDatePicker
+                                    label="Date:"
+                                    inputFormat="MM/dd/yyyy"
+                                    value={event.date}
+                                    onChange={handleDateChange}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
                             <FormHelperText>Select the date of the event.</FormHelperText>
                         </FormControl>
                     </Grid>
@@ -420,7 +438,6 @@ export default function EventDetails(props) {
                         <Backdrop
                             sx={{ color : "#f08a5d", zIndex: (theme) => theme.zIndex.drawer + 1 }}
                             open={open}
-                            onClick={handleClose}
                         >
                             <Box component={"div"} sx={{ backgroundColor : "#ffffff", padding : '1rem', borderRadius : "0.5rem" }}>
                                 <IconButton color={"primary"} sx={{
@@ -444,7 +461,7 @@ export default function EventDetails(props) {
                     <Grid item xs={12} sm={12} lg={12}>
                         <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between"}}>
                             <Typography variant={"subtitle1"} fontSize={20}>Total Price (Rs): {totalPrice}</Typography>
-                            <Button type={"submit"} variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white"}} disabled={event.guest === "" || event.venue === "" || event.eventType === ""}>{props?.event ? "Update" : "Next"}</Button>
+                            <Button type={"submit"} variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white"}} disabled={event.guest === "" || event.venue === "" || event.eventType === ""|| event.date === new Date()}>{props?.event ? "Update" : "Next"}</Button>
                         </Box>
                     </Grid>
                     <FormHelperText sx={{ fontSize : "15px" }}>Fields with * are required!</FormHelperText>

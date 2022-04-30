@@ -21,6 +21,9 @@ import MobileStepper from "@mui/material/MobileStepper";
 import Backdrop from "@mui/material/Backdrop";
 import $ from "jquery";
 import param from "jquery-param";
+import Close from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
+import Link from "next/link";
 
 export default function Event(props) {
 
@@ -106,9 +109,7 @@ export default function Event(props) {
 
     //for handling payment
     const loadIframe = () => {
-        // localStorage.setItem("info", JSON.stringify(data));
         sessionStorage.setItem("info", JSON.stringify(data));
-        console.log(typeof data.date, "date")
         const request = {
             storeId: "13221",
             amount: /*data.totalPrice*/1,
@@ -125,7 +126,6 @@ export default function Event(props) {
         $iframe.attr("src", "https://easypay.easypaisa.com.pk/easypay/Index.jsf?"+str);
     }
 
-
     const next = (params, e) => {
         e.preventDefault();
         setData((prevParams) => ({
@@ -134,6 +134,7 @@ export default function Event(props) {
         }));
         nextStep();
     }
+
 
     const Form = () => {
         return activeStep === 0 ? <EventDetails next={next} eventProps={props} /> : activeStep === 1 ? <CustomerDetails next={next} back={backStep} props={props}  /> : <CheckOut next={ next } back={ backStep } props={props} data={data}/>;
@@ -164,11 +165,23 @@ export default function Event(props) {
                         </Box>
                         {/*  Backdrop for payment  */}
                         <Backdrop
-                            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                            sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
                             open={isOpen}
-                            onClick={ () => setIsOpen(false) }
-                        >
-                            <iframe style={{ backgroundColor : "#fff", padding : "1rem", borderRadius : "0.5rem" }} id="easypay-iframe" name="easypay-iframe" src="about:blank" width="65%" height="600px"/>
+                        ><Box component={"div"} sx={{ backgroundColor : "#ffffff", padding : '1rem', borderRadius : "0.5rem", display : "flex", flexDirection : "column", width : "70%" }}>
+                            <Box component={"div"}>
+                                <Link href={"/users/dashboard"}>
+                                    <IconButton color={"primary"} sx={{
+                                        cursor: "pointer",
+                                        borderRadius: 1,
+                                        marginX: 1,
+                                        marginY: 2,
+                                        fontSize: "20px",
+                                        ':hover': {backgroundColor: "#f08a5d", color: "#fff"}
+                                    }}><Close fontSize={"large"}/></IconButton>
+                                </Link>
+                            </Box>
+                            <iframe style={{ backgroundColor : "#fff", padding : "1rem", borderRadius : "0.5rem", border : "none" }} id="easypay-iframe" name="easypay-iframe" src="about:blank" width="100%" height="600px"/>
+                        </Box>
                         </Backdrop>
                     </Box>
                 ) : <Form/> }

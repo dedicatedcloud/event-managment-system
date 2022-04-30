@@ -10,7 +10,6 @@ import Grid from "@mui/material/Grid";
 
 export default function Dashboard({user, data}) {
 
-    // TODO: fix the bug causing the data to not load fast
     const [ calenderEvents, setCalenderEvents ] = useState([]);
     const [ events, setEvents ] = useState([]);
 
@@ -30,7 +29,6 @@ export default function Dashboard({user, data}) {
                     e.event_equipment = e.event_equipment.map( eq => eq.equipmentId)
                     return e;
                 } ));
-                console.log(data.events);
                 const _events = data.events.map(event => ({
                     title : `Event : ${event.event_type}`,
                     allDay : true,
@@ -44,6 +42,7 @@ export default function Dashboard({user, data}) {
     }
 
     useEffect(() => {
+        console.log(sessionStorage.getItem("info"));
         fetchEvents()
     }, [])
 
@@ -67,13 +66,13 @@ export default function Dashboard({user, data}) {
                 </Grid> : <Typography variant={"h5"} align={"center"} color={"primary"} sx={{ marginY : "2rem" }}>No events found</Typography> }
             </Box>
             <Divider variant={"middle"} sx={{ marginY : "1rem" }}/>
-            <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center", alignItems : "center", marginY : "2rem" }}>
+            <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center", alignItems : "center", marginY : "2rem", paddingX : "1rem" }}>
                     <Calendar
                         localizer={localizer}
                         events={calenderEvents}
                         startAccessor="start"
                         endAccessor="end"
-                        style={{ height: "30rem", width : "50%", padding : "1rem", border : "0.2rem solid #f08a5d", borderRadius : "0.5rem" }}
+                        style={{ height: "30rem", padding : "1rem", border : "0.2rem solid #f08a5d", borderRadius : "0.5rem" }}
                     />
             </Box>
         </div>
