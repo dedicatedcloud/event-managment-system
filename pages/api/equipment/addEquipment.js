@@ -32,9 +32,10 @@ const handler = nc({
 })
     .use(upload.single("image"))
     .post(async (req, res) => {
-        try {
-            const session = await getSession({ req });
-            if(session){
+        const session = await getSession({ req });
+        if(session){
+
+            try {
                 const { name, price } = req.body;
                 const { filename } = req.file;
                 const equipment = await prisma.equipment.create({
@@ -44,57 +45,25 @@ const handler = nc({
                         picture : filename
                     }
                 });
-                prisma.$disconnect();
                 if(!equipment){
-                    res.json({
-                        error : "Error Occurred while Inserting!"
+                    return res.json({
+                        message : "Error Occurred while Inserting!"
                     })
                 }else {
-                    const equipment = await prisma.equipment.findMany({});
-                    prisma.$disconnect();
-                    res.json({
-                        equipment
+                    return res.json({
+                        message : "Equipment Added Successfully!",
                     });
                 }
-            }else {
+            } catch (e) {
                 return res.json({
-                    message : "Not Authenticated!"
+                    error : e.message
                 })
             }
-        }catch (e) {
+        }else {
             return res.json({
-                message : e.message
+                message : "Not Authenticated!"
             })
         }
     })
 
 export default handler;
-/*export default async function handler(req, res) {
-    try {
-        const session = await getSession({ req });
-        if(session){
-            const { name, price } = req.body;
-            const equipment = await prisma.equipment.create({
-                data : {
-                    name,
-                    price : parseInt(price),
-                }
-            });
-            if(equipment){
-                const data = await prisma.equipment.findMany({});
-                return res.json({
-                    data
-                });
-            }
-        }
-        else {
-            return res.json({
-                message : "Not Authenticated!"
-            });
-        }
-    }catch (e){
-        return res.json({
-            message : e.message
-        })
-    }
-}*/

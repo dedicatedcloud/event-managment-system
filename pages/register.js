@@ -46,17 +46,17 @@ const Register = () => {
             })
         }).then(res => res.json())
             .then(data => {
-                if(data.user){
+                if(data?.user){
+                    setMessage(data.message)
                     signIn("credentials",{
                         email : email,
                         password : password,
                         callbackUrl : "/"
                     })
                 }
-                else{
-                    setMessage(data.error);
+                if(data?.error){
+                    setMessage(data.error)
                 }
-
             })
             .catch(e => console.log(e.message));
     }

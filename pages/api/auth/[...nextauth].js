@@ -1,9 +1,8 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaClient } from '@prisma/client';
+import prisma from "../../../lib/prisma";
 import bcrypt from "bcryptjs";
 
-const prisma = new PrismaClient();
 
 
 export default NextAuth({
@@ -24,7 +23,6 @@ export default NextAuth({
                         email : req.body.email,
                     },
                 });
-                prisma.$disconnect();
                 // console.log(await bcrypt.compare(req.body.password, user.password), "bcrypt");
                 // If no error and we have users data, return it
                 if(user && await bcrypt.compare(req.body.password, user.password)){
@@ -52,13 +50,6 @@ export default NextAuth({
 
     },
     secret : "test",
-    /*jwt: {
-        secret : "test",
-        encryption : true
-    },
-    session : {
-        jwt : true
-    },*/
     pages : {
         error : "/login"
     }

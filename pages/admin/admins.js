@@ -96,11 +96,12 @@ export default function Admins(props) {
                         <Typography variant={"subtitle1"}>Role: Admin</Typography>
                         <br/>
                         <Button type={"submit"} variant={"contained"} sx={{ color : "white" }}>Add</Button>
+                        <br/>
                         { message && <span>{message}</span> }
                     </form>
                 </Box>
             </Box>
-            <Grid container sx={{ marginY : "5rem"}}>
+            <Grid container sx={{ marginY : "5rem"}} spacing={3}>
                 {
                     admins.map((a, i) => (
                         <Grid key={i} item lg={2}>

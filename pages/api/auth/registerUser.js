@@ -1,7 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from "../../../lib/prisma";
 
 export default async function handler(req, res) {
   try {
@@ -11,10 +9,9 @@ export default async function handler(req, res) {
         email : email
       }
     });
-    prisma.$disconnect();
     if(data){
       return res.json({
-        error : "Email already exists! Try a different One."
+        error : "Email already exists! Try a different one."
       });
     }
     if(!data){
@@ -25,9 +22,9 @@ export default async function handler(req, res) {
           password : password
         }
       });
-      prisma.$disconnect();
       return res.json({
-        user : user
+        user : user,
+        message : "User created successfully!"
       })
     }
   }catch (e){

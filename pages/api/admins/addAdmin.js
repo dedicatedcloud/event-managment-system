@@ -6,9 +6,8 @@ import {getSession} from "next-auth/react";
 export default async function handler(req, res) {
     const session = getSession({req});
     if(session){
-        const { name, email, password, role } = req.body;
-        console.log(req.body);
         try {
+            const { name, email, password, role } = req.body;
             const data = await prisma.user.findUnique({
                 where : {
                     email : email
@@ -37,5 +36,9 @@ export default async function handler(req, res) {
                 error : e.message
             });
         }
+    }else{
+        return res.json({
+            message : "Not Authenticated!"
+        });
     }
 }

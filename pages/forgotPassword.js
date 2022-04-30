@@ -17,13 +17,13 @@ export default function ForgotPassword(props) {
 
     const router = useRouter();
     const { email_verified, email} = router.query;
-    console.log(router.query)
-    console.log(email);
 
     const { data : session, status } = useSession();
     if(status === "authenticated") router.push("/")
 
     const schema = yup.object({
+        email : yup.string().required().email().trim(),
+        password : yup.string().required().min(5).max(24).trim()
     });
 
     const { handleSubmit, formState: { errors }, control } = useForm({
@@ -47,7 +47,6 @@ export default function ForgotPassword(props) {
         }
         else{
             const { email } = data;
-            console.log(email);
             fetch("http://localhost:3000/api/auth/verifyEmail",{
                 method : "POST",
                 headers:{
@@ -72,8 +71,7 @@ export default function ForgotPassword(props) {
                     { email_verified && <Controller name="password" control={ control } defaultValue={""} render={({field}) => (<TextField {...field} fullWidth variant={"outlined"} label={"Password"} type={"password"} error={!!errors.password} helperText={errors.password ? errors.password?.message : ""} />)} />}
                     <Button variant={"contained"} type={"submit"} sx={{ color : "white", marginY : "1rem" }}>{!email_verified ? "Verify Email" : "Reset Password"}</Button>
                 </form>
-                { !email_verified && <Link href={"/login"}><Button color={"primary"} sx={{color: "white", margin: "0 auto"}} size={"small"}
-                                               variant={"contained"}>Back</Button></Link>}
+                { !email_verified && <Link href={"/login"}><Button color={"primary"} sx={{color: "white", margin: "0 auto"}} size={"small"} variant={"contained"}>Back</Button></Link>}
             </Box>
         </Box>
     );

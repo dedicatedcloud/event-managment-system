@@ -261,7 +261,6 @@ export default function Food(props) {
                     </form>
                 </Box>
             </Box>
-            {/*Table*/}
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center"}}>
                 <Box sx={{ width : "80rem", margin : "0 auto", paddingY : "3rem" }}>
                     <Button variant={"contained"} color={"error"} sx={{ marginY : 3, borderRadius : "0.5rem" }} size={"large"} onClick={handleDeletion}>Delete</Button>

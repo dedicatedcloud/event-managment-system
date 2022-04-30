@@ -32,9 +32,9 @@ const handler = nc({
 })
     .use(upload.single("image"))
     .post(async (req, res) => {
-        try {
-            const session = await getSession({ req });
-            if(session){
+        const session = await getSession({ req });
+        if(session){
+            try {
                 let equipment;
                 const { id } = req.body;
                 if(!req.file) {
@@ -51,7 +51,6 @@ const handler = nc({
                                 [field]: value,
                             },
                         });
-                        prisma.$disconnect();
                     } catch (e) {
                         return res.json({
                             message: e.message
@@ -68,66 +67,32 @@ const handler = nc({
                                 picture : filename,
                             },
                         });
-                        prisma.$disconnect();
                     } catch (e) {
                         return res.json({
                             message: e.message
                         });
                     }
                 }
+                if(equipment){
+                    return res.json({
+                        message: "Equipment updated successfully!",
+                    });
+                }
+                else{
+                    return res.json({
+                        message: "Equipment not updated!"
+                    });
+                }
+            } catch (e) {
                 return res.json({
-                    equipment,
-                    message : "Record Updated Successfully!"
-
+                    message: e.message
                 });
-            }else {
-                return res.json({
-                    message : "Not Authenticated!"
-                })
             }
-        }catch (e) {
+        }else {
             return res.json({
-                message : e.message
+                message : "Not Authenticated!"
             })
         }
     })
 
 export default handler;
-/*export default async function handler(req, res) {
-    try {
-        const session = await getSession({ req });
-        if(session){
-            const { id, field, value } = req.body;
-            console.log(req.body);
-            let equipment;
-            try {
-                equipment = await prisma.equipment.update({
-                    where: {
-                        id : id,
-                    },
-                    data: {
-                        [field] : value,
-                    },
-                });
-            }catch(e){
-                return  res.json({
-                    message : e.message
-                });
-            }
-            return res.json({
-                equipment,
-                message : "Record Updated Successfully!"
-
-            });
-        }
-        else {
-            return res.json({
-                message : "Not Authenticated!"
-            });
-        }
-    }catch (e){
-        return res.json({
-            message : e.message
-        })
-    }
-}*/

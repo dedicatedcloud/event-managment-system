@@ -6,13 +6,11 @@ const nodemailer = require('nodemailer');
 export default async function handler(req, res){
     try {
         const { email } = req.body;
-        console.log(email)
         const user = await prisma.user.findUnique({
             where : {
                 email : email
             }
         });
-        prisma.$disconnect();
         if(user){
             //send password reset link
             const transporter = nodemailer.createTransport({
@@ -32,12 +30,10 @@ export default async function handler(req, res){
             transporter.sendMail(mailData, (err, data) => {
                 if (err) {
                       return res.json({
-                        status: 500,
-                        message: err
+                        error : err
                       });
                 } else {
                     return res.json({
-                        status: 200,
                         message: "Email sent successfully"
                     });
                 }
@@ -51,5 +47,6 @@ export default async function handler(req, res){
     }catch (e){
         return res.json({
             error : e.message
-        })    }
+        })
+    }
 }

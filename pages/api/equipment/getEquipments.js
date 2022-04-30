@@ -9,7 +9,7 @@ export default async function handler(req, res) {
         });
     }catch (e){
         return res.json({
-            message : e.message
+            error : e.message
         })
     }
 }

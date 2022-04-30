@@ -13,6 +13,7 @@ import Image from "next/image";
 import AbcIcon from "@mui/icons-material/Abc";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
+import EditIcon from "@mui/icons-material/Edit";
 
 export default function Equipment(props) {
 
@@ -42,6 +43,14 @@ export default function Equipment(props) {
             }
         }
         }/>
+    }
+
+    const deleteButton = (props) => {
+        return (
+            <>
+                <Button variant={"contained"} color={"error"} onClick={ () => handleDeletion(props.row.id) }>Delete</Button>
+            </>
+        );
     }
 
     //for currency display
@@ -104,7 +113,13 @@ export default function Equipment(props) {
             renderHeader : (params) => {
                 return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><InsertPhotoIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
             }
-        }
+        },
+        { field: 'Action', headerName: 'Action', editable : false, flex : 1,
+            renderCell : deleteButton,
+            renderHeader : (params) => {
+                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><EditIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
+            }
+        },
     ];
 
     //validation schema for form
@@ -126,27 +141,25 @@ export default function Equipment(props) {
         setLoading(false);
     }
 
-    const handleDeletion = () => {
-        const id = selectionModel;
-        if(id.length > 0){
-            setLoading(true);
-            fetch("http://localhost:3000/api/equipment/deleteEquipment", {
-                method : "POST",
-                headers : {
-                    "Content-Type" : "application/json",
-                },
-                body : JSON.stringify({
-                    id
-                })
-            }).then(res => res.json()).then(data => {
-                getEquipment();
+    const handleDeletion = (id) => {
+        setLoading(true);
+        fetch("http://localhost:3000/api/equipment/deleteEquipment", {
+            method : "POST",
+            headers : {
+                "Content-Type" : "application/json",
+            },
+            body : JSON.stringify({
+                id
+            })
+        }).then(res => res.json()).then(data => {
+            getEquipment();
+            if(data.message){
                 setMessage(data.message);
-            }).catch(e => console.log(e.message));
-        }
-    };
-
-    const handleOnSelectionModelChange = (newSelectionModel) => {
-        setSelectionModel(newSelectionModel);
+            }
+            if(data.error){
+                setMessage(data.error);
+            }
+        }).catch(e => console.log(e.message));
     };
 
     //to get the edited record from the table row
@@ -167,7 +180,14 @@ export default function Equipment(props) {
         })
             .then(res => res.json())
             .then(data => {
+                console.log(data);
                 getEquipment();
+                if(data.message){
+                    setMessage(data.message);
+                }
+                if(data.error){
+                    setMessage(data.error);
+                }
             })
             .catch(e => console.log(e.message));
 
@@ -186,8 +206,14 @@ export default function Equipment(props) {
         })
             .then(res => res.json())
             .then(data => {
-                //setEquipment(data.data);
+                console.log(data);
                 getEquipment();
+                if(data.error){
+                    setMessage(data.error);
+                }
+                else{
+                    setMessage(data.message);
+                }
                 //need to empty fields after form submission
                 reset({
                     name : "",
@@ -213,9 +239,8 @@ export default function Equipment(props) {
             </Box>
             {/*Table*/}
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center"}}>
-                <Box sx={{ width : "65rem", margin : "0 auto", paddingY : "3rem" }}>
-                    <Button variant={"contained"} color={"error"} sx={{ marginY : 3, borderRadius : "0.5rem" }} size={"large"} onClick={handleDeletion}>Delete</Button>
-                    <DataGrid columns={columns} rows={equipment} loading={loading} sx={{ boxShadow : 5, color : "#f08a5d" }} autoHeight={true} checkboxSelection={true} disableSelectionOnClick={true} density={"comfortable"} onCellEditCommit={handleCellEditCommit} onSelectionModelChange={handleOnSelectionModelChange} selectionModel={selectionModel}  />
+                <Box sx={{ width : "70rem", margin : "0 auto", paddingY : "3rem" }}>
+                    <DataGrid columns={columns} rows={equipment} loading={loading} sx={{ boxShadow : 5, color : "#f08a5d", marginY : "1rem" }} autoHeight={true} disableSelectionOnClick={true} density={"comfortable"} onCellEditCommit={handleCellEditCommit} />
                 </Box>
             </Box>
         </Box>

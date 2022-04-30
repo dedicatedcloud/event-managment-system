@@ -14,15 +14,12 @@ export default async function handler(req, res){
                 password : hashedPassword
             }
         });
-        prisma.$disconnect();
         if(user){
             res.json({
-                status : 200,
-                message : 'Password changed successfully'
+                message : 'Password changed successfully!'
             });
         }
         else {
-            console.log("not found")
             return res.json({
                 message : "Email does not exist or is Incorrect!"
             })

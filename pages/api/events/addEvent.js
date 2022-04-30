@@ -7,9 +7,6 @@ export default async function handler(req, res) {
         const { event, totalPrice, phoneNumber, email, advancePayment } = JSON.parse(req.body);
         const userId = session.user.id;
         let foods = event.starterFood.concat(event.mainFood, event.dessertFood);
-        /*foods.push(event.starterFood);
-        foods.push(event.mainFood);
-        foods.push(event.dessertFood);*/
         //Todo : change this insert to add related ata using create
         const _event = await prisma.events.create({
             data : {
