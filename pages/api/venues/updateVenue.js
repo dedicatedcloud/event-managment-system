@@ -33,102 +33,61 @@ const handler = nc({
 })
     .use(upload.single("image"))
     .post(async (req, res) => {
-        try {
-            const session = await getSession({ req });
-            if(session){
-                let venue;
-                const { id } = req.body;
-                if(!req.file) {
-                    let {field, value} = req.body;
-                    if(field === "price" || field === "guestCountId"){
-                        value = parseInt(value);
-                    }
-                    try {
-                        venue = await prisma.venues.update({
-                            where: {
-                                id: parseInt(id),
-                            },
-                            data: {
-                                [field]: value,
-                            },
-                        });
-                        prisma.$disconnect();
-                    } catch (e) {
-                        return res.json({
-                            message: e.message
-                        });
-                    }
-                }else {
-                    const { filename } = req.file;
-                    try {
-                        venue = await prisma.venues.update({
-                            where: {
-                                id: parseInt(id),
-                            },
-                            data: {
-                                picture : filename,
-                            },
-                        });
-                        prisma.$disconnect();
-                    } catch (e) {
-                        return res.json({
-                            message: e.message
-                        });
-                    }
+        const session = await getSession({ req });
+        if(session){
+            let venue;
+            const { id } = req.body;
+            if(!req.file) {
+                let {field, value} = req.body;
+                if(field === "price" || field === "guestCountId"){
+                    value = parseInt(value);
                 }
-                return res.json({
-                    venue,
-                    message : "Record Updated Successfully!"
-
-                });
+                try {
+                    venue = await prisma.venues.update({
+                        where: {
+                            id: parseInt(id),
+                        },
+                        data: {
+                            [field]: value,
+                        },
+                    });
+                } catch (e) {
+                    return res.json({
+                        error: e.message
+                    });
+                }
             }else {
-                return res.json({
-                    message : "Not Authenticated!"
-                })
+                const { filename } = req.file;
+                try {
+                    venue = await prisma.venues.update({
+                        where: {
+                            id: parseInt(id),
+                        },
+                        data: {
+                            picture : filename,
+                        },
+                    });
+                } catch (e) {
+                    return res.json({
+                        error: e.message
+                    });
+                }
             }
-        }catch (e) {
+            if(venue){
+                return res.json({
+                    message: "Venue updated successfully!",
+                });
+            }
+            else{
+                return res.json({
+                    message: "Venue not updated!"
+                });
+            }
+        }else {
             return res.json({
-                message : e.message
+                message : "Not Authenticated!"
             })
         }
     })
 
 export default handler;
-/*export default async function handler(req, res) {
-    try {
-        const session = await getSession({ req });
-        if(session){
-            const { id, field, value } = req.body;
-            console.log(req.body);
-            let venue;
-            try {
-                venue = await prisma.venues.update({
-                    where: {
-                        id : id,
-                    },
-                    data: {
-                        [field] : value,
-                    },
-                });
-            }catch(e){
-                return  res.json({
-                    message : e.message
-                });
-            }
-            return res.json({
-                venue,
-                message : "Record Updated Successfully!"
-
-            });
-        }
-        else {
-            return res.json({
-                message : "Not Authenticated!"
-            });
-        }
-    }catch (e){
-        return res.json({
-            message : e.message
-        })
-    }
-}*/

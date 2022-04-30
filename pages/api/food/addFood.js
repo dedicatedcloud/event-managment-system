@@ -32,29 +32,31 @@ const handler = nc({
 })
     .use(upload.single("image"))
     .post(async (req, res) => {
-        try {
             const session = await getSession({ req });
             if(session){
-                const { name, price, category } = req.body;
-                const { filename } = req.file;
-                const food = await prisma.food.create({
-                    data : {
-                        name : name,
-                        price : parseInt(price),
-                        category : category,
-                        picture : filename
+                try {
+                    const { name, price, category } = req.body;
+                    const { filename } = req.file;
+                    const food = await prisma.food.create({
+                        data : {
+                            name : name,
+                            price : parseInt(price),
+                            category : category,
+                            picture : filename
+                        }
+                    });
+                    if(!food){
+                        return res.json({
+                            message : "Food not inserted!!"
+                        })
+                    }else {
+                        return res.json({
+                            message : "Food inserted successfully!"
+                        })
                     }
-                });
-                prisma.$disconnect();
-                if(!food){
-                    res.json({
-                        error : "Error Occurred while Inserting!"
-                    })
-                }else {
-                    const equipment = await prisma.food.findMany({});
-                    prisma.$disconnect();
-                    res.json({
-                        food
+                } catch (e) {
+                    return res.json({
+                        error : e.message
                     })
                 }
             }else {
@@ -62,41 +64,6 @@ const handler = nc({
                     message : "Not Authenticated!"
                 })
             }
-        }catch (e) {
-            return res.json({
-                message : e.message
-            })
-        }
     })
 
 export default handler;
-/*export default async function handler(req, res) {
-    try {
-        const session = await getSession({ req });
-        if(session){
-            const { name, category, price } = req.body;
-            const food = await prisma.food.create({
-                data : {
-                    name,
-                    category,
-                    price : parseInt(price),
-                }
-            });
-            if(food){
-                const data = await prisma.food.findMany({});
-                return res.json({
-                    data
-                });
-            }
-        }
-        else {
-            return res.json({
-                message : "Not Authenticated!"
-            });
-        }
-    }catch (e){
-        return res.json({
-            message : e.message
-        })
-    }
-}*/

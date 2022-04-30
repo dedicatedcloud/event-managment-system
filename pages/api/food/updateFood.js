@@ -32,102 +32,68 @@ const handler = nc({
 })
     .use(upload.single("image"))
     .post(async (req, res) => {
-        try {
             const session = await getSession({ req });
             if(session){
-                let food;
-                const { id } = req.body;
-                if(!req.file) {
-                    let {field, value} = req.body;
-                    if(field === "price"){
-                        value = parseInt(value);
+                try {
+                    let food;
+                    const { id } = req.body;
+                    if(!req.file) {
+                        let {field, value} = req.body;
+                        if(field === "price"){
+                            value = parseInt(value);
+                        }
+                        try {
+                            food = await prisma.food.update({
+                                where: {
+                                    id: parseInt(id),
+                                },
+                                data: {
+                                    [field]: value,
+                                },
+                            });
+                        } catch (e) {
+                            return res.json({
+                                message: e.message
+                            });
+                        }
+                    }else {
+                        const { filename } = req.file;
+                        try {
+                            food = await prisma.food.update({
+                                where: {
+                                    id: parseInt(id),
+                                },
+                                data: {
+                                    picture : filename,
+                                },
+                            });
+                        } catch (e) {
+                            return res.json({
+                                message: e.message
+                            });
+                        }
                     }
-                    try {
-                        food = await prisma.food.update({
-                            where: {
-                                id: parseInt(id),
-                            },
-                            data: {
-                                [field]: value,
-                            },
-                        });
-                        prisma.$disconnect();
-                    } catch (e) {
+                    if(food){
                         return res.json({
-                            message: e.message
+                            message: "Food updated successfully!",
                         });
                     }
-                }else {
-                    const { filename } = req.file;
-                    try {
-                        food = await prisma.food.update({
-                            where: {
-                                id: parseInt(id),
-                            },
-                            data: {
-                                picture : filename,
-                            },
-                        });
-                        prisma.$disconnect();
-                    } catch (e) {
+                    else{
                         return res.json({
-                            message: e.message
+                            message: "Food not updated!"
                         });
                     }
+                } catch (e) {
+                    return res.json({
+                        error : e.message
+                    })
                 }
-                return res.json({
-                    food,
-                    message : "Record Updated Successfully!"
 
-                });
             }else {
                 return res.json({
                     message : "Not Authenticated!"
                 })
             }
-        }catch (e) {
-            return res.json({
-                message : e.message
-            })
-        }
     })
 
 export default handler;
-/*export default async function handler(req, res) {
-    try {
-        const session = await getSession({ req });
-        if(session){
-            const { id, field, value } = req.body;
-            console.log(req.body);
-            let food;
-            try {
-                food = await prisma.food.update({
-                    where: {
-                        id : id,
-                    },
-                    data: {
-                        [field] : value,
-                    },
-                });
-            }catch(e){
-                return  res.json({
-                    message : e.message
-                });
-            }
-            return res.json({
-                food,
-                message : "Record Updated Successfully!"
-
-            });
-        }
-        else {
-            return res.json({
-                message : "Not Authenticated!"
-            });
-        }
-    }catch (e){
-        return res.json({
-            message : e.message
-        })
-    }
-}*/

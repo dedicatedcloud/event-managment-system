@@ -20,12 +20,12 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import NumbersIcon from '@mui/icons-material/Numbers';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import EditIcon from "@mui/icons-material/Edit";
 
 export default function Venue(props) {
     const [ venues, setVenues ] = useState([]);
     const [ guests, setGuests ] = useState([]);
     const [ message, setMessage ] = useState('');
-    const [ selectionModel, setSelectionModel ] = useState([]);
     const [ loading, setLoading ] = useState(true);
 
 
@@ -74,6 +74,15 @@ export default function Venue(props) {
             }
         }
         }/>
+    }
+
+    //for actions column
+    const deleteButton = (props) => {
+        return (
+            <>
+                <Button variant={"contained"} color={"error"} onClick={ () => handleDeletion(props.row.id) }>Delete</Button>
+            </>
+        );
     }
 
     //for currency display
@@ -152,7 +161,13 @@ export default function Venue(props) {
             renderHeader : (params) => {
                 return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><InsertPhotoIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
             }
-        }
+        },
+        { field: 'Action', headerName: 'Action', editable : false, flex : 1,
+            renderCell : deleteButton,
+            renderHeader : (params) => {
+                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><EditIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
+            }
+        },
     ];
 
     useEffect(() => {
@@ -206,21 +221,21 @@ export default function Venue(props) {
         })
             .then(res => res.json())
             .then(data => {
-                if(data?.error){
-                    console.log(data?.error);
+                console.log(data);
+                getVenues();
+                if(data.error){
+                    setMessage(data.error);
+                }else{
+                    setMessage(data.message);
                 }
-                else{
-                    // setVenues(data.venues);
-                    getVenues();
-                    //need to empty fields after form submission
-                    reset({
-                        name : "",
-                        location : "",
-                        price : "",
-                        selectedGuest : "",
-                        picture : ""
-                    });
-                }
+                //need to empty fields after form submission
+                reset({
+                    name : "",
+                    location : "",
+                    price : "",
+                    selectedGuest : "",
+                    picture : ""
+                });
             })
             .catch(e => console.log(e.message));
     };
@@ -243,34 +258,39 @@ export default function Venue(props) {
         })
             .then(res => res.json())
             .then(data => {
+                setLoading(false);
+                console.log(data);
                 getVenues();
+                if(data.error){
+                    setMessage(data.error);
+                }else{
+                    setMessage(data.message);
+                }
             })
             .catch(e => console.log(e.message));
 
     }, []);
 
-    //for getting the ids of the row to delete the selected record
-    const handleOnSelectionModelChange = (newSelectionModel) => {
-        setSelectionModel(newSelectionModel);
-    }
-
-    const handleDeletion = () => {
-        const id = selectionModel;
-        if(id.length > 0){
-            setLoading(true);
-            fetch("http://localhost:3000/api/venues/deleteVenue", {
-                method : "POST",
-                headers : {
-                    "Content-Type" : "application/json",
-                },
-                body : JSON.stringify({
-                    id
-                })
-            }).then(res => res.json()).then(data => {
-                getVenues();
-                setMessage(data.message);
-            }).catch(e => console.log(e.message));
-        }
+    const handleDeletion = async (id) => {
+        setLoading(true);
+        fetch("http://localhost:3000/api/venues/deleteVenue", {
+            method : "POST",
+            headers : {
+                "Content-Type" : "application/json",
+            },
+            body : JSON.stringify({
+                id
+            })
+        }).then(res => res.json()).then(data => {
+            console.log(data);
+            getVenues();
+            if(data.error){
+                setMessage(data.error);
+            }
+            else{
+                setMessage(data.message)
+            }
+        }).catch(e => console.log(e.message));
     };
 
     return (
@@ -302,8 +322,7 @@ export default function Venue(props) {
             {/*Table*/}
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center"}}>
                 <Box sx={{ width : "80rem", margin : "0 auto", paddingY : "3rem" }}>
-                    <Button variant={"contained"} color={"error"} sx={{ marginY : 3, borderRadius : "0.5rem" }} size={"large"} onClick={handleDeletion}>Delete</Button>
-                    <DataGrid autoHeight={true} checkboxSelection={true} disableSelectionOnClick={true} loading={loading} sx={{ boxShadow : 5, color : "#f08a5d" }} density={"comfortable"} rows={venues} columns={columns} onCellEditCommit={handleCellEditCommit} onSelectionModelChange={handleOnSelectionModelChange} selectionModel={selectionModel}  />
+                    <DataGrid autoHeight={true} disableSelectionOnClick={true} loading={loading} sx={{ boxShadow : 5, color : "#f08a5d", marginY : "1rem" }} density={"comfortable"} rows={venues} columns={columns} onCellEditCommit={handleCellEditCommit} />
                 </Box>
             </Box>
         </Box>

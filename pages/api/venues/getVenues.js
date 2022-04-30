@@ -7,13 +7,12 @@ export default async function handler(req, res) {
                 guest : true
             }
         });
-        prisma.$disconnect();
         return res.json({
             venues
         });
     }catch (e){
         return res.json({
-            message : e.message
+            error : e.message
         })
     }
 }

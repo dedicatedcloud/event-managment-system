@@ -19,12 +19,12 @@ import AbcIcon from "@mui/icons-material/Abc";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
+import EditIcon from "@mui/icons-material/Edit";
 
 export default function Food(props) {
 
     const [ food, setFood ] = useState();
     const [ message, setMessage ] = useState("");
-    const [ selectionModel, setSelectionModel ] = useState([]);
     const [ loading, setLoading ] = useState(true);
 
     useEffect(() => {
@@ -77,6 +77,14 @@ export default function Food(props) {
             }
         }
         }/>
+    }
+
+    const deleteButton = (props) => {
+        return (
+            <>
+                <Button variant={"contained"} color={"error"} onClick={ () => handleDeletion(props.row.id) }>Delete</Button>
+            </>
+        );
     }
 
     //Food column edit validation function
@@ -141,31 +149,36 @@ export default function Food(props) {
             renderHeader : (params) => {
                 return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><InsertPhotoIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
             }
-        }
+        },
+        { field: 'Action', headerName: 'Action', editable : false, flex : 1,
+            renderCell : deleteButton,
+            renderHeader : (params) => {
+                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><EditIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
+            }
+        },
     ];
 
-    const handleDeletion = () => {
-        const id = selectionModel;
-        if(id.length > 0){
-            setLoading(true)
-            fetch("http://localhost:3000/api/food/deleteFood", {
-                method : "POST",
-                headers : {
-                    "Content-Type" : "application/json",
-                },
-                body : JSON.stringify({
-                    id
-                })
-            }).then(res => res.json()).then(data => {
-                getFoods();
-                setMessage(data.message);
-            }).catch(e => console.log(e.message));
-        }
+    const handleDeletion = (id) => {
+        setLoading(true)
+        fetch("http://localhost:3000/api/food/deleteFood", {
+            method : "POST",
+            headers : {
+                "Content-Type" : "application/json",
+            },
+            body : JSON.stringify({
+                id
+            })
+        }).then(res => res.json()).then(data => {
+            console.log(data);
+            getFoods();
+            if(data.error){
+                setMessage(data.error);
+            }
+            else{
+                setMessage(data.message)
+            }
+        }).catch(e => console.log(e.message));
     };
-
-    const handleOnSelectionModelChange = (newSelectionModel) => {
-        setSelectionModel(newSelectionModel);
-    }
 
     //validation schema for form
     const schema = yup.object({
@@ -205,7 +218,14 @@ export default function Food(props) {
         })
             .then(res => res.json())
             .then(data => {
+                setLoading(false);
+                console.log(data);
                 getFoods();
+                if(data.error){
+                    setMessage(data.error);
+                }else{
+                    setMessage(data.message);
+                }
             })
             .catch(e => console.log(e.message));
 
@@ -226,6 +246,11 @@ export default function Food(props) {
             .then(res => res.json())
             .then(data => {
                 getFoods();
+                if(data.error){
+                    setMessage(data.error);
+                }else{
+                    setMessage(data.message);
+                }
                 //need to empty fields after form submission !!pending
                 reset({
                     name : "",
@@ -263,8 +288,7 @@ export default function Food(props) {
             </Box>
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center"}}>
                 <Box sx={{ width : "80rem", margin : "0 auto", paddingY : "3rem" }}>
-                    <Button variant={"contained"} color={"error"} sx={{ marginY : 3, borderRadius : "0.5rem" }} size={"large"} onClick={handleDeletion}>Delete</Button>
-                    <DataGrid columns={columns} rows={food ? food : []} autoHeight={true} loading={loading} sx={{ boxShadow : 5, color : "#f08a5d" }} checkboxSelection={true} disableSelectionOnClick={true} density={"comfortable"} onCellEditCommit={handleCellEditCommit} onSelectionModelChange={handleOnSelectionModelChange} selectionModel={selectionModel}  />
+                    <DataGrid columns={columns} rows={food} autoHeight={true} loading={loading} sx={{ boxShadow : 5, color : "#f08a5d", marginY : "1rem" }}  disableSelectionOnClick={true} density={"comfortable"} onCellEditCommit={handleCellEditCommit} />
                 </Box>
             </Box>
         </Box>

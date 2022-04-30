@@ -22,7 +22,7 @@ export default function Events({events : _events, guests, venues, users}) {
 
     const [ loading, setLoading ] = useState(true);
     const [ events, setEvents ] = useState([]);
-    const [ selectionModel, setSelectionModel ] = useState([]);
+    const [ message, setMessage ] = useState("");
 
     //for setting the event in the details view
     const [ event, setEvent ] = useState({
@@ -274,8 +274,14 @@ export default function Events({events : _events, guests, venues, users}) {
                     id
                 })
             }).then(res => res.json()).then(data => {
+                console.log(data);
                 fetchEvents();
-                // setMessage(data.message);
+                if(data.error){
+                    setMessage(data.error);
+                }
+                else{
+                    setMessage(data.message);
+                }
             }).catch(e => console.log(e.message));
     }
 

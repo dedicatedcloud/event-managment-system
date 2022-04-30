@@ -10,7 +10,6 @@ export default function TransactionComplete(props) {
 
     useEffect(() => {
         const data = JSON.parse(sessionStorage.getItem('info'))
-        console.log(data);
         const handleEvents = async () => {
             await fetch("/api/events/addEvent", {
                 method: 'POST',

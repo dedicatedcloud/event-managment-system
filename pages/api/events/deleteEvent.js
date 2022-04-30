@@ -5,8 +5,8 @@ export default async function handler(req, res) {
     try {
         const session = await getSession({ req });
         if(session){
-            const {id} = req.body;
             try {
+                const {id} = req.body;
                 let event_foods = prisma.event_foods.deleteMany({
                     where: {
                         eventId: id
@@ -27,9 +27,7 @@ export default async function handler(req, res) {
                     event_equipment,
                     event
                 ]);
-                console.log(transaction);
-                prisma.$disconnect();
-                if (transaction){
+                if (await transaction.length > 0){
                     return res.json({
                         message : "Event deleted Successfully!",
                     })
@@ -47,7 +45,7 @@ export default async function handler(req, res) {
         }
     }catch (e){
         return res.json({
-            message : e.message
+            error : e.message
         })
     }
 }

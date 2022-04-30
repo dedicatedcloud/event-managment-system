@@ -4,57 +4,55 @@ import prisma from "../../../lib/prisma";
 export default async function handler(req, res) {
     const session = await getSession({ req });
     if(session){
-        const { event, totalPrice, phoneNumber, email, advancePayment } = JSON.parse(req.body);
-        const userId = session.user.id;
-        let foods = event.starterFood.concat(event.mainFood, event.dessertFood);
-        //Todo : change this insert to add related ata using create
-        const _event = await prisma.events.create({
-            data : {
-                event_type: event.eventType,
-                guestCountId : event.guest,
-                event_environment : event.environment,
-                venueId : event.venue,
-                userId,
-                phone_number : phoneNumber,
-                date : event.date,
-                total_price : totalPrice,
-                advance_payment : advancePayment,
-                payment_status : "pending",
-                event_status : "pending",
-            }
-        });
-        prisma.$disconnect();
-        if(_event){
-            let food = "";
-            for(let i = 0; i < foods.length; i++){
-                for(let j = 0; j < foods[i].length; j++){
-                    food = await prisma.event_foods.create({
-                        data : {
-                            eventId : _event.id,
-                            foodId : foods[i][j]
-                        }
-                    });
+        try {
+            const { event, totalPrice, phoneNumber, email, advancePayment } = JSON.parse(req.body);
+            const userId = session.user.id;
+
+            // combine the arrays into a single array
+            let foods = event.starterFood.concat(event.mainFood, event.dessertFood);
+
+
+            let food = foods.map((f) => ({
+                foodId : f
+            }));
+
+            let equipment = event.equipment.map((e) => ({
+                equipmentId : e
+            }));
+
+            const _event = await prisma.events.create({
+                data : {
+                    event_type: event.eventType,
+                    guestCountId : event.guest,
+                    event_environment : event.environment,
+                    venueId : event.venue,
+                    userId,
+                    phone_number : phoneNumber,
+                    date : event.date,
+                    total_price : totalPrice,
+                    advance_payment : advancePayment,
+                    payment_status : "pending",
+                    event_status : "pending",
+                    event_foods : {
+                        create : food
+                    },
+                    event_equipment : {
+                        create : equipment
+                    },
                 }
-            }
-            prisma.$disconnect();
-            let equipment = "";
-            for(let i = 0; i < event.equipment.length; i++){
-                equipment = await prisma.event_equipment.create({
-                    data : {
-                        eventId : _event.id,
-                        equipmentId : event.equipment[i],
-                    }
-                });
-            }
-            prisma.$disconnect();
-            if(food && equipment){
-                res.json({
+            });
+            if(await _event){
+                return res.json({
                     message : "Event created successfully",
                 });
+            } else{
+                return res.json({
+                    message : "Event creation failed!",
+                });
             }
-        } else{
-            res.json({
-                message : "Event creation failed",
+        } catch (e) {
+            return res.json({
+                error : e.message
             });
         }
     } else {

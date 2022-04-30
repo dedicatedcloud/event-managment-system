@@ -34,7 +34,6 @@ const handler = nc({
     .post(async (req, res) => {
         const session = await getSession({ req });
         if(session){
-
             try {
                 const { name, price } = req.body;
                 const { filename } = req.file;

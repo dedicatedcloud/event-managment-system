@@ -2,36 +2,33 @@ import { getSession } from "next-auth/react";
 import prisma from '../../../lib/prisma';
 
 export default async function handler(req, res) {
-    try {
-        const session = await getSession({ req });
-        if(session){
+    const session = await getSession({ req });
+    if(session){
+        try {
             const {id} = req.body;
-                try {
-                    id.map(async (id) => {
-                        let venue = await prisma.venues.delete({
-                            where : {
-                                id : id
-                            }
-                        });
-                    })
-                    prisma.$disconnect();
-                }catch (e) {
-                    return res.json({
-                        message : e.message
-                    })
+            let venue = await prisma.venues.delete({
+                where : {
+                    id : id
                 }
+            });
+            if(venue){
+                return res.json({
+                    message : "Venue deleted successfully!"
+                })
+            }else {
+                return res.json({
+                    message : "Error deleting venue!"
+                })
+            }
+        }catch (e) {
             return res.json({
-                message : "Record deleted Successfully!"
+                error : e.message
             })
         }
-        else {
-            return res.json({
-                message : "Not Authenticated!"
-            });
-        }
-    }catch (e){
+    }
+    else {
         return res.json({
-            message : e.message
-        })
+            message : "Not Authenticated!"
+        });
     }
 }

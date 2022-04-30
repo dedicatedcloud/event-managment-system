@@ -135,7 +135,6 @@ export default function Event(props) {
         nextStep();
     }
 
-
     const Form = () => {
         return activeStep === 0 ? <EventDetails next={next} eventProps={props} /> : activeStep === 1 ? <CustomerDetails next={next} back={backStep} props={props}  /> : <CheckOut next={ next } back={ backStep } props={props} data={data}/>;
     };
@@ -161,7 +160,7 @@ export default function Event(props) {
                         <Typography variant={"subtitle1"} color={"danger"} sx={{ marginY : "1rem" }}>By Clicking Confirm, you are affirming the validation of the Info you provided!</Typography>
                         <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between", alignItems : "center" }}>
                             <Button onClick={ backStep } variant={"contained"} sx={{ color : "white"}} color={"primary"}>Back</Button>
-                            <Button variant={"contained"} sx={{ color : "white"}} type={"submit"} onClick={ () => { setIsOpen(true); loadIframe()  } } color={"primary"}>Confirm</Button>
+                            <Button variant={"contained"} sx={{ color : "white"}} type={"submit"} onClick={ () => { setIsOpen(true); loadIframe(); } } color={"primary"}>Confirm</Button>
                         </Box>
                         {/*  Backdrop for payment  */}
                         <Backdrop
