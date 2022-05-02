@@ -79,13 +79,13 @@ export default function CheckOut({ next, back, data, props}) {
                     </Grid>
                     <Grid item xs={12} sm={6} md={6} lg={6}>
                         <Typography variant={"h6"} width={"100%"} gutterBottom color={"primary"}>Food Selection:</Typography>
-                        <Typography gutterBottom>Starter: { starterFoodData.join(", ") }</Typography>
-                        <Typography gutterBottom>Main Course: { mainFoodData.join(", ") }</Typography>
-                        <Typography>Dessert: { dessertFoodData.join(",") }</Typography>
+                        <Typography gutterBottom>Starter: { starterFoodData.length === 0 ? "None" : starterFoodData.join(", ") }</Typography>
+                        <Typography gutterBottom>Main Course: { mainFoodData.length === 0 ? "None" : mainFoodData.join(", ") }</Typography>
+                        <Typography>Dessert: { dessertFoodData.length === 0 ? "None" : dessertFoodData.join(",") }</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={6} lg={6}>
                         <Typography variant={"h6"} width={"100%"} gutterBottom color={"primary"}>Equipment Selection:</Typography>
-                        <Typography>{ equipmentData.join(", ") }</Typography>
+                        <Typography>{ equipmentData.length === 0 ? "None" : equipmentData.join(", ") }</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={6} lg={6}>
                         <Typography variant={"h6"} width={"100%"} gutterBottom color={"primary"}>Customer Details:</Typography>

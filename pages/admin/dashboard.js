@@ -118,7 +118,6 @@ export async function getServerSideProps(context) {
             }
         }
         else {
-            //Todo : make these queries using transactions
             const usersCount = await prisma.user.count();
             const venuesCount = await prisma.venues.count();
             const foodCount = await prisma.food.count();

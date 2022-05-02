@@ -33,7 +33,7 @@ export default function Users(props) {
 
     //column props for the DataGrid
     const columns = [
-        { field: 'id', headerName: 'Id', flex : 1, editable : false, type: "number", renderHeader : (params) => {
+        { field: 'id', headerName: 'Id', editable : false, type: "number", renderHeader : (params) => {
                 return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><Tag fontSize={"small"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
         }
         },

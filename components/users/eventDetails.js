@@ -176,20 +176,23 @@ export default function EventDetails(props) {
     };
 
     const handleDateChange = (date) => {
-        // Todo: compare the dates and show warning if same date is selected
         const filteredDate = events.filter((d) => {
             let temp = new Date(d.start);
             let eventDate = new Date(`${temp.getMonth()+1}/${temp.getDate()}/${temp.getFullYear()}`);
-            console.log(eventDate.getDate() === date.getDate())
+            console.log(eventDate.getDate() === date.getDate() && date.getDate() === new Date().getDate())
             if(eventDate.getDate() === date.getDate()){
                 return d;
             }
         });
 
-        if(filteredDate.length > 0){
-            //show notification if same date is selected
-        }
-        else{
+        //checking difference between today's date and the selected date
+        let Difference_In_Time = date.getTime() - new Date().getTime();
+        // To calculate the no. of days between two dates
+        let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+        console.log(Difference_In_Days, Difference_In_Days < 5);
+        if(filteredDate.length > 0 || Difference_In_Days < 5){
+            //show notification if same date is selected or if the selected date is less than 5 days from today
+        } else{
             setEvent(prevEvent => ({
                 ...prevEvent,
                 date : date,
@@ -240,7 +243,6 @@ export default function EventDetails(props) {
 
     //if the form is being used in the dashboard for editing an event
     useEffect( () => {
-        //Todo: equipment is not being set
         if(props?.event){
             const { event } = props;
             let starter = [];
@@ -301,7 +303,6 @@ export default function EventDetails(props) {
                                ...prevEvent,
                                eventType : target.value
                            })) } label={"Event Type"}>
-                               <MenuItem value={""}>None</MenuItem>
                                <MenuItem value={"Wedding"}>Wedding</MenuItem>
                                <MenuItem value={"Birthday Party"}>Birthday Party</MenuItem>
                                <MenuItem value={"Gathering"}>Gathering</MenuItem>
@@ -315,7 +316,6 @@ export default function EventDetails(props) {
                                ...prevEvent,
                                guest : target.value
                            })) }>
-                               <MenuItem value={""}>None</MenuItem>
                                { props.eventProps.guests.map((g,i) => {
                                    return (
                                        <MenuItem key={i} value={g.id}>{g.min} - {g.max}</MenuItem>
@@ -362,7 +362,6 @@ export default function EventDetails(props) {
                                ...prevEvent,
                                starterFood : target.value
                            })) }>
-                               <MenuItem value={""}>None</MenuItem>
                                { starter.map((s, i) => (
                                    <MenuItem key={i} value={s.id}>{s.name} - Price : {s.price}</MenuItem>
                                ))}
@@ -376,7 +375,6 @@ export default function EventDetails(props) {
                                ...prevEvent,
                                mainFood : target.value
                            })) }>
-                               <MenuItem value={""}>None</MenuItem>
                                { main.map((m, i) => (
                                    <MenuItem key={i} value={m.id}>{m.name} - Price : {m.price}</MenuItem>
                                ))}
@@ -390,7 +388,6 @@ export default function EventDetails(props) {
                                ...prevEvent,
                                dessertFood : target.value
                            })) }>
-                               <MenuItem value={""}>None</MenuItem>
                                { dessert.map((d, i) => (
                                    <MenuItem key={i} value={d.id}>{d.name} - Price : {d.price}</MenuItem>
                                ))}
@@ -408,7 +405,6 @@ export default function EventDetails(props) {
                                ...prevEvent,
                                equipment : target.value
                            })) }>
-                               <MenuItem value={""}>None</MenuItem>
                                { props.eventProps.equipment.map((e, i) => (
                                    <MenuItem key={i} value={e.id}>{e.name} - Price : {e.price}</MenuItem>
                                ))}
@@ -461,7 +457,7 @@ export default function EventDetails(props) {
                     <Grid item xs={12} sm={12} lg={12}>
                         <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between"}}>
                             <Typography variant={"subtitle1"} fontSize={20}>Total Price (Rs): {totalPrice}</Typography>
-                            <Button type={"submit"} variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white"}} disabled={event.guest === "" || event.venue === "" || event.eventType === ""|| event.date === new Date()}>{props?.event ? "Update" : "Next"}</Button>
+                            <Button type={"submit"} variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white"}} disabled={event.guest === "" || event.venue === "" || event.eventType === ""|| event.date.getDate() === new Date().getDate()}>{props?.event ? "Update" : "Next"}</Button>
                         </Box>
                     </Grid>
                     <FormHelperText sx={{ fontSize : "15px" }}>Fields with * are required!</FormHelperText>

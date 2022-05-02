@@ -87,7 +87,7 @@ export default function Equipment(props) {
     }
 
     const columns = [
-        { field: 'id', headerName: 'Id', editable : false, renderHeader : (params) => {
+        { field: 'id', headerName: 'Id', type : "number",editable : false, renderHeader : (params) => {
                 return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><Tag fontSize={"small"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
             } },
         { field: 'name', headerName: 'Name', editable : true, flex : 1, renderHeader : (params) => {
@@ -152,6 +152,7 @@ export default function Equipment(props) {
                 id
             })
         }).then(res => res.json()).then(data => {
+            console.log(data);
             getEquipment();
             if(data.message){
                 setMessage(data.message);

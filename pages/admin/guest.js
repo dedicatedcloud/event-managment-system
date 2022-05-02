@@ -26,12 +26,22 @@ export default function Guest(props) {
     }, []);
 
     //for data grid column validation
-    const validateMinGuests = (value) => {
-        return value >= 100
+    const validateMinGuests = (props) => {
+        if(props.props.value < props.row.max && props.props.value >= 100){
+            return true;
+        }
+        else{
+            return false;
+        }
     };
 
-    const validateMaxGuests = (value) => {
-        return value >= 200;
+    const validateMaxGuests = (props) => {
+        if(props.props.value > props.row.min && props.props.value >= 200){
+            return true;
+        }
+        else{
+            return false;
+        }
     };
 
     //for actions column
@@ -45,27 +55,27 @@ export default function Guest(props) {
 
     //column props for the DataGrid
     const columns = [
-    { field: 'id', headerName: 'Id', flex : 1, editable : false, type: "number",renderHeader : (params) => {
-            return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><Tag fontSize={"small"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
+    { field: 'id', headerName: 'Id', editable : false, type: "number",renderHeader : (props) => {
+            return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><Tag fontSize={"small"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
     }},
-    { field: 'min', headerName: 'Min Guests',type : "number", flex : 1, editable : true, preProcessEditCellProps: (params) => {
-            const validMinValue = validateMinGuests(params.props.value);
-            return { ...params.props, error: !validMinValue };
-        },renderHeader : (params) => {
-            return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><PeopleIcon fontSize={"small"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
+    { field: 'min', headerName: 'Min Guests',type : "number", flex : 1, editable : true, preProcessEditCellProps: (props) => {
+            const validMinValue = validateMinGuests(props);
+            return { ...props.props, error: !validMinValue };
+        },renderHeader : (props) => {
+            return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><PeopleIcon fontSize={"small"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
         }
     },
-    { field: 'max', headerName: 'Max Guests',type : "number", flex : 1, editable : true, preProcessEditCellProps: (params) => {
-            const validMaxValue = validateMaxGuests(params.props.value);
-            return { ...params.props, error: !validMaxValue };
-        },renderHeader : (params) => {
-        return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><PeopleIcon fontSize={"small"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
+    { field: 'max', headerName: 'Max Guests',type : "number", flex : 1, editable : true, preProcessEditCellProps: (props) => {
+            const validMaxValue = validateMaxGuests(props);
+            return { ...props.props, error: !validMaxValue };
+        },renderHeader : (props) => {
+        return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><PeopleIcon fontSize={"small"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
     }
     },
         { field: 'Action', headerName: 'Action', editable : false, flex : 1,
             renderCell : deleteButton,
-            renderHeader : (params) => {
-                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><EditIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
+            renderHeader : (props) => {
+                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><EditIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
             }
         },
     ]
@@ -90,9 +100,9 @@ export default function Guest(props) {
 
 
     //to get the edited record from the table row
-    const handleCellEditCommit = useCallback(async (params) => {
+    const handleCellEditCommit = useCallback(async (props) => {
         setLoading(true);
-        const { id, field, value } = params;
+        const { id, field, value } = props;
         fetch("http://localhost:3000/api/guest/updateGuestCount", {
             method : "POST",
             headers : {
@@ -145,35 +155,37 @@ export default function Guest(props) {
 
     //for form submission
     const SubmitHandler = async (data) => {
-        setLoading(true)
-        const { max, min } = data;
-        fetch("http://localhost:3000/api/guest/addGuestCount", {
-            method : "POST",
-            headers : {
-                "Content-type" : "application/json"
-            },
-            body : JSON.stringify({
-                max,
-                min
+        if(data.min < data.max){
+            setLoading(true)
+            const { max, min } = data;
+            fetch("http://localhost:3000/api/guest/addGuestCount", {
+                method : "POST",
+                headers : {
+                    "Content-type" : "application/json"
+                },
+                body : JSON.stringify({
+                    max,
+                    min
+                })
             })
-        })
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                getGuestCount();
-                if(data.error){
-                    setMessage(data.error);
-                }
-                else{
-                    setMessage(data.message)
-                }
-                //need to empty fields after form submission
-                reset({
-                    max : "",
-                    min : ""
-                });
-            })
-            .catch(e => console.log(e.message));
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    getGuestCount();
+                    if(data.error){
+                        setMessage(data.error);
+                    }
+                    else{
+                        setMessage(data.message)
+                    }
+                    //need to empty fields after form submission
+                    reset({
+                        max : "",
+                        min : ""
+                    });
+                })
+                .catch(e => console.log(e.message));
+        }
     }
 
     return (

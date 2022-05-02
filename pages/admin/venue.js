@@ -31,8 +31,8 @@ export default function Venue(props) {
 
 
     //For guest Count and editing it
-    const SelectInput = (params) => {
-        const { id, value, api, field } = params;
+    const SelectInput = (props) => {
+        const { id, value, api, field } = props;
         return <div>
             <Select value={value} onChange={ async (e) => {
                 api.setEditCellValue({id, field, value: e.target.value}, e);
@@ -64,8 +64,8 @@ export default function Venue(props) {
         return <Image src={"/Venues/"+props.value} width={1000} height={400} className={"ImageSize"} alt=""/>
     }
 
-    const SelectImage = (params) => {
-        const { id, field, value, api } = params;
+    const SelectImage = (props) => {
+        const { id, field, value, api } = props;
         return <TextField type={"file"} onChange={ async (e) => {
             api.setEditCellValue({id, field, value: e.target.files[0]}, e);
             const isValid = await api.commitCellChange({id, field});
@@ -120,52 +120,52 @@ export default function Venue(props) {
     }
 
     const columns = [
-        { field: 'id', headerName: 'Id', editable : false, renderHeader : (params) => {
-            return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><Tag fontSize={"small"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
+        { field: 'id', headerName: 'Id', editable : false, type : "number", renderHeader : (props) => {
+            return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><Tag fontSize={"small"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
             }},
-        { field: 'name', headerName: 'Name', editable : true, flex : 1, renderHeader : (params) => {
-                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><AbcIcon fontSize={"large"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
+        { field: 'name', headerName: 'Name', editable : true, flex : 1, renderHeader : (props) => {
+                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><AbcIcon fontSize={"large"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
             },
-            preProcessEditCellProps : (params) => {
-                const validValue = validateVenueName(params.props.value);
-                return { ...params.props, error: !validValue };
+            preProcessEditCellProps : (props) => {
+                const validValue = validateVenueName(props.props.value);
+                return { ...props.props, error: !validValue };
             }
         },
-        { field: 'location', headerName: 'Location', flex: 2, editable : true, renderHeader : (params) => {
-                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><LocationOnIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
+        { field: 'location', headerName: 'Location', flex: 2, editable : true, renderHeader : (props) => {
+                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><LocationOnIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
             },
-            preProcessEditCellProps : (params) => {
-                const validValue = params.props.value.length > 10;
-                return { ...params.props, error: !validValue };
+            preProcessEditCellProps : (props) => {
+                const validValue = props.props.value.length > 10;
+                return { ...props.props, error: !validValue };
             }
         },
-        { field: 'price', headerName: 'Price', editable : true, type: "number", valueFormatter: ({ value }) => currencyFormatter.format(Number(value)), renderHeader : (params) => {
-                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><AttachMoneyIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
+        { field: 'price', headerName: 'Price', editable : true, type: "number", valueFormatter: ({ value }) => currencyFormatter.format(Number(value)), renderHeader : (props) => {
+                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><AttachMoneyIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
             },
-            preProcessEditCellProps : (params) => {
-                const validValue = validateVenuePrice(params.props.value);
-                return { ...params.props, error: !validValue };
+            preProcessEditCellProps : (props) => {
+                const validValue = validateVenuePrice(props.props.value);
+                return { ...props.props, error: !validValue };
             }
         },
         { field: 'guestCountId', headerName: 'Guest Count', flex : 1, editable : true, type : "number",
             renderCell : field,
             renderEditCell : SelectInput,
-            renderHeader : (params) => {
-                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><NumbersIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
+            renderHeader : (props) => {
+                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><NumbersIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
             }
         },
         {
-            field: 'picture', headerName: "Picture", editable: true, flex: 1,
+            field: 'picture', headerName: "Picture", editable: true, flex: 2,
             renderCell : DisplayImage,
             renderEditCell : SelectImage,
-            renderHeader : (params) => {
-                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><InsertPhotoIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
+            renderHeader : (props) => {
+                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><InsertPhotoIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
             }
         },
         { field: 'Action', headerName: 'Action', editable : false, flex : 1,
             renderCell : deleteButton,
-            renderHeader : (params) => {
-                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><EditIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{params.colDef.headerName}</Typography></Box>
+            renderHeader : (props) => {
+                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><EditIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
             }
         },
     ];
@@ -241,9 +241,9 @@ export default function Venue(props) {
     };
 
     //to get the edited record from the table row
-    const handleCellEditCommit = useCallback(async (params) => {
+    const handleCellEditCommit = useCallback(async (props) => {
         setLoading(true);
-        const { id, field, value } = params;
+        const { id, field, value } = props;
         const formData = new FormData();
         formData.append("id", id);
         formData.append("field", field);
