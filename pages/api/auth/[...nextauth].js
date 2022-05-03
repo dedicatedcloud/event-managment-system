@@ -4,7 +4,6 @@ import prisma from "../../../lib/prisma";
 import bcrypt from "bcryptjs";
 
 
-
 export default NextAuth({
     // Configure one or more authentication providers
     providers: [
@@ -51,6 +50,7 @@ export default NextAuth({
     },
     secret : "test",
     pages : {
-        error : "/login"
+        signIn: '/login',
+        error: '/login',
     }
 })

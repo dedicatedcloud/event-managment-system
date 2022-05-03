@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -19,7 +19,7 @@ export default function Login() {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.down("md"));
 
-    const { error } = useRouter().query;
+    const {error} = useRouter().query;
 
     const schema = yup.object({
         email : yup.string().required().email().trim(),
@@ -35,11 +35,12 @@ export default function Login() {
             {
                 email : email,
                 password : password,
-                // The page where you want to redirect to after a
-                // successful login
-                callbackUrl: "/"
+                // The page where you want to redirect to after a successful login
+                callbackUrl: "/",
             }
-        ).then((error) => console.log(error))
+        ).then((error) => {
+            console.log(error);
+        })
             .catch((error) => console.log(error));
     };
 
@@ -57,7 +58,7 @@ export default function Login() {
                     <form onSubmit={handleSubmit(formSubmit)}>
                         <Controller name="email" control={ control } defaultValue={""} render={({field}) => (<TextField {...field} sx={{ marginY : "1rem" }} label={"Email"} type={"email"} variant={"outlined"} fullWidth error={!!errors.email} helperText={errors.email ? errors.email?.message : ""} />)} />
                         <Controller name="password" control={ control } defaultValue={""} render={({field}) => (<TextField {...field} sx={{ marginY : "1rem" }} label={"Password"} type={"password"} variant={"outlined"} fullWidth error={!!errors.password} helperText={errors.password ? errors.password?.message : ""} />)} />
-                        <Link href={"/forgotPassword"}><Typography color={"primary"} sx={{ cursor : "pointer", marginY : "1rem", ":hover" : { color : "#6d6e71" } }} variant={"subtitle1"} width={"8rem"}>Forgot Password?</Typography></Link>
+                        <Link href={"/forgotPassword"}><Typography color={"primary"} sx={{ cursor : "pointer", marginY : "1rem", width : "max-content", ":hover" : { color : "#6d6e71" } }} variant={"subtitle1"} >Forgot Password?</Typography></Link>
                         <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "start", alignItems : "center" }}>
                             <Button type="submit" value={"Submit"} variant={"contained"} sx={{ color : "white", borderRadius : "0.5rem", marginRight : "1.5rem" }} size={"large"}>Login</Button>
                             <Link href={"/register"}><Typography color={"primary"}  sx={{ cursor : "pointer", marginY : "1rem", ":hover" : { color : "#6d6e71" } }} variant={"subtitle1"}>Create an Account</Typography></Link>

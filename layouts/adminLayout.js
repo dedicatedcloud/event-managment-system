@@ -178,11 +178,6 @@ export default function AdminLayout(props) {
                         <MenuIcon fontSize={"large"} />
                     </IconButton>
                     <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "end", flexGrow : 1 }}>
-                        {/*{
-                            links.map((link, i) => (
-                                <Link href={link.href} key={i}><Typography  sx={{ cursor : "pointer", borderRadius : 1, marginX : 1, paddingX: 3, paddingY : 1, fontSize: "20px", ':hover' : { backgroundColor : "#f08a5d", color : "#fff" }}} color={"primary"}>{link.text}</Typography></Link>
-                            ))
-                        }*/}
                         <Typography sx={{ margin : 0, paddingTop : 1, paddingX : 1, color : "#f08a5d" }} variant={"h6"}>Signed In As { status === "authenticated" && session.user.name } </Typography>
                         <DropDown/>
                     </Box>
