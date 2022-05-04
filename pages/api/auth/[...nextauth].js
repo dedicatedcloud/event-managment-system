@@ -35,12 +35,14 @@ export default NextAuth({
     ],
     callbacks: {
         jwt : async ({ token, user }) => {
+            // we store the user info in the token
             if(user){
                 token.user = user;
             }
             return token;
         },
         session : async ({ token, session }) => {
+            // we store the user info in the session if the token has a user
             if(token){
                 session.user = token.user;
             }
@@ -48,7 +50,7 @@ export default NextAuth({
         },
 
     },
-    secret : "test",
+    secret : "test", // for making the token secure
     pages : {
         signIn: '/login',
         error: '/login',

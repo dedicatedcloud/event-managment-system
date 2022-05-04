@@ -7,11 +7,14 @@ import {Calendar, momentLocalizer} from "react-big-calendar";
 import moment from "moment";
 import EventCards from "../../components/users/eventCards";
 import Grid from "@mui/material/Grid";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function Dashboard({user, data}) {
 
     const [ calenderEvents, setCalenderEvents ] = useState([]);
     const [ events, setEvents ] = useState([]);
+    const [ loading, setLoading ] = useState(true);
 
     const localizer = momentLocalizer(moment);
 
@@ -24,6 +27,7 @@ export default function Dashboard({user, data}) {
             body :  JSON.stringify(user.id)
         }).then(res => res.json()).then(data => {
             if(data?.events){
+                setLoading(false);
                 setEvents(data.events.map((e) => {
                     e.event_foods = e.event_foods.map( ef => ef.foodId)
                     e.event_equipment = e.event_equipment.map( eq => eq.equipmentId)
@@ -42,8 +46,7 @@ export default function Dashboard({user, data}) {
     }
 
     useEffect(() => {
-        console.log(sessionStorage.getItem("info"));
-        fetchEvents()
+        fetchEvents();
     }, [])
 
 
@@ -54,7 +57,7 @@ export default function Dashboard({user, data}) {
             <Divider variant={"middle"} sx={{ marginY : "1rem" }}/>
             <Typography variant={"h5"} align={"left"} sx={{ paddingX : "1rem", marginY : "1rem" }} color={"primary"}>My Events:</Typography>
             <Box sx={{ marginY : "1rem", padding : "1rem" }}>
-                { events ? <Grid container spacing={5} sx={{paddingX: "2rem"}}>
+                { !loading ? events.length > 0 ? <Grid container spacing={5} sx={{paddingX: "2rem"}}>
                     {events.map((e, i) => {
                         return (
                             <Grid item key={i}>
@@ -63,7 +66,7 @@ export default function Dashboard({user, data}) {
                         );
                     })
                     }
-                </Grid> : <Typography variant={"h5"} align={"center"} color={"primary"} sx={{ marginY : "2rem" }}>No events found</Typography> }
+                </Grid> : <Typography align={"center"} color={"primary"} variant={"h4"}>No Events available.</Typography> : <Typography align={"center"}><CircularProgress color="primary" size={"3rem"}/></Typography>}
             </Box>
             <Divider variant={"middle"} sx={{ marginY : "1rem" }}/>
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center", alignItems : "center", marginY : "2rem", paddingX : "1rem" }}>
@@ -88,7 +91,6 @@ export async function getServerSideProps({req}){
         return {
             redirect : {
                 destination : "/",
-                permanent : false
             }
         }
     }

@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {useSession} from "next-auth/react";
+import {getSession} from "next-auth/react";
 import { useRouter } from "next/router";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -17,10 +17,6 @@ export default function ForgotPassword(props) {
 
     const router = useRouter();
     const { email_verified, email} = router.query;
-
-
-    const { data : session, status } = useSession();
-    if(status === "authenticated") router.push("/")
 
     // password field in password reset form
     const schema = yup.object({
@@ -98,3 +94,28 @@ export default function ForgotPassword(props) {
 };
 
 ForgotPassword.layout = "user";
+
+export async function getServerSideProps({req}){
+    const session = await getSession({req})
+    if(session){
+        if(session.user.role === "admin"){
+            return {
+                redirect : {
+                    destination : "/admin/dashboard",
+                }
+            }
+        }else{
+            return {
+                redirect : {
+                    destination : "/",
+                }
+            }
+        }
+    }else{
+        return {
+            props : {
+                session : null
+            }
+        }
+    }
+}

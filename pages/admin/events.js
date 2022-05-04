@@ -338,16 +338,6 @@ export async function getServerSideProps(context){
         }
     }
     if(session){
-
-        const data = await Promise.all([fetchEvents(), fetchGuestCount(), fetchVenues(), fetchUsers()]).then(results => {
-            return {
-                events : results[0],
-                guests : results[1],
-                venues : results[2],
-                users : results[3]
-            }
-        });
-
         const { role } = session.user;
         if(role === "user") {
             return {
@@ -358,6 +348,15 @@ export async function getServerSideProps(context){
             }
         }
         else {
+            const data = await Promise.all([fetchEvents(), fetchGuestCount(), fetchVenues(), fetchUsers()]).then(results => {
+                return {
+                    events : results[0],
+                    guests : results[1],
+                    venues : results[2],
+                    users : results[3]
+                }
+            });
+
             return {
                 props : {
                     user: session.user,

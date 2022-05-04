@@ -3,9 +3,19 @@ const path = require('path');
 
 module.exports = withTM({
   reactStrictMode: true,
-  swcMinify: false,
+  swcMinify: true,
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')]
+  },
+  experimental: {
+    modularizeImports: {
+      '@mui/material/?(((\\w*)?/?)*)': {
+        transform: '@mui/material/{{ matches.[1] }}/{{member}}'
+      },
+      '@mui/icons-material/?(((\\w*)?/?)*)': {
+        transform: '@mui/icons-material/{{ matches.[1] }}/{{member}}'
+      }
+    }
   }
 });
 /*module.exports = {

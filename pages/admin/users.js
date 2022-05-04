@@ -98,10 +98,8 @@ export default function Users(props) {
 
 Users.layout = "admin";
 
-export async function getServerSideProps({req, res}){
+export async function getServerSideProps({req}){
     const session = await getSession({req})
-    const resp = await fetch("http://localhost:3000/api/users/getUsers");
-    const data = await resp.json();
     if(!session){
         return {
             redirect : {
@@ -121,10 +119,8 @@ export async function getServerSideProps({req, res}){
             }
         }
         else {
-            res.setHeader(
-                'Cache-Control',
-                'public, s-maxage=10, stale-while-revalidate=59'
-            )
+            const res = await fetch("http://localhost:3000/api/users/getUsers");
+            const data = await res.json();
             return {
                 props : {
                     user: session.user,

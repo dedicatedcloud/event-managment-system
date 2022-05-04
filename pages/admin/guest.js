@@ -213,8 +213,6 @@ Guest.layout = "admin";
 
 export async function getServerSideProps(context){
     const session = await getSession(context)
-    const res = await fetch("http://localhost:3000/api/guest/getGuestCount");
-    const data = await res.json();
     if(!session){
         return {
             redirect : {
@@ -234,6 +232,8 @@ export async function getServerSideProps(context){
             }
         }
         else {
+            const res = await fetch("http://localhost:3000/api/guest/getGuestCount");
+            const data = await res.json();
             return {
                 props : {
                     user: session.user,

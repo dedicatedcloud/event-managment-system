@@ -298,15 +298,12 @@ export default function Food(props) {
 
 Food.layout = "admin";
 
-export async function getServerSideProps({req, res}){
+export async function getServerSideProps({req}){
     const session = await getSession({req})
-    const resp = await fetch("http://localhost:3000/api/food/getFoods");
-    const {food} = await resp.json();
     if(!session){
         return {
             redirect : {
                 destination : "/",
-                permanent : false
             }
         }
     }
@@ -316,15 +313,12 @@ export async function getServerSideProps({req, res}){
             return {
                 redirect : {
                     destination : "/",
-                    permanent : false
                 }
             }
         }
         else {
-            res.setHeader(
-                'Cache-Control',
-                'public, s-maxage=10, stale-while-revalidate=59'
-            )
+            const res = await fetch("http://localhost:3000/api/food/getFoods");
+            const {food} = await res.json();
             return {
                 props : {
                     user: session.user,

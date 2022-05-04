@@ -331,12 +331,8 @@ export default function Venue(props) {
 
 Venue.layout = "admin";
 
-export async function getServerSideProps({req, res}){
+export async function getServerSideProps({req}){
     const session = await getSession({req});
-    const resp = await fetch("http://localhost:3000/api/venues/getVenues");
-    const { venues } = await resp.json();
-    const resp2 = await fetch("http://localhost:3000/api/guest/getGuestCount");
-    const { guests } = await resp2.json();
     if(!session){
         return {
             redirect : {
@@ -356,10 +352,10 @@ export async function getServerSideProps({req, res}){
             }
         }
         else {
-            res.setHeader(
-                'Cache-Control',
-                'public, s-maxage=10, stale-while-revalidate=59'
-            )
+            const res = await fetch("http://localhost:3000/api/venues/getVenues");
+            const { venues } = await res.json();
+            const res2 = await fetch("http://localhost:3000/api/guest/getGuestCount");
+            const { guests } = await res2.json();
             return {
                 props : {
                     user: session.user,

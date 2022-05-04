@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import bcrypt from 'bcryptjs';
-import { signIn } from "next-auth/react";
+import {getSession, signIn} from "next-auth/react";
 import Image from "next/image";
 import registerImage from "../public/assets/registerImage.jpg";
 import Link from "next/link";
@@ -91,3 +91,28 @@ const Register = () => {
 Register.layout = "user";
 
 export default Register;
+
+export async function getServerSideProps({req}){
+    const session = await getSession({req})
+    if(session){
+        if(session.user.role === "admin"){
+            return {
+                redirect : {
+                    destination : "/admin/dashboard",
+                }
+            }
+        }else{
+            return {
+                redirect : {
+                    destination : "/",
+                }
+            }
+        }
+    }else {
+        return {
+            props : {
+                session : null
+            }
+        }
+    }
+}

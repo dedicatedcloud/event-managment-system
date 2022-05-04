@@ -42,7 +42,7 @@ export default function Dashboard(props){
                                 <Typography align={"right"} variant={"h5"} color={"secondary"}>{props.venuesCount}<br/>Venues</Typography>
                             </CardContent>
                             <CardActions sx={{ backgroundColor : "#ffffff" }}>
-                                <Link href={"/admin/users"}><Button size="small" variant={"contained"} sx={{ color : "#ffffff" }} color={"primary"}>View Records</Button></Link>
+                                <Link href={"/admin/venue"}><Button size="small" variant={"contained"} sx={{ color : "#ffffff" }} color={"primary"}>View Records</Button></Link>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -53,7 +53,7 @@ export default function Dashboard(props){
                                 <Typography align={"right"} variant={"h5"} color={"secondary"}>{props.foodCount}<br/>Foods</Typography>
                             </CardContent>
                             <CardActions sx={{ backgroundColor : "#ffffff" }}>
-                                <Link href={"/admin/users"}><Button size="small" variant={"contained"} sx={{ color : "#ffffff" }} color={"primary"}>View Records</Button></Link>
+                                <Link href={"/admin/food"}><Button size="small" variant={"contained"} sx={{ color : "#ffffff" }} color={"primary"}>View Records</Button></Link>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -64,7 +64,7 @@ export default function Dashboard(props){
                                 <Typography align={"right"} variant={"h5"} color={"secondary"}>{props.equipmentCount}<br/>Equipment</Typography>
                             </CardContent>
                             <CardActions sx={{ backgroundColor : "#ffffff" }}>
-                                <Link href={"/admin/users"}><Button size="small" variant={"contained"} sx={{ color : "#ffffff" }} color={"primary"}>View Records</Button></Link>
+                                <Link href={"/admin/equipment"}><Button size="small" variant={"contained"} sx={{ color : "#ffffff" }} color={"primary"}>View Records</Button></Link>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -103,7 +103,6 @@ export async function getServerSideProps(context) {
         return {
             redirect : {
                 destination : "/",
-                permanent : false
             }
         }
     }
@@ -113,7 +112,6 @@ export async function getServerSideProps(context) {
             return {
                 redirect : {
                     destination : "/",
-                    permanent : false
                 }
             }
         }
