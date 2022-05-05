@@ -49,7 +49,6 @@ export async function getStaticProps(){
     return {
         props : {
             venues : data.venues
-        },
-        revalidate : 5
+        }
     }
 }

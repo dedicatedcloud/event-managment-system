@@ -333,7 +333,6 @@ export async function getServerSideProps(context){
         return {
             redirect : {
                 destination : "/",
-                permanent : false
             }
         }
     }
@@ -343,7 +342,6 @@ export async function getServerSideProps(context){
             return {
                 redirect : {
                     destination : "/",
-                    permanent : false
                 }
             }
         }

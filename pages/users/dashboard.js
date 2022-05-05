@@ -7,7 +7,6 @@ import {Calendar, momentLocalizer} from "react-big-calendar";
 import moment from "moment";
 import EventCards from "../../components/users/eventCards";
 import Grid from "@mui/material/Grid";
-import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export default function Dashboard({user, data}) {

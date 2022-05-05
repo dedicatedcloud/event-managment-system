@@ -250,7 +250,7 @@ export default function Equipment(props) {
 
 Equipment.layout = "admin";
 
-export async function getServerSideProps({req, res}){
+export async function getServerSideProps({req}){
     const session = await getSession({req});
     const resp = await fetch("http://localhost:3000/api/equipment/getEquipments");
     const {equipment} = await resp.json();
@@ -258,7 +258,6 @@ export async function getServerSideProps({req, res}){
         return {
             redirect : {
                 destination : "/",
-                permanent : false
             }
         }
     }
@@ -268,15 +267,10 @@ export async function getServerSideProps({req, res}){
             return {
                 redirect : {
                     destination : "/",
-                    permanent : false
                 }
             }
         }
         else {
-            res.setHeader(
-                'Cache-Control',
-                'public, s-maxage=10, stale-while-revalidate=59'
-            )
             return {
                 props : {
                     user: session.user,

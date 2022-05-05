@@ -104,7 +104,6 @@ export async function getServerSideProps({req}){
         return {
             redirect : {
                 destination : "/",
-                permanent : false
             }
         }
     }
@@ -114,7 +113,6 @@ export async function getServerSideProps({req}){
             return {
                 redirect : {
                     destination : "/",
-                    permanent : false
                 }
             }
         }
