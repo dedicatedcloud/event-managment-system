@@ -33,7 +33,7 @@ export default function CustomerDetails ({ next, back, props }){
                     <Grid item xs={12} md={12} sm={12} lg={12}>
                         <Box  component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between"}}>
                             <Button onClick={ back } variant={"contained"} sx={{ color : "white"}} color={"primary"}>Back</Button>
-                            <Button variant={"contained"} sx={{ color : "white"}} type={"submit"} color={"primary"} disabled={phoneNumber.length < 11}>Next</Button>
+                            <Button variant={"contained"} sx={{ color : "white"}} type={"submit"} color={"primary"} disabled={phoneNumber.length !== 11}>Next</Button>
                         </Box>
                     </Grid>
                 </Grid>

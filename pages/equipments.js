@@ -49,6 +49,6 @@ export async function getStaticProps(){
         props : {
             equipment : data.equipment
         },
-        revalidate : 5
+        revalidate : 10
     }
 }

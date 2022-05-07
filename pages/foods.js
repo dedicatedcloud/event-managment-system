@@ -90,6 +90,6 @@ export async function getStaticProps(){
         props : {
             foods : data.food
         },
-        revalidate : 5
+        revalidate : 10
     }
 }

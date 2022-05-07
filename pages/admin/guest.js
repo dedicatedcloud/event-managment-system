@@ -27,7 +27,7 @@ export default function Guest(props) {
 
     //for data grid column validation
     const validateMinGuests = (props) => {
-        if(props.props.value < props.row.max && props.props.value >= 100){
+        if(props.props.value < props.row.max && props.props.value >= 10){
             return true;
         }
         else{
@@ -36,7 +36,7 @@ export default function Guest(props) {
     };
 
     const validateMaxGuests = (props) => {
-        if(props.props.value > props.row.min && props.props.value >= 200){
+        if(props.props.value > props.row.min && props.props.value >= 50){
             return true;
         }
         else{
@@ -82,8 +82,8 @@ export default function Guest(props) {
 
     //schema for the validation being used in the form
     const schema = yup.object({
-        max : yup.number().required().min(200).typeError('Must be a Number').positive("Value must be positive"),
-        min : yup.number().required().min(100).typeError('Must be a Number').positive("Value must be positive")
+        max : yup.number().required().min(50).typeError('Number is required!').positive("Value must be positive"),
+        min : yup.number().required().min(10).typeError('Number is required!').positive("Value must be positive")
     })
 
     const { control, formState : { errors }, handleSubmit, reset } = useForm({
