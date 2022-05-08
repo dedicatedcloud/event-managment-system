@@ -88,7 +88,7 @@ export default function Users(props) {
         <Box component={"div"}>
             <Typography  variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem" }} color={"primary"}>Users</Typography>
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center", marginY : "8rem"}}>
-                <Box sx={{ width : "50rem", margin : "0 auto", paddingY : "3rem" }}>
+                <Box sx={{ width : "50rem", margin : "6rem auto", paddingY : "3rem" }}>
                     <DataGrid autoHeight={true} loading={loading} disableSelectionOnClick={true} sx={{ boxShadow : 5, color : "#f08a5d", marginY : "1rem" }} density={"comfortable"} rows={users} columns={columns} />
                 </Box>
             </Box>
