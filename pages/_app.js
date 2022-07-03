@@ -5,8 +5,18 @@ import {SessionProvider} from "next-auth/react";
 import LayoutWrapper from "../layouts/layoutWrapper";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import NextNProgress from "nextjs-progressbar";
+import createEmotionCache from '../src/createEmotionCache';
+import { CacheProvider } from '@emotion/react';
+import PropTypes from 'prop-types';
 
-function MyApp({ Component, pageProps: { session, ...pageProps }}) {
+// Client-side cache shared for the whole session
+// of the user in the browser.
+
+const clientSideEmotionCache = createEmotionCache();
+function MyApp(props) {
+
+    const { Component, emotionCache =
+        clientSideEmotionCache, pageProps : { session, ...pageProps } } = props;
 
     const theme = createTheme({
         palette : {
@@ -19,15 +29,23 @@ function MyApp({ Component, pageProps: { session, ...pageProps }}) {
         },
     });
     return (
-       <SessionProvider session={session}>
-          <ThemeProvider theme={theme}>
-              <NextNProgress height={8} color={"#f08a5d"}/>
-              <LayoutWrapper {...pageProps}>
-                  <Component {...pageProps}/>
-              </LayoutWrapper>
-          </ThemeProvider>
-       </SessionProvider>
+       <CacheProvider value={emotionCache}>
+           <SessionProvider session={session}>
+               <ThemeProvider theme={theme}>
+                   <NextNProgress height={8} color={"#f08a5d"}/>
+                   <LayoutWrapper {...pageProps}>
+                       <Component {...pageProps}/>
+                   </LayoutWrapper>
+               </ThemeProvider>
+           </SessionProvider>
+       </CacheProvider>
     )
 }
+
+MyApp.propTypes = {
+    Component: PropTypes.elementType.isRequired,
+    emotionCache: PropTypes.object,
+    pageProps: PropTypes.object.isRequired,
+};
 
 export default MyApp
