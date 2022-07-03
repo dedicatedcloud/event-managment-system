@@ -97,7 +97,7 @@ export default function CheckOut({ next, back, data, props}) {
                         <Typography variant={"h6"} width={"100%"} gutterBottom color={"primary"}>Pricing:</Typography>
                         <Typography gutterBottom>Total Price (in Rs) : {totalPrice} </Typography>
                         <Typography gutterBottom>Amount to be paid (in Rs) : {advancePayment} </Typography>
-                        <FormHelperText>To avoid fraud, we'll ask for a small payment before confirming the Event Registration</FormHelperText>
+                        <FormHelperText>To avoid fraud, we&apos;ll ask for a small payment before confirming the Event Registration</FormHelperText>
                     </Grid>
                     <Grid item xs={12} sm={12} md={12} lg={12} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between" }}>
                         <Button onClick={ back } variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white" }}>Back</Button>

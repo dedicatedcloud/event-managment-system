@@ -1,3 +1,4 @@
+import React,{useEffect} from 'react';
 import '../styles/globals.css'
 import '../styles/calenderSass.scss';
 import {SessionProvider} from "next-auth/react";
@@ -6,6 +7,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import NextNProgress from "nextjs-progressbar";
 
 function MyApp({ Component, pageProps: { session, ...pageProps }}) {
+
     const theme = createTheme({
         palette : {
             primary : {
