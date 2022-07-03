@@ -8,7 +8,7 @@ import Image from 'next/image';
 
 export default function Foods(props) {
 
-    const [ starter, setStarter ] = useState([]);
+   /* const [ starter, setStarter ] = useState([]);
     const [ main, setMain ] = useState([]);
     const [ dessert, setDessert ] = useState([]);
 
@@ -16,14 +16,14 @@ export default function Foods(props) {
         setStarter(props.foods.filter(food => food.category === "Starter"));
         setMain(props.foods.filter(food => food.category === "Main Course"));
         setDessert(props.foods.filter(food => food.category === "Dessert"));
-    },[]);
+    },[]);*/
 
     return (
         <Box component={"div"}>
             <Typography variant={"h4"} align={"center"} color={"primary"} sx={{ marginY : "5rem" }}>Food Items</Typography>
             <Box component={"div"} sx={{ paddingX : "2rem", marginY : "8rem" }}>
                 <Typography variant={"h4"} align={"left"}  sx={{ marginY : "2rem" }} color={"primary"}>Starter Items:</Typography>
-                <Grid container rowSpacing={5} columnSpacing={6}>
+                {/*<Grid container rowSpacing={5} columnSpacing={6}>
                     {
                         starter.map((sf, i) => {
                             return (
@@ -75,7 +75,7 @@ export default function Foods(props) {
                             );
                         })
                     }
-                </Grid>
+                </Grid>*/}
             </Box>
         </Box>
     );
@@ -83,7 +83,7 @@ export default function Foods(props) {
 
 Foods.layout = "user";
 
-export async function getStaticProps(){
+/*export async function getStaticProps(){
     const res = await fetch("http://localhost:3000/api/food/getFoods");
     const data = await res.json();
     return {
@@ -92,4 +92,4 @@ export async function getStaticProps(){
         },
         revalidate : 10
     }
-}
+}*/

@@ -8,17 +8,17 @@ import Image from 'next/image';
 
 export default function Venues(props) {
 
-    const [ venues, setVenues ] = useState([]);
+    /*const [ venues, setVenues ] = useState([]);
 
     useEffect(() => {
         setVenues(props.venues);
-    },[])
+    },[])*/
 
     return (
         <Box component={"div"}>
             <Typography variant={"h4"} align={"center"} color={"primary"} sx={{ marginY : "5rem" }}>Venues</Typography>
             <Box sx={{ paddingX : "2rem", marginY : "8rem" }}>
-                <Grid container rowSpacing={5} columnSpacing={6}>
+                {/*<Grid container rowSpacing={5} columnSpacing={6}>
                     {
                         venues.map((venue, i) => {
                             return (
@@ -35,7 +35,7 @@ export default function Venues(props) {
                             );
                         })
                     }
-                </Grid>
+                </Grid>*/}
             </Box>
         </Box>
     );
@@ -43,7 +43,7 @@ export default function Venues(props) {
 
 Venues.layout = "user";
 
-export async function getStaticProps(){
+/*export async function getStaticProps(){
     const res = await fetch("http://localhost:3000/api/venues/getVenues");
     const data = await res.json();
     return {
@@ -52,4 +52,4 @@ export async function getStaticProps(){
         },
         revalidate : 10
     }
-}
+}*/
