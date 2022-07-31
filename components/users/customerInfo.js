@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import React, {useEffect, useState} from "react";
+import React,{useState} from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import {TextField} from "@mui/material";
@@ -20,10 +20,10 @@ export default function CustomerDetails ({ next, back, props }){
                         <Typography variant={"h5"} color={"primary"} align={"center"}>Customer Details:</Typography><br/>
                     </Grid>
                     <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <TextField  label="Name" disabled value={user.name} InputLabelProps={{ shrink : true }} variant="outlined" fullWidth/>
+                        <TextField  label="Name" aria-readonly={true} value={user.name} InputLabelProps={{ shrink : true }} variant="outlined" fullWidth/>
                     </Grid>
                     <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <TextField  label="Email" disabled value={user.email} InputLabelProps={{ shrink : true }} variant="outlined" fullWidth/>
+                        <TextField  label="Email" aria-readonly={true} value={user.email} InputLabelProps={{ shrink : true }} variant="outlined" fullWidth/>
                     </Grid>
                     <Grid item xs={12} sm={12} md={6} lg={6}>
                         <FormControl required fullWidth>

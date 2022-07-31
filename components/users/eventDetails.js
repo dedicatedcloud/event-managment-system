@@ -28,9 +28,9 @@ export default function EventDetails(props) {
     const localizer = momentLocalizer(moment);
 
     // get the foods by category from the props.eventProps
-    const starter = props.eventProps.food.filter(food => food.category === "Starter");
-    const main = props.eventProps.food.filter(food => food.category === "Main Course");
-    const dessert = props.eventProps.food.filter(food => food.category === "Dessert");
+    const menu1 = props.eventProps.food.filter(food => food.menu === "Menu 1");
+    const menu2 = props.eventProps.food.filter(food => food.menu === "Menu 2");
+    const menu3 = props.eventProps.food.filter(food => food.menu === "Menu 3");
 
     const [ events, setEvents ] = useState([]);
 
@@ -43,9 +43,9 @@ export default function EventDetails(props) {
         guest : "",
         venue : "",
         environment : "",
-        starterFood : [],
-        mainFood : [],
-        dessertFood : [],
+        menu1Food : [],
+        menu2Food : [],
+        menu3Food : [],
         equipment : [],
         date : new Date()
     });
@@ -53,9 +53,9 @@ export default function EventDetails(props) {
     // for handling the prices of the selected fields
     const [ prices, setPrices] = useState({
         venuePrice : 0,
-        starterFoodPrice : 0,
-        mainFoodPrice : 0,
-        dessertFoodPrice : 0,
+        menu1Price : 0,
+        menu2Price : 0,
+        menu3Price : 0,
         equipmentPrice : 0
     });
 
@@ -81,11 +81,11 @@ export default function EventDetails(props) {
         });
     }, [event.venue]);
 
-    //iterating over starterFood array to get the selected items prices, adding them and setting the state
+    //iterating over menu1Food array to get the selected items prices, adding them and setting the state
     useEffect(() => {
         let total = 0;
-        starter.map((s) => {
-            event.starterFood.map((sf) => {
+        menu1.map((s) => {
+            event.menu1Food.map((sf) => {
                 if(sf === s.id){
                     total = total+s.price
                 }
@@ -93,15 +93,15 @@ export default function EventDetails(props) {
         });
         setPrices(prevPrices => ({
             ...prevPrices,
-            starterFoodPrice : total
+            menu1FoodPrice : total
         }));
-    }, [event.starterFood]);
+    }, [event.menu1Food]);
 
     //iterating over MainFood array to get the selected items prices, adding them and setting the state
     useEffect(() => {
         let total = 0;
-        main.map((m) => {
-            event.mainFood.map((mf) => {
+        menu2.map((m) => {
+            event.menu2Food.map((mf) => {
                 if(mf === m.id){
                     total = total+m.price
                 }
@@ -109,15 +109,15 @@ export default function EventDetails(props) {
         });
         setPrices(prevPrices => ({
             ...prevPrices,
-            mainFoodPrice : total
+            menu2FoodPrice : total
         }));
-    }, [event.mainFood]);
+    }, [event.menu2Food]);
 
     //iterating over DesertFood array to get the selected items prices, adding them and setting the state
     useEffect(() => {
         let total = 0;
-        dessert.map((d) => {
-            event.dessertFood.map((df) => {
+        menu3.map((d) => {
+            event.menu3Food.map((df) => {
                 if(df === d.id){
                     total = total+d.price
                 }
@@ -125,9 +125,9 @@ export default function EventDetails(props) {
         });
         setPrices(prevPrices => ({
             ...prevPrices,
-            dessertFoodPrice : total
+            menu3FoodPrice : total
         }));
-    }, [event.dessertFood]);
+    }, [event.menu3Food]);
 
     //iterating over Equipment array to get the selected items prices, adding them and setting the state
     useEffect(() => {
@@ -148,7 +148,7 @@ export default function EventDetails(props) {
     //for calculating price on each item change
     useEffect( () => {
         setTotalPrice(Object.values(prices).reduce((a, b) => a + b));
-    }, [ prices.venuePrice, prices.starterFoodPrice, prices.mainFoodPrice, prices.dessertFoodPrice, prices.equipmentPrice ]);
+    }, [ prices.venuePrice, prices.menu1FoodPrice, prices.menu2FoodPrice, prices.menu3FoodPrice, prices.equipmentPrice ]);
 
     // Todo: same date must not be allowed to be selected
     useEffect(() => {
@@ -168,9 +168,11 @@ export default function EventDetails(props) {
 
     //states and functions for the BackDrop
     const [open, setOpen] = useState(false);
+
     const handleClose = () => {
         setOpen(false);
     };
+
     const handleToggle = () => {
         setOpen(!open);
     };
@@ -191,7 +193,7 @@ export default function EventDetails(props) {
         let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
         console.log(Difference_In_Days, Difference_In_Days < 5);
         if(filteredDate.length > 0 || Difference_In_Days < 5){
-            //show notification if same date is selected or if the selected date is less than 5 days from today
+            // TODO: show notification if same date is selected or if the selected date is less than 5 days from today
         } else{
             setEvent(prevEvent => ({
                 ...prevEvent,
@@ -200,7 +202,6 @@ export default function EventDetails(props) {
         }
     }
 
-
     const handleUpdate = async () => {
         const eventData = {
             id : props.event.id,
@@ -208,14 +209,13 @@ export default function EventDetails(props) {
             guest: event.guest,
             venue: event.venue,
             environment: event.environment,
-            starterFood: event.starterFood,
-            mainFood: event.mainFood,
-            dessertFood: event.dessertFood,
+            menu1Food: event.menu1Food,
+            menu2Food: event.menu2Food,
+            menu3Food: event.menu3Food,
             equipment: event.equipment,
             date: new Date(event.date),
             price : totalPrice
         }
-        console.log(eventData);
         await fetch(`/api/events/updateEvent`, {
             method : 'PUT',
             headers : {
@@ -245,22 +245,22 @@ export default function EventDetails(props) {
     useEffect( () => {
         if(props?.event){
             const { event } = props;
-            let starter = [];
-            let main = [];
-            let dessert = [];
+            let menu1 = [];
+            let menu2 = [];
+            let menu3 = [];
             let equipment = [];
 
             for(let i = 0; i < event.event_foods.length; i++){
                 for(let j = 0; j < props.eventProps.food.length; j++){
                     if(event.event_foods[i] === props.eventProps.food[j].id){
                         if(props.eventProps.food[j].category === "Starter"){
-                            starter.push(props.eventProps.food[j].id)
+                            menu1.push(props.eventProps.food[j].id)
                         }
                         else if(props.eventProps.food[j].category === "Main Course"){
-                            main.push(props.eventProps.food[j].id)
+                            menu2.push(props.eventProps.food[j].id)
                         }
                         else{
-                            dessert.push(props.eventProps.food[j].id)
+                            menu3.push(props.eventProps.food[j].id)
                         }
                     }
                 }
@@ -278,16 +278,14 @@ export default function EventDetails(props) {
                 guest: event.guestCountId,
                 venue: event.venueId,
                 environment: event.event_environment,
-                starterFood: starter,
-                mainFood: main,
-                dessertFood: dessert,
+                menu1Food: menu1,
+                menu2Food: menu2,
+                menu3Food: menu3,
                 equipment: equipment,
                 date: new Date(event.date)
             })
         }
     }, [])
-
-
 
     return (
         <Box>
@@ -326,7 +324,7 @@ export default function EventDetails(props) {
                        </FormControl>
                    </Grid>
                    <Grid item xs={12} sm={6} lg={6}>
-                       <FormControl required sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }}>
+                       <FormControl sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }}>
                            <InputLabel id={"Venues"}>Venues</InputLabel>
                            <Select value={event.venue} labelId={"Venues"} label={"Venues"} onChange={ ({target}) => setEvent(prevEvent => ({
                                ...prevEvent,
@@ -341,7 +339,7 @@ export default function EventDetails(props) {
                        </FormControl>
                    </Grid>
                     <Grid item xs={12} sm={6} lg={6}>
-                        <FormControl required sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }}>
+                        <FormControl sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }}>
                             <InputLabel id={"Outdoor/Indoor"}>Indoor/Outdoor</InputLabel>
                             <Select value={event.environment} labelId={"Outdoor/Indoor"} label={"Outdoor/Indoor"} onChange={ ({target}) => setEvent(prevEvent => ({
                                 ...prevEvent,
@@ -355,41 +353,41 @@ export default function EventDetails(props) {
                     <Grid item xs={12} sm={12} md={12} lg={12}>
                         <Typography variant={"h5"}  color={"primary"} sx={{ paddingY : "1rem" }} align={"center"}>Foods Category:</Typography>
                     </Grid>
-                   <Grid item xs={12} sm={6} lg={6}>
-                       <FormControl sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }}>
-                           <InputLabel id="starter">Starter</InputLabel>
-                           <Select labelId="Starter" id="Starter" label={"Starter"} value={event.starterFood} multiple onChange={ ({target}) => setEvent(prevEvent => ({
+                   <Grid item xs={12} sm={12} lg={12} sx={{ paddingRight : "1rem" }}>
+                       <FormControl sx={{ m: 1 }} fullWidth>
+                           <InputLabel id="Menu1">Menu 1</InputLabel>
+                           <Select labelId="Menu1" id="Menu1" label={"Menu 1"} value={event.menu1Food} multiple onChange={ ({target}) => setEvent(prevEvent => ({
                                ...prevEvent,
-                               starterFood : target.value
+                               menu1Food : target.value
                            })) }>
-                               { starter.map((s, i) => (
-                                   <MenuItem key={i} value={s.id}>{s.name} - Price : {s.price}</MenuItem>
+                               { menu1.map((m1, i) => (
+                                   <MenuItem key={i} value={m1.id}>{m1.name} ({m1.type}) - Price : {m1.price}</MenuItem>
                                ))}
                            </Select>
                        </FormControl>
                    </Grid>
-                   <Grid item xs={12} sm={6} lg={6}>
-                       <FormControl required sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }}>
-                           <InputLabel id="Main">Main Course</InputLabel>
-                           <Select labelId="Main" id="Main" label={"Main Course"} value={event.mainFood} multiple onChange={ ({target}) => setEvent(prevEvent => ({
+                   <Grid item xs={12} sm={12} lg={12} sx={{ paddingRight : "1rem" }}>
+                       <FormControl sx={{ m: 1 }} fullWidth>
+                           <InputLabel id="Menu2">Menu 2</InputLabel>
+                           <Select labelId="Menu2" id="Menu2" label={"Menu 2"} value={event.menu2Food} multiple onChange={ ({target}) => setEvent(prevEvent => ({
                                ...prevEvent,
-                               mainFood : target.value
+                               menu2Food : target.value
                            })) }>
-                               { main.map((m, i) => (
-                                   <MenuItem key={i} value={m.id}>{m.name} - Price : {m.price}</MenuItem>
+                               { menu2.map((m2, i) => (
+                                   <MenuItem key={i} value={m2.id}>{m2.name} ({m2.type}) - Price : {m2.price}</MenuItem>
                                ))}
                            </Select>
                        </FormControl>
                    </Grid>
-                   <Grid item xs={12} sm={6} lg={12}>
-                       <FormControl sx={{ m: 1, width: { xs : 320, sm : 200, md : 320, lg :320 } }}>
-                           <InputLabel id="Dessert">Dessert</InputLabel>
-                           <Select labelId="Dessert" id="Dessert" label={"Desert"} value={event.dessertFood} multiple onChange={ ({target}) => setEvent(prevEvent => ({
+                   <Grid item xs={12} sm={12} lg={12} sx={{ paddingRight : "1rem" }}>
+                       <FormControl sx={{ m: 1 }} fullWidth>
+                           <InputLabel id="Menu3">Menu 3</InputLabel>
+                           <Select labelId="Menu3" id="Menu3" label={"Menu 3"} value={event.menu3Food} multiple onChange={ ({target}) => setEvent(prevEvent => ({
                                ...prevEvent,
-                               dessertFood : target.value
+                               menu3Food : target.value
                            })) }>
-                               { dessert.map((d, i) => (
-                                   <MenuItem key={i} value={d.id}>{d.name} - Price : {d.price}</MenuItem>
+                               { menu3.map((m3, i) => (
+                                   <MenuItem key={i} value={m3.id}>{m3.name} ({m3.type}) - Price : {m3.price}</MenuItem>
                                ))}
                            </Select>
                            <FormHelperText>Multiple items can be selected for all food items.<br/>To unselect click on the option again.</FormHelperText>
@@ -457,7 +455,7 @@ export default function EventDetails(props) {
                     <Grid item xs={12} sm={12} lg={12}>
                         <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between"}}>
                             <Typography variant={"subtitle1"} fontSize={20}>Total Price (Rs): {totalPrice}</Typography>
-                            <Button type={"submit"} variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white"}} disabled={event.guest === "" || event.venue === "" || event.eventType === ""|| event.date.getDate() === new Date().getDate()}>{props?.event ? "Update" : "Next"}</Button>
+                            <Button type={"submit"} variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white"}} disabled={event.guest === "" || event.venue === "" || event.eventType === ""|| event.date.getDate() === new Date().getDate() || (event.menu1Food.length === 0 && event.menu2Food.length === 0 && event.menu3Food.length === 0)}>{props?.event ? "Update" : "Next"}</Button>
                         </Box>
                     </Grid>
                     <FormHelperText sx={{ fontSize : "15px" }}>Fields with * are required!</FormHelperText>

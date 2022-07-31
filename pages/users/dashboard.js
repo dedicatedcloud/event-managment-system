@@ -96,25 +96,25 @@ export async function getServerSideProps({req}){
     if(session){
 
         const fetchGuests = async () => {
-            const resGuests = await fetch("http://localhost:3000/api/guest/getGuestCount");
+            const resGuests = await fetch(`${process.env.APP_URL}/api/guest/getGuestCount`);
             const {guests} = await resGuests.json();
             return guests
         }
 
         const fetchVenues = async () => {
-            const resVenues = await fetch("http://localhost:3000/api/venues/getVenues")
+            const resVenues = await fetch(`${process.env.APP_URL}/api/venues/getVenues`)
             const {venues} = await resVenues.json()
             return venues;
         }
 
         const fetchFoods = async () => {
-            const resFood = await fetch("http://localhost:3000/api/food/getFoods")
+            const resFood = await fetch(`${process.env.APP_URL}/api/food/getFoods`)
             const {food} = await resFood.json()
             return food;
         }
 
         const fetchEquipment = async () => {
-            const resEquipment = await fetch("http://localhost:3000/api/equipment/getEquipments")
+            const resEquipment = await fetch(`${process.env.APP_URL}/api/equipment/getEquipments`)
             const {equipment} = await resEquipment.json()
             return equipment
         }

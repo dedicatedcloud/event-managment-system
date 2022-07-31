@@ -41,7 +41,8 @@ model Venues {
 model Food {
   id            Int       @id @default(autoincrement())
   name          String    @unique
-  category      String
+  menu          String
+  type          String
   price         Int
   picture       String
   event_foods   Event_foods[]
@@ -89,4 +90,12 @@ model Event_equipment {
   eventId       Int
   equipment     Equipment   @relation(fields : [equipmentId], references : [id])
   equipmentId   Int
+}
+
+model Our_Events {
+  id             Int       @id @default(autoincrement())
+  name           String
+  location       String
+  description    String
+  pictures       Json
 }

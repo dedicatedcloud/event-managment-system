@@ -55,7 +55,7 @@ export default function Users(props) {
 
     const getUsers = async () => {
         setLoading(true);
-        const res =  await fetch("http://localhost:3000/api/users/getUsers");
+        const res =  await fetch("/api/users/getUsers");
         const  { users } = await res.json();
         setUsers(users);
         setLoading(false);
@@ -64,7 +64,7 @@ export default function Users(props) {
 
     const handleDeletion = async (id) => {
         setLoading(true);
-        fetch("http://localhost:3000/api/users/deleteUser", {
+        fetch("/api/users/deleteUser", {
             method : "POST",
             headers : {
                 "Content-Type" : "application/json",
@@ -117,7 +117,7 @@ export async function getServerSideProps({req}){
             }
         }
         else {
-            const res = await fetch("http://localhost:3000/api/users/getUsers");
+            const res = await fetch(`${process.env.APP_URL}/api/users/getUsers`);
             const data = await res.json();
             return {
                 props : {

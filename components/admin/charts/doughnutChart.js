@@ -9,7 +9,7 @@ function DoughnutChart() {
 
     useEffect(() => {
         const getGuests = async () => {
-            const res = await fetch("http://localhost:3000/api/guest/getGuestCount");
+            const res = await fetch("/api/guest/getGuestCount");
             const {guests} = await res.json();
             setGuests(guests);
         };

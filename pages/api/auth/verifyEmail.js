@@ -1,6 +1,5 @@
 import prisma from '../../../lib/prisma';
 import nodemailer from 'nodemailer';
-import logo from "../../../public/assets/logo.png";
 
 require("dotenv").config();
 

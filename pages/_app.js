@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React from 'react';
 import '../styles/globals.css'
 import '../styles/calenderSass.scss';
 import {SessionProvider} from "next-auth/react";

@@ -42,7 +42,7 @@ export default function ForgotPassword(props) {
     const onSubmit = async (data) => {
         if(email_verified){
             const { password } = data;
-            fetch("http://localhost:3000/api/auth/changePassword",{
+            fetch("/api/auth/changePassword",{
                 method : "POST",
                 headers:{
                     "Content-type" : "application/json"

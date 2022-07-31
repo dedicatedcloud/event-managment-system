@@ -113,7 +113,7 @@ export default function Event(props) {
         const request = {
             storeId: "13221",
             amount: /*data.totalPrice*/1,
-            postBackURL: "http://localhost:3000/users/confirmation",
+            postBackURL: `${process.env.APP_URL}/users/confirmation`,
             orderRefNum: "2341",
             autoRedirect: "0",
             paymentMethod: "",
@@ -121,8 +121,8 @@ export default function Event(props) {
             emailAddr: data.email,
             mobileNum: data.phoneNumber,
         }
-        var $iframe = $('#easypay-iframe');
-        var str = param(request);
+        let $iframe = $('#easypay-iframe');
+        let str = param(request);
         $iframe.attr("src", "https://easypay.easypaisa.com.pk/easypay/Index.jsf?"+str);
     }
 
@@ -140,7 +140,12 @@ export default function Event(props) {
     };
 
     return (
-        <Box sx={{ display : "flex", flexDirection : "column", alignItems : "center",justifyContent : "center", height : { xs : "90rem", sm : "80rem", md : "80rem", lg : "80rem" }, marginY : "5rem" }} component={"div"}>
+        <Box sx={{ display : "flex", flexDirection : "column", alignItems : "center",justifyContent : "center", height : { xs : "90rem", sm : "80rem", md : "80rem" }, marginY : () => {
+                if(activeStep === 0) {
+                        return "10rem"
+                }
+                return "0rem"
+            } }} component={"div"}>
             <Paper sx={{width : { xs : "22rem", sm : "35rem", md : "50rem", lg : "60rem" }, paddingY : "2rem", paddingX : { xs: 1, sm : 2, md : "4rem", lg : "4rem" }, borderRadius : "1rem", boxShadow : 6}}>
                 { !matches && <Stepper activeStep={activeStep} connector={<ColorlibConnector/>} sx={{paddingY: "2rem"}}>
                     {
@@ -201,25 +206,25 @@ export async function getServerSideProps(context){
     }
     if(session){
         const fetchGuests = async () => {
-            const resGuests = await fetch("http://localhost:3000/api/guest/getGuestCount");
+            const resGuests = await fetch(`${process.env.APP_URL}/api/guest/getGuestCount`);
             const {guests} = await resGuests.json();
             return guests
         }
 
         const fetchVenues = async () => {
-            const resVenues = await fetch("http://localhost:3000/api/venues/getVenues")
+            const resVenues = await fetch(`${process.env.APP_URL}/api/venues/getVenues`)
             const {venues} = await resVenues.json()
             return venues;
         }
 
         const fetchFoods = async () => {
-            const resFood = await fetch("http://localhost:3000/api/food/getFoods")
+            const resFood = await fetch(`${process.env.APP_URL}/api/food/getFoods`)
             const {food} = await resFood.json()
             return food;
         }
 
         const fetchEquipment = async () => {
-            const resEquipment = await fetch("http://localhost:3000/api/equipment/getEquipments")
+            const resEquipment = await fetch(`${process.env.APP_URL}/api/equipment/getEquipments`)
             const {equipment} = await resEquipment.json()
             return equipment
         }

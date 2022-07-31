@@ -92,7 +92,7 @@ export default function Guest(props) {
 
     const getGuestCount = async () => {
         setLoading(true);
-        const res =  await fetch("http://localhost:3000/api/guest/getGuestCount");
+        const res =  await fetch("/api/guest/getGuestCount");
         const  { guests } = await res.json();
         setGuests(guests);
         setLoading(false);
@@ -103,7 +103,7 @@ export default function Guest(props) {
     const handleCellEditCommit = useCallback(async (props) => {
         setLoading(true);
         const { id, field, value } = props;
-        fetch("http://localhost:3000/api/guest/updateGuestCount", {
+        fetch("/api/guest/updateGuestCount", {
             method : "POST",
             headers : {
                 "Content-type" : "application/json"
@@ -132,7 +132,7 @@ export default function Guest(props) {
 
     const handleDeletion = async (id) => {
         setLoading(true);
-        fetch("http://localhost:3000/api/guest/deleteGuestCount", {
+        fetch("/api/guest/deleteGuestCount", {
             method : "POST",
             headers : {
                 "Content-Type" : "application/json",
@@ -158,7 +158,7 @@ export default function Guest(props) {
         if(data.min < data.max){
             setLoading(true)
             const { max, min } = data;
-            fetch("http://localhost:3000/api/guest/addGuestCount", {
+            fetch("/api/guest/addGuestCount", {
                 method : "POST",
                 headers : {
                     "Content-type" : "application/json"
@@ -230,7 +230,7 @@ export async function getServerSideProps(context){
             }
         }
         else {
-            const res = await fetch("http://localhost:3000/api/guest/getGuestCount");
+            const res = await fetch(`${process.env.APP_URL}/api/guest/getGuestCount`);
             const data = await res.json();
             return {
                 props : {

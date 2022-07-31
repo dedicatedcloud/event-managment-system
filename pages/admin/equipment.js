@@ -135,7 +135,7 @@ export default function Equipment(props) {
 
     const getEquipment = async () => {
         setLoading(true);
-        const res =  await fetch("http://localhost:3000/api/equipment/getEquipments");
+        const res =  await fetch("/api/equipment/getEquipments");
         const  { equipment } = await res.json();
         setEquipment(equipment);
         setLoading(false);
@@ -143,7 +143,7 @@ export default function Equipment(props) {
 
     const handleDeletion = (id) => {
         setLoading(true);
-        fetch("http://localhost:3000/api/equipment/deleteEquipment", {
+        fetch("/api/equipment/deleteEquipment", {
             method : "POST",
             headers : {
                 "Content-Type" : "application/json",
@@ -175,7 +175,7 @@ export default function Equipment(props) {
         }else{
             formData.append("value", value);
         }
-        fetch("http://localhost:3000/api/equipment/updateEquipment", {
+        fetch("/api/equipment/updateEquipment", {
             method : "POST",
             body : formData
         })
@@ -201,7 +201,7 @@ export default function Equipment(props) {
         formData.append("name", name);
         formData.append("price", price);
         formData.append("image", picture[0]);
-        fetch("http://localhost:3000/api/equipment/addEquipment", {
+        fetch("/api/equipment/addEquipment", {
             method : "POST",
             body : formData
         })
@@ -252,7 +252,7 @@ Equipment.layout = "admin";
 
 export async function getServerSideProps({req}){
     const session = await getSession({req});
-    const resp = await fetch("http://localhost:3000/api/equipment/getEquipments");
+    const resp = await fetch(`${process.env.APP_URL}/api/equipment/getEquipments`);
     const {equipment} = await resp.json();
     if(!session){
         return {

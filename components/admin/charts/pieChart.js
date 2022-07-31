@@ -9,23 +9,23 @@ function PieChart(props) {
 
     useEffect( () => {
         const getFoods = async () => {
-            const res =  await fetch("http://localhost:3000/api/food/getFoods");
+            const res =  await fetch("/api/food/getFoods");
             const { food } = await res.json();
             setFood(food);
         };
         getFoods();
     }, []);
 
-    const starter = food.filter( food => food.category === "Starter");
-    const main = food.filter( food => food.category === "Main Course");
-    const dessert = food.filter( food => food.category === "Dessert");
+    const menu1 = food.filter( food => food.menu === "Menu 1");
+    const menu2 = food.filter( food => food.menu === "Menu 2");
+    const menu3 = food.filter( food => food.menu === "Menu 3");
 
     const data = {
-        labels: ['Starter', 'Main Course', 'Dessert'],
+        labels: ['Menu 1', 'Menu 2', 'Menu 3'],
         datasets: [
             {
                 label: '# of Votes',
-                data: [starter.length, main.length, dessert.length],
+                data: [menu1.length, menu2.length, menu3.length],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',

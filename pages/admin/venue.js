@@ -194,7 +194,7 @@ export default function Venue(props) {
 
     const getVenues = async () => {
         setLoading(true)
-        const res =  await fetch("http://localhost:3000/api/venues/getVenues");
+        const res =  await fetch("/api/venues/getVenues");
         const  { venues } = await res.json();
         setVenues(venues);
         setLoading(false)
@@ -209,13 +209,14 @@ export default function Venue(props) {
     const SubmitHandler = async (data) => {
         setLoading(true);
         const { name, location, price, picture, guestCount } = data;
+        console.log(picture[0])
         const formData = new FormData();
         formData.append("name", name);
         formData.append("location", location);
         formData.append("price", price);
         formData.append("guestCount", guestCount);
         formData.append("image", picture[0]);
-        fetch("http://localhost:3000/api/venues/addVenue", {
+        fetch("/api/venues/addVenue", {
             method : "POST",
             body : formData
         })
@@ -252,7 +253,7 @@ export default function Venue(props) {
         }else{
             formData.append("value", value);
         }
-        fetch("http://localhost:3000/api/venues/updateVenue", {
+        fetch("/api/venues/updateVenue", {
             method : "POST",
             body : formData
         })
@@ -273,7 +274,7 @@ export default function Venue(props) {
 
     const handleDeletion = async (id) => {
         setLoading(true);
-        fetch("http://localhost:3000/api/venues/deleteVenue", {
+        fetch("/api/venues/deleteVenue", {
             method : "POST",
             headers : {
                 "Content-Type" : "application/json",
@@ -351,9 +352,9 @@ export async function getServerSideProps({req}){
             }
         }
         else {
-            const res = await fetch("http://localhost:3000/api/venues/getVenues");
+            const res = await fetch(`${process.env.APP_URL}/api/venues/getVenues`);
             const { venues } = await res.json();
-            const res2 = await fetch("http://localhost:3000/api/guest/getGuestCount");
+            const res2 = await fetch(`${process.env.APP_URL}/api/guest/getGuestCount`);
             const { guests } = await res2.json();
             return {
                 props : {

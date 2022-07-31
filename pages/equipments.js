@@ -8,17 +8,17 @@ import Image from 'next/image';
 
 export default function Venues(props) {
 
-    /*const [ equipments, setEquipments ] = useState([]);
+    const [ equipments, setEquipments ] = useState([]);
 
     useEffect(() => {
         setEquipments(props.equipment);
-    },[])*/
+    },[])
 
     return (
         <Box component={"div"}>
             <Typography variant={"h4"} align={"center"} color={"primary"} sx={{ marginY : "5rem" }}>Equipment</Typography>
             <Box sx={{ paddingX : "2rem", marginY : "8rem" }}>
-                {/*<Grid container rowSpacing={5} columnSpacing={6}>
+                <Grid container rowSpacing={5} columnSpacing={6}>
                     {
                         equipments.map((equipment, i) => {
                             return (
@@ -34,7 +34,7 @@ export default function Venues(props) {
                             );
                         })
                     }
-                </Grid>*/}
+                </Grid>
             </Box>
         </Box>
     );
@@ -42,8 +42,8 @@ export default function Venues(props) {
 
 Venues.layout = "user";
 
-/*export async function getStaticProps(){
-    const res = await fetch("http://localhost:3000/api/equipment/getEquipments");
+export async function getStaticProps(){
+    const res = await fetch(`${process.env.APP_URL}/api/equipment/getEquipments`);
     const data = await res.json();
     return {
         props : {
@@ -51,4 +51,4 @@ Venues.layout = "user";
         },
         revalidate : 10
     }
-}*/
+}

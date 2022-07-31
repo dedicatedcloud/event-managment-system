@@ -34,7 +34,7 @@ const Register = () => {
     const SubmitHandler = async (data) => {
         const { name, email, password } = data;
         const hashedPassword = await bcrypt.hash(password, 10)
-        fetch("http://localhost:3000/api/auth/registerUser", {
+        fetch("/api/auth/registerUser", {
             method : "POST",
             headers : {
                 "Content-type" : "application/json"

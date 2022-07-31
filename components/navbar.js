@@ -45,6 +45,10 @@ const Navbar = ({ session, status }) => {
             href : "/equipments",
             text : "Equipments"
         },
+        {
+            href : "/companyEvents",
+            text : "Our Events"
+        }
     ]
 
     const toggleDrawer = (open) => {

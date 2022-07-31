@@ -35,13 +35,14 @@ const handler = nc({
             const session = await getSession({ req });
             if(session){
                 try {
-                    const { name, price, category } = req.body;
+                    const { name, price, menu, type } = req.body;
                     const { filename } = req.file;
                     const food = await prisma.food.create({
                         data : {
                             name : name,
                             price : parseInt(price),
-                            category : category,
+                            menu : menu,
+                            type : type,
                             picture : filename
                         }
                     });

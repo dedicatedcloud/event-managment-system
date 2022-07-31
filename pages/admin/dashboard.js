@@ -78,7 +78,7 @@ export default function Dashboard(props){
                     </Grid>
                     <Grid lg={3} item>
                         <Box sx={{ boxShadow : 5, padding : 3 }} component={"div"}>
-                            <Typography variant={"h5"} color={"primary"} gutterBottom align={"center"}>Food Items (Based on Category)</Typography>
+                            <Typography variant={"h5"} color={"primary"} gutterBottom align={"center"}>Food Items (Based on Menu Items)</Typography>
                             <PieChart />
                         </Box>
                     </Grid>

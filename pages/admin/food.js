@@ -39,8 +39,8 @@ export default function Food(props) {
         currency: 'PKR',
     });
 
-    //for Food Category & editing them
-    const SelectInput = (props) => {
+    //for Food type & editing them
+    const SelectInputType = (props) => {
         const { id, value, api, field } = props;
         return <div>
             <Select value={value} onChange={ async (e) => {
@@ -54,6 +54,25 @@ export default function Food(props) {
                 <MenuItem value={"Starter"} >Starter</MenuItem>
                 <MenuItem value={"Main Course"} >Main Course</MenuItem>
                 <MenuItem value={"Dessert"} >Dessert</MenuItem>
+            </Select>
+        </div>
+    };
+
+    //for Food Menu & editing them
+    const SelectInputMenu = (props) => {
+        const { id, value, api, field } = props;
+        return <div>
+            <Select value={value} onChange={ async (e) => {
+                api.setEditCellValue({id, field, value: e.target.value}, e);
+                const isValid = await api.commitCellChange({id, field});
+                if (isValid) {
+                    api.setCellMode(id, field, 'view');
+                }
+            }
+            }>
+                <MenuItem value={"Menu 1"} >Menu 1</MenuItem>
+                <MenuItem value={"Menu 2"} >Menu 2</MenuItem>
+                <MenuItem value={"Menu 3"} >Menu 3</MenuItem>
             </Select>
         </div>
     };
@@ -127,9 +146,16 @@ export default function Food(props) {
                 return { ...props.props, error: !validValue };
             }
         },
-        { field: 'category', headerName: 'Category', editable : true, flex : 1,
+        { field: 'type', headerName: 'Type', editable : true, flex : 1,
             renderCell : field,
-            renderEditCell : SelectInput,
+            renderEditCell : SelectInputType,
+            renderHeader : (props) => {
+                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><FactCheckIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
+            }
+        },
+        { field: 'menu', headerName: 'Menu', editable : true, flex : 1,
+            renderCell : field,
+            renderEditCell : SelectInputMenu,
             renderHeader : (props) => {
                 return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><FactCheckIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
             }
@@ -160,7 +186,7 @@ export default function Food(props) {
 
     const handleDeletion = (id) => {
         setLoading(true)
-        fetch("http://localhost:3000/api/food/deleteFood", {
+        fetch("/api/food/deleteFood", {
             method : "POST",
             headers : {
                 "Content-Type" : "application/json",
@@ -184,7 +210,8 @@ export default function Food(props) {
     const schema = yup.object({
         name : yup.string().required("Name is required").min(8, "Name must be at least 8 characters long"),
         price : yup.number().required("Price is required").positive("Price must be positive").min(1000, "Price must be greater than 1000"),
-        foodCategory : yup.string().required("Category is required"),
+        type : yup.string().required("Type is required"),
+        menu : yup.string().required("Menu is required"),
         picture : yup.mixed().required("Picture is required")
     });
 
@@ -194,7 +221,7 @@ export default function Food(props) {
 
     const getFoods = async () => {
         setLoading(true);
-        const res =  await fetch("http://localhost:3000/api/food/getFoods");
+        const res =  await fetch("/api/food/getFoods");
         const { food } = await res.json();
         setFood(food);
         setLoading(false);
@@ -212,7 +239,7 @@ export default function Food(props) {
         }else{
             formData.append("value", value);
         }
-        fetch("http://localhost:3000/api/food/updateFood", {
+        fetch("/api/food/updateFood", {
             method : "POST",
             body : formData
         })
@@ -233,19 +260,19 @@ export default function Food(props) {
 
     const SubmitHandler = async (data) => {
         setLoading(true);
-        const { name, price, picture, foodCategory } = data;
+        const { name, price, picture, menu, type } = data;
         const formData = new FormData();
         formData.append("name", name);
         formData.append("price", price);
-        formData.append("category", foodCategory);
+        formData.append("menu", menu);
+        formData.append("type", type);
         formData.append("image", picture[0]);
-        fetch("http://localhost:3000/api/food/addFood", {
+        fetch("/api/food/addFood", {
             method : "POST",
             body : formData
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
                 getFoods();
                 if(data.error){
                     setMessage(data.error);
@@ -256,7 +283,7 @@ export default function Food(props) {
                 reset({
                     name : "",
                     price : "",
-                    foodCategory : "",
+                    menu : "",
                     picture : ""
                 });
             })
@@ -271,15 +298,26 @@ export default function Food(props) {
                     <form onSubmit={handleSubmit(SubmitHandler)}>
                         <Controller control={control} render={({field}) => (<TextField  {...field} label={"Name"} type={"text"} variant={"outlined"} sx={{ marginY : "1rem" }} fullWidth error={!!errors.name} helperText={errors.name?.message} />)} name="name"/>
                         <FormControl fullWidth sx={{marginY: "1rem"}}>
-                            <InputLabel id="food">Food Category</InputLabel>
-                            <Controller render={({ field }) => (<Select {...field} labelId={"food"} error={!!errors.foodCategory} label="Food Category">
+                            <InputLabel id="foodType">Food Type</InputLabel>
+                            <Controller render={({ field }) => (<Select {...field} labelId={"foodType"} error={!!errors.type} label="foodType">
                                     <MenuItem value={"Starter"} >Starter</MenuItem>
                                     <MenuItem value={"Main Course"} >Main Course</MenuItem>
                                     <MenuItem value={"Dessert"} >Dessert</MenuItem>
                                 </Select>
                             )
-                            } control={control} name="foodCategory" defaultValue={""}/>
-                            {errors.foodCategory && <FormHelperText sx={{color: "red"}}>{errors.foodCategory?.message}</FormHelperText>}
+                            } control={control} name="type" defaultValue={""}/>
+                            {errors.type && <FormHelperText sx={{color: "red"}}>{errors.type?.message}</FormHelperText>}
+                        </FormControl>
+                        <FormControl fullWidth sx={{marginY: "1rem"}}>
+                            <InputLabel id="menu">Menu</InputLabel>
+                            <Controller render={({ field }) => (<Select {...field} labelId={"menu"} error={!!errors.menu} label="Menu">
+                                    <MenuItem value={"Menu 1"} >Menu 1</MenuItem>
+                                    <MenuItem value={"Menu 2"} >Menu 2</MenuItem>
+                                    <MenuItem value={"Menu 3"} >Menu 3</MenuItem>
+                                </Select>
+                            )
+                            } control={control} name="menu" defaultValue={""}/>
+                            {errors.menu && <FormHelperText sx={{color: "red"}}>{errors.menu?.message}</FormHelperText>}
                         </FormControl>
                         <Controller control={control} render={({field}) => (<TextField {...field} variant={"outlined"} sx={{ marginY : "1rem" }} fullWidth label={"Price"} type={"number"} error={!!errors.price} helperText={errors.price?.message} />)} name="price"/>
                         <Controller control={control} render={({field}) => (<TextField type={"file"} onChange={ ({target}) => field.onChange(target.files) } sx={{ marginY : "1rem" }} error={!!errors.picture} helperText={errors.picture?.message} fullWidth />)} name="picture"/>
@@ -289,7 +327,8 @@ export default function Food(props) {
             </Box>
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center"}}>
                 <Box sx={{ width : "80rem", margin : "0 auto", paddingY : "3rem" }}>
-                    <DataGrid columns={columns} rows={food} autoHeight={true} loading={loading} sx={{ boxShadow : 5, color : "#f08a5d", marginY : "1rem" }}  disableSelectionOnClick={true} density={"comfortable"} onCellEditCommit={handleCellEditCommit} />
+                    {/* TODO:set table icon for food type column */}
+                    <DataGrid columns={columns} rows={food ? food : []} autoHeight={true} loading={loading} sx={{ boxShadow : 5, color : "#f08a5d", marginY : "1rem" }}  disableSelectionOnClick={true} density={"comfortable"} onCellEditCommit={handleCellEditCommit} />
                 </Box>
             </Box>
         </Box>
@@ -317,7 +356,7 @@ export async function getServerSideProps({req}){
             }
         }
         else {
-            const res = await fetch("http://localhost:3000/api/food/getFoods");
+            const res = await fetch(`${process.env.APP_URL}/api/food/getFoods`);
             const {food} = await res.json();
             return {
                 props : {

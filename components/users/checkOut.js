@@ -7,7 +7,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 
 export default function CheckOut({ next, back, data, props}) {
 
-    const { eventType, guest, venue, environment, starterFood, mainFood, dessertFood, equipment } = data.event;
+    const { eventType, guest, venue, environment, menu1Food, menu2Food, menu3Food, equipment } = data.event;
     const { phoneNumber } = data;
     const { totalPrice } = data;
 
@@ -16,31 +16,24 @@ export default function CheckOut({ next, back, data, props}) {
     const guestData = props.guests.filter( g => g.id === guest)[0];
     const venueData = props.venues.filter( v => v.id === venue)[0];
 
-
+    //
+    const allFoods = menu1Food.concat(menu2Food, menu3Food);
     //getting food names
-    let starterFoodData = [];
-        starterFood.map( (sf) => {
+    let starter = [];
+    let main = [];
+    let dessert = [];
+        allFoods.map( (al) => {
         props.food.map((f) => {
-            if (f.id === sf) {
-                starterFoodData.push(f.name)
-            }
-        });
-    })
-
-    let mainFoodData = [];
-    mainFood.map( (mf) => {
-        props.food.map((f) => {
-            if (f.id === mf) {
-                mainFoodData.push(f.name)
-            }
-        });
-    })
-
-    let dessertFoodData = [];
-    dessertFood.map( (df) => {
-        props.food.map((f) => {
-            if (f.id === df) {
-                dessertFoodData.push(f.name)
+            if (f.id === al) {
+                if(f.type === "Starter") {
+                    starter.push(f.name);
+                }
+                else if(f.type === "Main Course") {
+                    main.push(f.name);
+                }
+                else if(f.type === "Dessert") {
+                    dessert.push(f.name);
+                }
             }
         });
     })
@@ -79,9 +72,9 @@ export default function CheckOut({ next, back, data, props}) {
                     </Grid>
                     <Grid item xs={12} sm={6} md={6} lg={6}>
                         <Typography variant={"h6"} width={"100%"} gutterBottom color={"primary"}>Food Selection:</Typography>
-                        <Typography gutterBottom>Starter: { starterFoodData.length === 0 ? "None" : starterFoodData.join(", ") }</Typography>
-                        <Typography gutterBottom>Main Course: { mainFoodData.length === 0 ? "None" : mainFoodData.join(", ") }</Typography>
-                        <Typography>Dessert: { dessertFoodData.length === 0 ? "None" : dessertFoodData.join(",") }</Typography>
+                        <Typography gutterBottom>Starter: { starter.length === 0 ? "None" : starter.join(", ") }</Typography>
+                        <Typography gutterBottom>Main Course: { main.length === 0 ? "None" : main.join(", ") }</Typography>
+                        <Typography>Dessert: { dessert.length === 0 ? "None" : dessert.join(",") }</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={6} lg={6}>
                         <Typography variant={"h6"} width={"100%"} gutterBottom color={"primary"}>Equipment Selection:</Typography>

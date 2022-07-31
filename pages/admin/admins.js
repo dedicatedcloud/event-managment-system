@@ -36,13 +36,13 @@ export default function Admins(props) {
     }, []);
 
     const getAdmins = async () => {
-        const res =  await fetch("http://localhost:3000/api/admins/getAdmins");
+        const res =  await fetch("/api/admins/getAdmins");
         const  { admins } = await res.json();
         setAdmins(admins);
     }
 
     const handleDelete = async (id) => {
-        fetch("http://localhost:3000/api/admins/deleteAdmin", {
+        fetch("/api/admins/deleteAdmin", {
             method : "POST",
             headers : {
                 "Content-Type" : "application/json",
@@ -59,7 +59,7 @@ export default function Admins(props) {
     const SubmitHandler = async (data) => {
         const { name, email, password } = data;
         const hashedPassword = await bcrypt.hash(password, 10)
-        fetch("http://localhost:3000/api/admins/addAdmin", {
+        fetch("/api/admins/addAdmin", {
             method : "POST",
             headers : {
                 "Content-type" : "application/json"
@@ -127,7 +127,7 @@ Admins.layout = "admin";
 
 export async function getServerSideProps({req}){
     const session = await getSession({req})
-    const resp = await fetch("http://localhost:3000/api/admins/getAdmins");
+    const resp = await fetch(`${process.env.APP_URL}/api/admins/getAdmins`);
     const data = await resp.json();
     if(!session){
         return {

@@ -137,6 +137,11 @@ export default function AdminLayout(props) {
             text : "Events"
         },
         {
+            href : "/admin/ourEvents",
+            icon : <AdminPanelSettingsIcon fontSize={"medium"} color={"secondary"}/>,
+            text : "Our Events"
+        },
+        {
             href : "/admin/users",
             icon : <PersonIcon fontSize={"medium"} color={"secondary"}/>,
             text : "Users"
@@ -221,4 +226,3 @@ export default function AdminLayout(props) {
         </Box>
     );
 }
-

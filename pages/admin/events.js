@@ -57,7 +57,7 @@ export default function Events({events : _events, guests, venues, users}) {
     };*/
 
     const fetchEvents = async () => {
-        const res = await fetch("http://localhost:3000/api/events/getEvents");
+        const res = await fetch("/api/events/getEvents");
         const {events} = await res.json();
         setEvents(events);
         setLoading(false);
@@ -247,7 +247,7 @@ export default function Events({events : _events, guests, venues, users}) {
         formData.append("field", field);
         formData.append("value", value);
 
-        fetch("http://localhost:3000/api/events/updateEventAdmin", {
+        fetch("/api/events/updateEventAdmin", {
             method : "POST",
             body : JSON.stringify({
                 id,
@@ -265,7 +265,7 @@ export default function Events({events : _events, guests, venues, users}) {
     //delete the event
     const handleDelete = async (id) => {
             setLoading(true);
-            fetch("http://localhost:3000/api/events/deleteEvent", {
+            fetch("/api/events/deleteEvent", {
                 method : "POST",
                 headers : {
                     "Content-Type" : "application/json",
@@ -306,25 +306,25 @@ export async function getServerSideProps(context){
     const session = await getSession(context)
 
     const fetchEvents = async () => {
-        const res = await fetch("http://localhost:3000/api/events/getEvents");
+        const res = await fetch(`${process.env.APP_URL}/api/events/getEvents`);
         const {events} = await res.json();
         return events;
     }
 
     const fetchGuestCount = async () => {
-        const res = await fetch("http://localhost:3000/api/guest/getGuestCount");
+        const res = await fetch(`${process.env.APP_URL}/api/guest/getGuestCount`);
         const {guests} = await res.json();
         return guests;
     }
 
     const fetchVenues = async () => {
-        const res = await fetch("http://localhost:3000/api/venues/getVenues");
+        const res = await fetch(`${process.env.APP_URL}/api/venues/getVenues`);
         const {venues} = await res.json();
         return venues;
     }
 
     const fetchUsers = async () => {
-        const res = await fetch("http://localhost:3000/api/users/getUsers");
+        const res = await fetch(`${process.env.APP_URL}/api/users/getUsers`);
         const {users} = await res.json();
         return users;
     }
