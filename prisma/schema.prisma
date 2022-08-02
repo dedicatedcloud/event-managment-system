@@ -97,5 +97,5 @@ model Our_Events {
   name           String
   location       String
   description    String
-  pictures       Json
+  picture        Json
 }

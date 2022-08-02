@@ -30,31 +30,30 @@ const handler = nc({
         res.status(404).end("Page is not found");
     },
 })
-    .use(upload.fields([{ name: 'pictures', maxCount: 6 }]))
+    .use(upload.single([{ name: 'pictures', maxCount: 6 }]))
     .post(async (req, res) => {
         const session = await getSession({ req });
         if(session){
             try{
                 const { name, location, description } = req.body;
-                console.log(req.body, req.files)
-                /*const venue = await prisma.venues.create({
+                const { filename } = req.file;
+                const ourEvent = await prisma.our_events.create({
                     data : {
                         name : name,
                         location : location,
-                        price : parseInt(price),
-                        guestCountId : parseInt(guestCount),
+                        description : description,
                         picture : filename
                     }
                 });
-                if(venue){
+                if(ourEvent){
                     return res.json({
-                        message : "Venue inserted successfully!"
+                        message : "Event inserted successfully!"
                     })
                 }else {
                     return res.json({
-                        message : "Error inserting venue!"
+                        message : "Error inserting Event!"
                     })
-                }*/
+                }
             } catch (e) {
                 return res.json({
                     error : e.message
