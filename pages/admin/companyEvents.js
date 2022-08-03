@@ -11,7 +11,6 @@ import {getSession} from "next-auth/react";
 import Tag from "@mui/icons-material/Tag";
 import AbcIcon from "@mui/icons-material/Abc";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import EditIcon from "@mui/icons-material/Edit";
 import ArticleIcon from '@mui/icons-material/Article';
@@ -117,11 +116,11 @@ export default function CompanyEvents(props) {
                 return { ...props.props, error: !validValue };
             }
         },
-        { field: 'description', headerName: 'Description', flex : 2, editable : true, type: "text", renderHeader : (props) => {
+        { field: 'description', headerName: 'Description', flex: 1, editable : true, renderHeader : (props) => {
                 return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><ArticleIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
             },
             preProcessEditCellProps : (props) => {
-                const validValue = validateDescription(props.props.value);
+                const validValue = props.props.value.length > 10;
                 return { ...props.props, error: !validValue };
             }
         },
@@ -165,13 +164,12 @@ export default function CompanyEvents(props) {
                     setMessage(data.message);
                 }
                 //need to empty fields after form submission
-                /*reset({
+                reset({
                     name : "",
                     location : "",
-                    price : "",
-                    selectedGuest : "",
+                    description : "",
                     picture : ""
-                });*/
+                });
             })
             .catch(e => console.log(e.message));
     };
@@ -207,6 +205,7 @@ export default function CompanyEvents(props) {
         formData.append("id", id);
         formData.append("field", field);
         if(field === "picture"){
+            console.log(value, "value");
             formData.append("image", value);
         }else{
             formData.append("value", value);
