@@ -118,10 +118,10 @@ export default function Guest(props) {
             .then(data => {
                 setLoading(false)
                 console.log(data);
-                getGuestCount();
                 if(data.error){
                     setMessage(data.error);
                 }else{
+                    getGuestCount();
                     setMessage(data.message);
                 }
             })
@@ -142,11 +142,11 @@ export default function Guest(props) {
             })
         }).then(res => res.json()).then(data => {
             console.log(data);
-            getGuestCount();
             if(data.error){
                 setMessage(data.error);
             }
             else{
+                getGuestCount();
                 setMessage(data.message)
             }
         }).catch(e => console.log(e.message));
@@ -171,11 +171,11 @@ export default function Guest(props) {
                 .then(res => res.json())
                 .then(data => {
                     console.log(data);
-                    getGuestCount();
                     if(data.error){
                         setMessage(data.error);
                     }
                     else{
+                        getGuestCount();
                         setMessage(data.message)
                     }
                     //need to empty fields after form submission

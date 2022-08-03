@@ -153,11 +153,11 @@ export default function Equipment(props) {
             })
         }).then(res => res.json()).then(data => {
             console.log(data);
-            getEquipment();
             if(data.message){
                 setMessage(data.message);
             }
             if(data.error){
+                getEquipment();
                 setMessage(data.error);
             }
         }).catch(e => console.log(e.message));
@@ -182,8 +182,8 @@ export default function Equipment(props) {
             .then(res => res.json())
             .then(data => {
                 console.log(data);
-                getEquipment();
                 if(data.message){
+                    getEquipment();
                     setMessage(data.message);
                 }
                 if(data.error){
@@ -213,6 +213,7 @@ export default function Equipment(props) {
                     setMessage(data.error);
                 }
                 else{
+                    getEquipment();
                     setMessage(data.message);
                 }
                 //need to empty fields after form submission

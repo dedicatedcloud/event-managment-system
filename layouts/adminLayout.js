@@ -137,7 +137,7 @@ export default function AdminLayout(props) {
             text : "Events"
         },
         {
-            href : "/admin/ourEvents",
+            href : "/admin/companyEvents",
             icon : <AdminPanelSettingsIcon fontSize={"medium"} color={"secondary"}/>,
             text : "Our Events"
         },

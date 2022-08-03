@@ -1,7 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import prisma from "../../../lib/prisma";
 import {getSession} from "next-auth/react";
-//Todo : secure admin route
 
 export default async function handler(req, res) {
     const session = getSession({req});

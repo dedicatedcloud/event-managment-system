@@ -13,7 +13,7 @@ export const config = {
 const upload = multer({
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
-            cb(null, path.join(process.cwd(), "public", "Our_Events"));
+            cb(null, path.join(process.cwd(), "public", "CompanyEvents"));
         },
         filename: function (req, file, cb) {
             cb(null, new Date().getTime() + "_" + file.originalname);
@@ -30,14 +30,16 @@ const handler = nc({
         res.status(404).end("Page is not found");
     },
 })
-    .use(upload.single([{ name: 'pictures', maxCount: 6 }]))
+    .use(upload.single("image"))
     .post(async (req, res) => {
         const session = await getSession({ req });
         if(session){
             try{
                 const { name, location, description } = req.body;
                 const { filename } = req.file;
-                const ourEvent = await prisma.our_events.create({
+                console.log(req.body);
+                console.log(req.file);
+                const ourEvent = await prisma.companyEvents.create({
                     data : {
                         name : name,
                         location : location,

@@ -275,11 +275,11 @@ export default function Events({events : _events, guests, venues, users}) {
                 })
             }).then(res => res.json()).then(data => {
                 console.log(data);
-                fetchEvents();
                 if(data.error){
                     setMessage(data.error);
                 }
                 else{
+                    fetchEvents();
                     setMessage(data.message);
                 }
             }).catch(e => console.log(e.message));

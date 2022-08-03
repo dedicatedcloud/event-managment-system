@@ -12,13 +12,13 @@ import Tag from "@mui/icons-material/Tag";
 import AbcIcon from "@mui/icons-material/Abc";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import NumbersIcon from "@mui/icons-material/Numbers";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import EditIcon from "@mui/icons-material/Edit";
+import ArticleIcon from '@mui/icons-material/Article';
 import Image from "next/image";
 
 
-export default function OurEvents(props) {
+export default function CompanyEvents(props) {
 
 
     const [ourEvents, setOurEvents] = useState([]);
@@ -29,7 +29,7 @@ export default function OurEvents(props) {
         name : yup.string().required("Name is required").min(8, "Name must be at least 8 characters long"),
         location : yup.string().required("Location is required").min(5, "Location must be at least 10 characters long"),//change back to 10
         description : yup.string().required("Description is required").min(5, "Description must be at least 100 characters long"),//change back to 10
-        pictures : yup.mixed().required("Pictures are required")
+        picture : yup.mixed().required("Pictures are required")
     });
 
     const {control, formState : { errors }, handleSubmit, reset} = useForm({
@@ -41,10 +41,16 @@ export default function OurEvents(props) {
         setOurEvents(props.ourEvents);
     }, []);
 
+    const getEvents = async () => {
+        const res = await fetch("/api/companyEvents/getCompanyEvent");
+        const { ourEvents } = await res.json();
+        setOurEvents(ourEvents);
+    }
+
 
     //for Images & editing them
     const DisplayImage = (props) => {
-        return <Image src={"/Venues/"+props.value} width={1000} height={400} className={"ImageSize"} alt=""/>
+        return <Image src={"/CompanyEvents/"+props.value} width={1000} height={400} className={"ImageSize"} alt=""/>
     }
 
     const SelectImage = (props) => {
@@ -68,6 +74,29 @@ export default function OurEvents(props) {
         );
     }
 
+    //Company Event name column edit validation function
+    const validateName = (value) => {
+        //make a regex for validating string without numbers and special character
+        const regex = new RegExp("^[a-zA-Z\\s]*$");
+        if(regex.test(value)){
+            const name = ourEvents.filter(oe => oe.name === value);
+            if(name.length > 0) {
+                return false;
+            }else{
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const validateDescription = (value) => {
+        if (value > 1000) {
+            return true;
+        } else{
+            return false;
+        }
+    }
+
     const columns = [
         { field: 'id', headerName: 'Id', editable : false, type : "number", renderHeader : (props) => {
                 return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><Tag fontSize={"small"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
@@ -76,11 +105,11 @@ export default function OurEvents(props) {
                 return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><AbcIcon fontSize={"large"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
             },
             preProcessEditCellProps : (props) => {
-                const validValue = validateVenueName(props.props.value);
+                const validValue = validateName(props.props.value);
                 return { ...props.props, error: !validValue };
             }
         },
-        { field: 'location', headerName: 'Location', flex: 2, editable : true, renderHeader : (props) => {
+        { field: 'location', headerName: 'Location', flex: 1, editable : true, renderHeader : (props) => {
                 return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><LocationOnIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
             },
             preProcessEditCellProps : (props) => {
@@ -88,11 +117,11 @@ export default function OurEvents(props) {
                 return { ...props.props, error: !validValue };
             }
         },
-        { field: 'description', headerName: 'Description', editable : true, type: "text", valueFormatter: ({ value }) => currencyFormatter.format(Number(value)), renderHeader : (props) => {
-                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><AttachMoneyIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
+        { field: 'description', headerName: 'Description', flex : 2, editable : true, type: "text", renderHeader : (props) => {
+                return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><ArticleIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
             },
             preProcessEditCellProps : (props) => {
-                const validValue = validateVenuePrice(props.props.value);
+                const validValue = validateDescription(props.props.value);
                 return { ...props.props, error: !validValue };
             }
         },
@@ -115,16 +144,12 @@ export default function OurEvents(props) {
     const SubmitHandler = async (data) => {
         setLoading(true);
         const { name, location, description, picture } = data;
-        /*const picturesArray = Array.from(pictures).map((picture) => {
-            return picture
-        })
-        console.log(picturesArray);*/
         const formData = new FormData();
         formData.append("name", name);
         formData.append("location", location);
         formData.append("description", description);
-        formData.append("picture", picture[0]);
-        fetch("/api/ourEvents/addOurEvent", {
+        formData.append("image", picture[0]);
+        fetch("/api/companyEvents/addCompanyEvent", {
             method : "POST",
             body : formData
         })
@@ -132,8 +157,11 @@ export default function OurEvents(props) {
             .then(data => {
                 console.log(data, "response from server");
                 if(data.error){
+                    setLoading(false);
                     setMessage(data.error);
                 }else{
+                    getEvents();
+                    setLoading(false);
                     setMessage(data.message);
                 }
                 //need to empty fields after form submission
@@ -147,11 +175,10 @@ export default function OurEvents(props) {
             })
             .catch(e => console.log(e.message));
     };
-    console.log(errors);
 
     const handleDeletion = async (id) => {
         setLoading(true);
-        fetch("/api/venues/deleteVenue", {
+        fetch("/api/companyEvents/deleteCompanyEvent", {
             method : "POST",
             headers : {
                 "Content-Type" : "application/json",
@@ -161,19 +188,46 @@ export default function OurEvents(props) {
             })
         }).then(res => res.json()).then(data => {
             console.log(data);
-            /*getVenues();*/
             if(data.error){
                 setMessage(data.error);
             }
             else{
+                getEvents();
+                setLoading(false);
                 setMessage(data.message)
             }
         }).catch(e => console.log(e.message));
     };
 
 
-    const handleCellEditCommit = () => {
-
+    const handleCellEditCommit = (props) => {
+        setLoading(true);
+        const { id, field, value } = props;
+        const formData = new FormData();
+        formData.append("id", id);
+        formData.append("field", field);
+        if(field === "picture"){
+            formData.append("image", value);
+        }else{
+            formData.append("value", value);
+        }
+        fetch("/api/companyEvents/updateCompanyEvent", {
+            method : "POST",
+            body : formData
+        })
+            .then(res => res.json())
+            .then(data => {
+                setLoading(false);
+                console.log(data);
+                if(data.error){
+                    setMessage(data.error);
+                }else{
+                    getEvents();
+                    setLoading(false);
+                    setMessage(data.message);
+                }
+            })
+            .catch(e => console.log(e.message));
     }
 
     return (
@@ -202,7 +256,7 @@ export default function OurEvents(props) {
     );
 }
 
-OurEvents.layout = "admin";
+CompanyEvents.layout = "admin";
 
 export async function getServerSideProps({req}){
     const session = await getSession({req});
@@ -224,13 +278,13 @@ export async function getServerSideProps({req}){
             }
         }
         else {
-            //TODO: make api for fetching out_events
-            const res = await fetch(`${process.env.APP_URL}/api/ourEvents/getOurEvent`);
+            const res = await fetch(`${process.env.APP_URL}/api/companyEvents/getCompanyEvent`);
             const { ourEvents } = await res.json();
+            console.log(ourEvents);
             return {
                 props : {
                     user: session.user,
-                    ourEvents : ourEvents ?? null
+                    ourEvents : ourEvents
                 },
             }
         }

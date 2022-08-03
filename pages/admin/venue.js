@@ -223,10 +223,10 @@ export default function Venue(props) {
             .then(res => res.json())
             .then(data => {
                 console.log(data);
-                getVenues();
                 if(data.error){
                     setMessage(data.error);
                 }else{
+                    getVenues();
                     setMessage(data.message);
                 }
                 //need to empty fields after form submission
@@ -261,10 +261,10 @@ export default function Venue(props) {
             .then(data => {
                 setLoading(false);
                 console.log(data);
-                getVenues();
                 if(data.error){
                     setMessage(data.error);
                 }else{
+                    getVenues();
                     setMessage(data.message);
                 }
             })
@@ -284,11 +284,11 @@ export default function Venue(props) {
             })
         }).then(res => res.json()).then(data => {
             console.log(data);
-            getVenues();
             if(data.error){
                 setMessage(data.error);
             }
             else{
+                getVenues();
                 setMessage(data.message)
             }
         }).catch(e => console.log(e.message));

@@ -196,11 +196,11 @@ export default function Food(props) {
             })
         }).then(res => res.json()).then(data => {
             console.log(data);
-            getFoods();
             if(data.error){
                 setMessage(data.error);
             }
             else{
+                getFoods();
                 setMessage(data.message)
             }
         }).catch(e => console.log(e.message));
@@ -247,10 +247,10 @@ export default function Food(props) {
             .then(data => {
                 setLoading(false);
                 console.log(data);
-                getFoods();
                 if(data.error){
                     setMessage(data.error);
                 }else{
+                    getFoods();
                     setMessage(data.message);
                 }
             })
@@ -273,10 +273,10 @@ export default function Food(props) {
         })
             .then(res => res.json())
             .then(data => {
-                getFoods();
                 if(data.error){
                     setMessage(data.error);
                 }else{
+                    getFoods();
                     setMessage(data.message);
                 }
                 //need to empty fields after form submission !!pending
