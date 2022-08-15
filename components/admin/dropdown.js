@@ -6,8 +6,12 @@ import Fade from '@mui/material/Fade';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {signOut} from "next-auth/react";
 import LogoutIcon from '@mui/icons-material/Logout';
+import {useTheme} from "@mui/material/styles";
 
 export default function DropDown() {
+
+    const theme = useTheme();
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -27,13 +31,14 @@ export default function DropDown() {
                     paddingX: 3,
                     paddingY: 1,
                     fontSize: "20px",
-                    ':hover': {backgroundColor: "#f08a5d", color: "#fff"}
                 }}
                 id="fade-button"
                 aria-controls={open ? 'fade-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
+                color={"primary"}
+                variant={"text"}
             >
                 <AccountCircleIcon fontSize={"large"}/>
             </Button>
@@ -47,7 +52,7 @@ export default function DropDown() {
                 onClose={handleClose}
                 TransitionComponent={Fade}
             >
-                <MenuItem onClick={() => signOut({callbackUrl: "/"})} sx={{color: "#f08a5d"}}><LogoutIcon/>Logout</MenuItem>
+                <MenuItem onClick={() => signOut({callbackUrl: "/"})} sx={{color: theme.palette.primary.main}}><LogoutIcon/>Logout</MenuItem>
             </Menu>
         </div>
     );

@@ -18,10 +18,12 @@ function MyApp(props) {
     const { Component, emotionCache =
         clientSideEmotionCache, pageProps : { session, ...pageProps } } = props;
 
+    //TODO: need to change the visuals for the admin pages, so buttons and colors matche the rest of the site
     const theme = createTheme({
         palette : {
             primary : {
-                main : "#f08a5d"
+                main : "#ed733c", //#f08a5d
+                light: "#f08758",
             },
             secondary : {
                 main : "#ffffff"

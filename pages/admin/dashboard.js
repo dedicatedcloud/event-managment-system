@@ -16,58 +16,57 @@ import SpeakerIcon from "@mui/icons-material/Speaker";
 import DoughnutChart from "../../components/admin/charts/doughnutChart";
 import PieChart from "../../components/admin/charts/pieChart";
 import VerticalBarChart from "../../components/admin/charts/verticalBarChart";
+import {useTheme} from "@mui/material/styles";
 
 
 export default function Dashboard(props){
+
+    const theme = useTheme();
+
+    const cardData = [
+        {
+            icon: <PeopleIcon sx={{ fontSize : "8rem" }} color={"secondary"}/>,
+            count: props.usersCount,
+            text: "Users",
+            link: "/admin/users",
+        },
+        {
+            icon: <HouseIcon sx={{ fontSize : "8rem" }} color={"secondary"} />,
+            count: props.venuesCount,
+            text: "Venues",
+            link: "/admin/venue",
+        },
+        {
+            icon: <LocalDiningIcon sx={{ fontSize : "8rem" }} color={"secondary"}/>,
+            count: props.foodCount,
+            text: "Food",
+            link: "/admin/food",
+        },
+        {
+            icon: <SpeakerIcon sx={{ fontSize : "8rem" }} color={"secondary"}/>,
+            count: props.equipmentCount,
+            text: "Equipment",
+            link: "/admin/equipment",
+        }
+    ]
 
     return (
         <Box component={"div"}>
             <Box sx={{ paddingY : 8 }} component={"div"}>
                 <Grid container spacing={5}>
-                    <Grid item lg={3}>
-                        <Card sx={{ backgroundColor : "#f08a5d", boxShadow : 6 }}>
-                            <CardContent sx={{ display : "flex", flexDirection : "row",justifyContent : "space-between", alignItems : "center" }}>
-                                <PeopleIcon sx={{ fontSize : "8rem" }} color={"secondary"}/>
-                                <Typography align={"right"} variant={"h5"} color={"secondary"}>{props.usersCount}<br/>Users</Typography>
-                            </CardContent>
-                            <CardActions sx={{ backgroundColor : "#ffffff" }}>
-                               <Link href={"/admin/users"}><Button size="small" variant={"contained"} sx={{ color : "#ffffff" }} color={"primary"}>View Records</Button></Link>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid item lg={3}>
-                        <Card sx={{ backgroundColor : "#f08a5d", boxShadow : 6 }}>
-                            <CardContent sx={{ display : "flex", flexDirection : "row",justifyContent : "space-between", alignItems : "center" }}>
-                                <HouseIcon sx={{ fontSize : "8rem" }} color={"secondary"} />
-                                <Typography align={"right"} variant={"h5"} color={"secondary"}>{props.venuesCount}<br/>Venues</Typography>
-                            </CardContent>
-                            <CardActions sx={{ backgroundColor : "#ffffff" }}>
-                                <Link href={"/admin/venue"}><Button size="small" variant={"contained"} sx={{ color : "#ffffff" }} color={"primary"}>View Records</Button></Link>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid item lg={3}>
-                        <Card sx={{ backgroundColor : "#f08a5d", boxShadow : 6 }}>
-                            <CardContent sx={{ display : "flex", flexDirection : "row",justifyContent : "space-between", alignItems : "center" }}>
-                                <LocalDiningIcon sx={{ fontSize : "8rem" }} color={"secondary"}/>
-                                <Typography align={"right"} variant={"h5"} color={"secondary"}>{props.foodCount}<br/>Foods</Typography>
-                            </CardContent>
-                            <CardActions sx={{ backgroundColor : "#ffffff" }}>
-                                <Link href={"/admin/food"}><Button size="small" variant={"contained"} sx={{ color : "#ffffff" }} color={"primary"}>View Records</Button></Link>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid item lg={3}>
-                        <Card sx={{ backgroundColor : "#f08a5d", boxShadow : 6 }}>
-                            <CardContent sx={{ display : "flex", flexDirection : "row",justifyContent : "space-between", alignItems : "center" }}>
-                                <SpeakerIcon sx={{ fontSize : "8rem" }} color={"secondary"}/>
-                                <Typography align={"right"} variant={"h5"} color={"secondary"}>{props.equipmentCount}<br/>Equipment</Typography>
-                            </CardContent>
-                            <CardActions sx={{ backgroundColor : "#ffffff" }}>
-                                <Link href={"/admin/equipment"}><Button size="small" variant={"contained"} sx={{ color : "#ffffff" }} color={"primary"}>View Records</Button></Link>
-                            </CardActions>
-                        </Card>
-                    </Grid>
+                    {cardData.map((data, index) => (
+                        <Grid item lg={3} key={index}>
+                            <Card sx={{ backgroundColor : theme.palette.primary.light, boxShadow : 6 }}>
+                                <CardContent sx={{ display : "flex", flexDirection : "row",justifyContent : "space-between", alignItems : "center" }}>
+                                    {data.icon}
+                                    <Typography align={"right"} variant={"h5"} color={"secondary"}>{data.count}<br/>{data.text}</Typography>
+                                </CardContent>
+                                <CardActions sx={{ backgroundColor : "#ffffff" }}>
+                                    <Link href={data.link}><Button size="small" variant={"contained"} disableElevation={true} sx={{ color : "#ffffff", ":hover" : { backgroundColor: theme.palette.primary.light } }} color={"primary"}>View Records</Button></Link>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                    ))}
                 </Grid>
                 <Grid spacing={5} container sx={{ paddingY : "6rem" }}>
                     <Grid item lg={3}>

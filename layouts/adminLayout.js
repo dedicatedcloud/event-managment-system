@@ -33,7 +33,7 @@ const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
     width: drawerWidth,
-    backgroundColor : "#f08a5d",
+    backgroundColor : theme.palette.primary.light,
     transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
@@ -47,7 +47,7 @@ const closedMixin = (theme) => ({
         duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: 'hidden',
-    backgroundColor : "#f08a5d",
+    backgroundColor : theme.palette.primary.light,
     width: `calc(${theme.spacing(7)} + 1px)`,
     [theme.breakpoints.up('sm')]: {
         width: `calc(${theme.spacing(9)} + 1px)`,
@@ -168,7 +168,7 @@ export default function AdminLayout(props) {
                 <title>W&Decor Event Management</title>
                 <link rel="icon" type="image/x-icon" href="/assets/favicon.png"/>
             </Head>
-            <AppBar position="fixed" elevation={2} color={"secondary"} open={open} sx={{ paddingY : 2 }}>
+            <AppBar position="fixed" elevation={0} color={"secondary"} open={open} sx={{ paddingY : 2 }}>
                 <Toolbar>
                     <IconButton
                         color={"primary"}
@@ -182,8 +182,8 @@ export default function AdminLayout(props) {
                     >
                         <MenuIcon fontSize={"large"} />
                     </IconButton>
-                    <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "end", flexGrow : 1 }}>
-                        <Typography sx={{ margin : 0, paddingTop : 1, paddingX : 1, color : "#f08a5d" }} variant={"h6"}>Signed In As { status === "authenticated" && session.user.name } </Typography>
+                    <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "end", alignItems : "center", flexGrow : 1 }}>
+                        <Typography sx={{ margin : 0, paddingTop : 1, paddingX : 1, color : theme.palette.primary.light }} variant={"h6"}>Signed In As { status === "authenticated" && session.user.name } </Typography>
                         <DropDown/>
                     </Box>
                 </Toolbar>

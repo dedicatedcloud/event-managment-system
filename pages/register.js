@@ -77,8 +77,8 @@ const Register = () => {
                         <Controller name="email" control={ control } defaultValue={""} render={({field}) => (<TextField {...field} sx={{ marginY : "1rem" }} label={"Email"} type={"email"} variant={"outlined"} fullWidth error={!!errors.email} helperText={errors.email ? errors.email?.message : ""} />)} />
                         <Controller name="password" control={ control } defaultValue={""} render={({field}) => (<TextField {...field} sx={{ marginY : "1rem" }} label={"Password"} type={"password"} variant={"outlined"} fullWidth error={!!errors.password} helperText={errors.password ? errors.password?.message : ""} />)} />
                         <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "start", alignItems : "center", marginTop : 1 }}>
-                            <Button type="submit" value={"Submit"} variant={"contained"} sx={{ color : "white", borderRadius : "0.5rem" }} size={"large"}>Register</Button>
-                            <Link href={"/login"}><Button color={"primary"} sx={{ marginY : "1rem", color : "white" }} size={"small"} variant={"contained"}>Back</Button></Link>
+                            <Button type="submit" value={"Submit"} variant={"contained"} sx={{ color : "white", borderRadius : "0.5rem", ":hover" : { backgroundColor: theme.palette.primary.light } }} disableElevation={true} size={"large"}>Register</Button>
+                            <Link href={"/login"}><Button color={"primary"} disableElevation={true} sx={{ marginY : "1rem", color : "white", ":hover" : { backgroundColor: theme.palette.primary.light } }} size={"small"} variant={"contained"}>Back</Button></Link>
                         </Box>
                     </form>
                     { message && <Typography variant={"subtitle1"} color={"red"} fontSize={16} sx={{ padding : "1rem" }}>{message}</Typography> }
