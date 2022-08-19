@@ -18,23 +18,23 @@ export default function Venues(props) {
         <Box component={"div"}>
             <Typography variant={"h4"} align={"center"} color={"primary"} sx={{ marginY : "5rem" }}>Equipment</Typography>
             <Box sx={{ paddingX : "2rem", marginY : "8rem" }}>
-//                 <Grid container rowSpacing={5} columnSpacing={6}>
-//                     {
-//                         equipments.map((equipment, i) => {
-//                             return (
-//                                 <Grid item key={i} xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"}>
-//                                     <Card sx={{ width : { xs : "20rem", sm : "25rem", md : "25rem", lg : "25rem" } }}>
-//                                         <CardContent>
-//                                             <Image src={"/Equipment/"+equipment.picture} width={500} height={500}/>
-//                                             <Typography>{ equipment.name }</Typography>
-//                                             <Typography>Rs.{ equipment.price }</Typography>
-//                                         </CardContent>
-//                                     </Card>
-//                                 </Grid>
-//                             );
-//                         })
-//                     }
-//                 </Grid>
+                {/*<Grid container rowSpacing={5} columnSpacing={6}>
+                    {
+                        equipments.map((equipment, i) => {
+                            return (
+                                <Grid item key={i} xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"}>
+                                    <Card sx={{ width : { xs : "20rem", sm : "25rem", md : "25rem", lg : "25rem" } }}>
+                                        <CardContent>
+                                            <Image src={"/Equipment/"+equipment.picture} width={500} height={500}/>
+                                            <Typography>{ equipment.name }</Typography>
+                                            <Typography>Rs.{ equipment.price }</Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            );
+                        })
+                    }
+                </Grid>*/}
             </Box>
         </Box>
     );
