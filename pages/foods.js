@@ -12,18 +12,18 @@ export default function Foods(props) {
     const [ menu2, setMenu2 ] = useState([]);
     const [ menu3, setMenu3 ] = useState([]);
 
-//     useEffect(() => {
-//         setMenu1(props.foods.filter(food => food.menu === "Menu 1"));
-//         setMenu2(props.foods.filter(food => food.menu === "Menu 2"));
-//         setMenu3(props.foods.filter(food => food.menu === "Menu 3"));
-//     },[]);
+    useEffect(() => {
+        setMenu1(props.foods.filter(food => food.menu === "Menu 1"));
+        setMenu2(props.foods.filter(food => food.menu === "Menu 2"));
+        setMenu3(props.foods.filter(food => food.menu === "Menu 3"));
+    },[]);
 
     return (
         <Box component={"div"}>
             <Typography variant={"h4"} align={"center"} color={"primary"} sx={{ marginY : "5rem" }}>Food Items</Typography>
             <Box component={"div"} sx={{ paddingX : "2rem", marginY : "8rem" }}>
                 <Typography variant={"h4"} align={"left"}  sx={{ marginY : "2rem" }} color={"primary"}>Menu 1:</Typography>
-{/*<Grid container rowSpacing={5} columnSpacing={6}>
+<Grid container rowSpacing={5} columnSpacing={6}>
                     {
                         menu1.map((sf, i) => {
                             return (
@@ -78,7 +78,7 @@ export default function Foods(props) {
                             );
                         })
                     }
-                </Grid>*/}
+                </Grid>
             </Box>
         </Box>
     );
@@ -86,13 +86,13 @@ export default function Foods(props) {
 
 Foods.layout = "user";
 
-// export async function getStaticProps(){
-//     const res = await fetch(`${process.env.APP_URL}/api/food/getFoods`);
-//     const data = await res.json();
-//     return {
-//         props : {
-//             foods : data.food
-//         },
-//         revalidate : 10
-//     }
-// }
+export async function getStaticProps(){
+    const res = await fetch(`${process.env.APP_URL}/api/food/getFoods`);
+    const data = await res.json();
+    return {
+        props : {
+            foods : data.food
+        },
+        revalidate : 10
+    }
+}
