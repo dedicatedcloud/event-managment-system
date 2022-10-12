@@ -20,6 +20,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import EditIcon from "@mui/icons-material/Edit";
+import {toast} from "react-toastify";
 
 export default function Food(props) {
 
@@ -198,10 +199,12 @@ export default function Food(props) {
             console.log(data);
             if(data.error){
                 setMessage(data.error);
+                showErrorNotification(data.error)
             }
             else{
                 getFoods();
-                setMessage(data.message)
+                setMessage(data.message);
+                showSuccessNotification(data.message)
             }
         }).catch(e => console.log(e.message));
     };
@@ -227,6 +230,31 @@ export default function Food(props) {
         setLoading(false);
     }
 
+    // for notifications
+    function showSuccessNotification(message) {
+        toast.info(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
+    function showErrorNotification(message) {
+        toast.error(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
     //to get the edited record from the table row
     const handleCellEditCommit = useCallback(async (props) => {
         setLoading(true);
@@ -249,9 +277,11 @@ export default function Food(props) {
                 console.log(data);
                 if(data.error){
                     setMessage(data.error);
+                    showErrorNotification(data.error);
                 }else{
                     getFoods();
                     setMessage(data.message);
+                    showSuccessNotification(data.message);
                 }
             })
             .catch(e => console.log(e.message));
@@ -275,9 +305,11 @@ export default function Food(props) {
             .then(data => {
                 if(data.error){
                     setMessage(data.error);
+                    showErrorNotification(data.error);
                 }else{
                     getFoods();
                     setMessage(data.message);
+                    showSuccessNotification(data.message);
                 }
                 //need to empty fields after form submission !!pending
                 reset({

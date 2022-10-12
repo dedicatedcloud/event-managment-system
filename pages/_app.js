@@ -8,6 +8,8 @@ import NextNProgress from "nextjs-progressbar";
 import createEmotionCache from '../src/createEmotionCache';
 import { CacheProvider } from '@emotion/react';
 import PropTypes from 'prop-types';
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 // Client-side cache shared for the whole session
 // of the user in the browser.
@@ -36,11 +38,27 @@ function MyApp({ Component, pageProps : { session, ...pageProps } }) {
     return (
     <SessionProvider session={session}>
         <ThemeProvider theme={theme}>
-            <NextNProgress height={8} color={"#f08a5d"}/>
+            <NextNProgress height={5} color={"#f08a5d"} options={{
+                showSpinner: true,
+                easing: 'ease',
+                speed: 500,
+                minimum: 0.3,
+            }}/>
             <LayoutWrapper {...pageProps}>
                 <Component {...pageProps}/>
             </LayoutWrapper>
         </ThemeProvider>
+        <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable={false}
+            pauseOnHover
+        />
     </SessionProvider>
     )
 }

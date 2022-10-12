@@ -81,7 +81,7 @@ const Navbar = ({ session, status }) => {
                     <Box sx={{ cursor : "pointer" }} component={motion.div} initial={{ x : '-100vw' }} animate={{ x : 0 }} transition={{ delay : 0.6, type : 'tween', duration : 1  }}>
                         <Link href={"/"}><Image src={logo} width={"75rem"} height={"75rem"} alt={"logo"}/></Link>
                     </Box>
-                    { !matches && <Box component={motion.div}  sx={{display: "flex", flexDirection: "row"}} initial={{ x : '100vw' }} animate={{ x : 0 }} transition={{ delay : 0.6, type : 'tween', duration : 1  }}>
+                    { !matches && <Box component={motion.div}  sx={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"}} initial={{ x : '100vw' }} animate={{ x : 0 }} transition={{ delay : 0.6, type : 'tween', duration : 1  }}>
                             {status !== "loading" &&  links.map((link, i) => (<Link href={link.href} key={i}><Typography sx={{ color: theme.palette.primary.main, cursor : "pointer", marginX : 1, paddingX: 3,  fontSize: "20px", borderBottom: 2, borderBottomColor: "transparent",":hover": { borderBottomColor: theme.palette.primary.main, transition: "0.5s ease-in-out" }}}>{link.text}</Typography></Link>))}
                             {status === "unauthenticated" && <Link href={"/login"}><Typography sx={{cursor : "pointer", marginX : 1, paddingX: 3, fontSize: "20px", borderBottom: 2, borderBottomColor: "transparent",":hover": { borderBottomColor: theme.palette.primary.main, transition: "0.5s ease-in-out" }}} color={"primary"}>Login</Typography></Link>}
                             {status === "authenticated" && <DropDown/>}

@@ -13,6 +13,7 @@ import {Controller, useForm} from "react-hook-form";
 import bcrypt from "bcryptjs";
 import * as yup from "yup";
 import {yupResolver} from "@hookform/resolvers/yup";
+import {toast} from "react-toastify";
 
 export default function Admins(props) {
 
@@ -41,6 +42,31 @@ export default function Admins(props) {
         setAdmins(admins);
     }
 
+    // for notifications
+    function showSuccessNotification(message) {
+        toast.info(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
+    function showErrorNotification(message) {
+        toast.error(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
     const handleDelete = async (id) => {
         fetch("/api/admins/deleteAdmin", {
             method : "POST",
@@ -51,8 +77,13 @@ export default function Admins(props) {
                 id
             })
         }).then(res => res.json()).then(data => {
-            getAdmins();
-            setMessage(data.message);
+            if(data.error){
+                showErrorNotification(data.error);
+            }else{
+                getAdmins();
+                setMessage(data.message);
+                showSuccessNotification(data.message);
+            }
         }).catch(e => console.log(e.message));
     }
 
@@ -74,8 +105,10 @@ export default function Admins(props) {
             .then(data => {
                 if(data.error){
                     setMessage(data.error);
+                    showErrorNotification(data.error);
                 }else{
                     setMessage(data.message);
+                    showSuccessNotification(data.message);
                 }
                 getAdmins();
             })
@@ -107,9 +140,9 @@ export default function Admins(props) {
                         <Grid key={i} item lg={2}>
                             <Card elevation={5}>
                                 <CardContent>
-                                    <Typography sx={{ marginY : "1rem" }} color={"primary"} variant={"subtitle1"}>Name: {a.name}</Typography>
-                                    <Typography variant="subtitle1" color={"primary"} sx={{ marginY : "1rem" }}>Email: {a.email}</Typography>
-                                    <Typography variant="subtitle1" color={"primary"} sx={{ marginY : "1rem" }}>Privilege: {a.role}</Typography>
+                                    <Typography sx={{ marginY : "1rem" }} color={"primary"} variant={"subtitle1"}>Name: <br/> {a.name}</Typography>
+                                    <Typography variant="subtitle1" color={"primary"} sx={{ marginY : "1rem" }}>Email: <br/> {a.email}</Typography>
+                                    <Typography variant="subtitle1" color={"primary"} sx={{ marginY : "1rem" }}>Privilege: <br/> {a.role}</Typography>
                                 </CardContent>
                                 <CardActions>
                                     <Button variant={"contained"} color={"error"} sx={{ marginBottom : 1, borderRadius : "0.5rem" }} size={"large"} onClick={ () => handleDelete(a.id)} startIcon={<DeleteIcon/>}>Delete</Button>

@@ -60,7 +60,7 @@ export default function Login() {
                         <Controller name="password" control={ control } defaultValue={""} render={({field}) => (<TextField {...field} sx={{ marginY : "1rem" }} label={"Password"} type={"password"} variant={"outlined"} fullWidth error={!!errors.password} helperText={errors.password ? errors.password?.message : ""} />)} />
                         <Link href={"/forgotPassword"}><Typography color={"primary"} sx={{ cursor : "pointer", marginY : "1rem", width : "max-content", ":hover" : { color : "#6d6e71" } }} variant={"subtitle1"} >Forgot Password?</Typography></Link>
                         <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "start", alignItems : "center" }}>
-                            <Button type="submit" disableElevation={true} color={"primary"} value={"Submit"} variant={"contained"} sx={{ color : "white", borderRadius : "0.5rem", marginRight : "1.5rem", fontWeight: "bold", ":hover" : { backgroundColor: theme.palette.primary.light }}} size={"large"}>Login</Button>
+                            <Button type="submit" disableElevation={true} color={"primary"} value={"Submit"} variant={"contained"} sx={{ color : "white", borderRadius : "0.5rem", marginRight : "1.5rem", ":hover" : { backgroundColor: theme.palette.primary.light }}} size={"large"}>Login</Button>
                             <Link href={"/register"}><Typography color={"primary"}  sx={{ cursor : "pointer", marginY : "1rem", ":hover" : { color : "#6d6e71" } }} variant={"subtitle1"}>Create an Account</Typography></Link>
                         </Box>
                     </form>

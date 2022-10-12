@@ -14,6 +14,7 @@ import AbcIcon from "@mui/icons-material/Abc";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import EditIcon from "@mui/icons-material/Edit";
+import {toast} from "react-toastify";
 
 export default function Equipment(props) {
 
@@ -141,6 +142,31 @@ export default function Equipment(props) {
         setLoading(false);
     }
 
+    // for notifications
+    function showSuccessNotification(message) {
+        toast.info(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
+    function showErrorNotification(message) {
+        toast.error(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
     const handleDeletion = (id) => {
         setLoading(true);
         fetch("/api/equipment/deleteEquipment", {
@@ -153,12 +179,14 @@ export default function Equipment(props) {
             })
         }).then(res => res.json()).then(data => {
             console.log(data);
-            if(data.message){
-                setMessage(data.message);
-            }
             if(data.error){
-                getEquipment();
                 setMessage(data.error);
+                showSuccessNotification(data.error);
+            }
+            else{
+                getEquipment();
+                setMessage(data.message);
+                showErrorNotification(data.message);
             }
         }).catch(e => console.log(e.message));
     };
@@ -182,12 +210,14 @@ export default function Equipment(props) {
             .then(res => res.json())
             .then(data => {
                 console.log(data);
-                if(data.message){
-                    getEquipment();
-                    setMessage(data.message);
-                }
                 if(data.error){
                     setMessage(data.error);
+                    showErrorNotification(data.error);
+                }
+                else{
+                    getEquipment();
+                    setMessage(data.message);
+                    showSuccessNotification(data.message);
                 }
             })
             .catch(e => console.log(e.message));

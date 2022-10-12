@@ -11,6 +11,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import Tag from "@mui/icons-material/Tag";
 import PeopleIcon from '@mui/icons-material/People';
 import EditIcon from "@mui/icons-material/Edit";
+import {toast, ToastContainer} from "react-toastify";
 
 
 export default function Guest(props) {
@@ -18,7 +19,7 @@ export default function Guest(props) {
 
     const [ guests, setGuests ] = useState([]);
     const [ message, setMessage ] = useState("");
-    const [loading, setLoading] = useState(true);
+    const [ loading, setLoading ] = useState(true);
 
     useEffect(() => {
         setGuests(props.guests);
@@ -120,9 +121,11 @@ export default function Guest(props) {
                 console.log(data);
                 if(data.error){
                     setMessage(data.error);
+                    showErrorNotification(data.error);
                 }else{
                     getGuestCount();
                     setMessage(data.message);
+                    showSuccessNotification(data.message);
                 }
             })
             .catch(e => console.log(e.message));
@@ -144,14 +147,40 @@ export default function Guest(props) {
             console.log(data);
             if(data.error){
                 setMessage(data.error);
+                showErrorNotification(data.error);
             }
             else{
                 getGuestCount();
                 setMessage(data.message)
+                showSuccessNotification(data.message);
             }
         }).catch(e => console.log(e.message));
     }
 
+    // for notifications
+    function showSuccessNotification(message) {
+        toast.info(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
+    function showErrorNotification(message) {
+        toast.error(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
 
     //for form submission
     const SubmitHandler = async (data) => {
@@ -170,13 +199,15 @@ export default function Guest(props) {
             })
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data);
                     if(data.error){
                         setMessage(data.error);
+                        showErrorNotification(data.error);
                     }
                     else{
                         getGuestCount();
-                        setMessage(data.message)
+                        setMessage(data.message);
+                        console.log(data.message);
+                        showSuccessNotification(data.message);
                     }
                     //need to empty fields after form submission
                     reset({

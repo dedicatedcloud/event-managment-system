@@ -21,13 +21,13 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import NumbersIcon from '@mui/icons-material/Numbers';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import EditIcon from "@mui/icons-material/Edit";
+import {toast} from "react-toastify";
 
 export default function Venue(props) {
     const [ venues, setVenues ] = useState([]);
     const [ guests, setGuests ] = useState([]);
     const [ message, setMessage ] = useState('');
     const [ loading, setLoading ] = useState(true);
-
 
 
     //For guest Count and editing it
@@ -117,6 +117,31 @@ export default function Venue(props) {
             }
         }
         return false;
+    }
+
+    // for notifications
+    function showSuccessNotification(message) {
+        toast.info(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
+    function showErrorNotification(message) {
+        toast.error(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
     }
 
     const columns = [
@@ -225,9 +250,11 @@ export default function Venue(props) {
                 console.log(data);
                 if(data.error){
                     setMessage(data.error);
+                    showErrorNotification(data.error);
                 }else{
                     getVenues();
                     setMessage(data.message);
+                    showSuccessNotification(data.message);
                 }
                 //need to empty fields after form submission
                 reset({
@@ -263,9 +290,11 @@ export default function Venue(props) {
                 console.log(data);
                 if(data.error){
                     setMessage(data.error);
+                    showErrorNotification(data.error);
                 }else{
                     getVenues();
                     setMessage(data.message);
+                    showSuccessNotification(data.message);
                 }
             })
             .catch(e => console.log(e.message));
@@ -286,10 +315,12 @@ export default function Venue(props) {
             console.log(data);
             if(data.error){
                 setMessage(data.error);
+                showErrorNotification(data.error);
             }
             else{
                 getVenues();
-                setMessage(data.message)
+                setMessage(data.message);
+                showSuccessNotification(data.message);
             }
         }).catch(e => console.log(e.message));
     };

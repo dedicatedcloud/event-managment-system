@@ -37,8 +37,7 @@ const handler = nc({
             try{
                 const { name, location, description } = req.body;
                 const { filename } = req.file;
-                console.log(req.body);
-                console.log(req.file);
+                console.log(req.body, "req body");
                 const ourEvent = await prisma.companyEvents.create({
                     data : {
                         name : name,

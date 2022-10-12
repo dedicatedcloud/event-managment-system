@@ -16,6 +16,7 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import PaymentIcon from '@mui/icons-material/Payment';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import EditIcon from '@mui/icons-material/Edit';
+import {toast} from "react-toastify";
 
 
 export default function Events({events : _events, guests, venues, users}) {
@@ -238,6 +239,31 @@ export default function Events({events : _events, guests, venues, users}) {
         },
     ];
 
+    // for notifications
+    function showSuccessNotification(message) {
+        toast.info(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
+    function showErrorNotification(message) {
+        toast.error(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
     //to get the edited record from the table row
     const handleCellEditCommit = useCallback(async (params) => {
         setLoading(true);
@@ -277,6 +303,7 @@ export default function Events({events : _events, guests, venues, users}) {
                 console.log(data);
                 if(data.error){
                     setMessage(data.error);
+
                 }
                 else{
                     fetchEvents();

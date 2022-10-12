@@ -142,6 +142,7 @@ export default function CompanyEvents(props) {
 
     const SubmitHandler = async (data) => {
         setLoading(true);
+        console.log(data)
         const { name, location, description, picture } = data;
         const formData = new FormData();
         formData.append("name", name);

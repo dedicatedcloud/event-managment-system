@@ -28,6 +28,7 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import EventIcon from '@mui/icons-material/Event';
 import Footer from "../components/footer";
 import Head from "next/head";
+import {ToastContainer} from "react-toastify";
 
 const drawerWidth = 240;
 
