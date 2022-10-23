@@ -11,14 +11,16 @@ import { DataGrid } from '@mui/x-data-grid';
 import Tag from "@mui/icons-material/Tag";
 import PeopleIcon from '@mui/icons-material/People';
 import EditIcon from "@mui/icons-material/Edit";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
+import {useTheme} from "@mui/material/styles";
 
 
 export default function Guest(props) {
 
 
+    const theme = useTheme();
+
     const [ guests, setGuests ] = useState([]);
-    const [ message, setMessage ] = useState("");
     const [ loading, setLoading ] = useState(true);
 
     useEffect(() => {
@@ -49,7 +51,7 @@ export default function Guest(props) {
     const deleteButton = (props) => {
         return (
             <>
-                <Button variant={"contained"} color={"error"} onClick={ () => handleDeletion(props.row.id) }>Delete</Button>
+                <Button variant={"contained"} color={"error"} disableElevation={true} onClick={ () => handleDeletion(props.row.id) }>Delete</Button>
             </>
         );
     }
@@ -120,12 +122,10 @@ export default function Guest(props) {
                 setLoading(false)
                 console.log(data);
                 if(data.error){
-                    setMessage(data.error);
                     showErrorNotification(data.error);
                 }else{
-                    getGuestCount();
-                    setMessage(data.message);
                     showSuccessNotification(data.message);
+                    getGuestCount();
                 }
             })
             .catch(e => console.log(e.message));
@@ -146,13 +146,11 @@ export default function Guest(props) {
         }).then(res => res.json()).then(data => {
             console.log(data);
             if(data.error){
-                setMessage(data.error);
                 showErrorNotification(data.error);
             }
             else{
-                getGuestCount();
-                setMessage(data.message)
                 showSuccessNotification(data.message);
+                getGuestCount();
             }
         }).catch(e => console.log(e.message));
     }
@@ -200,14 +198,11 @@ export default function Guest(props) {
                 .then(res => res.json())
                 .then(data => {
                     if(data.error){
-                        setMessage(data.error);
                         showErrorNotification(data.error);
                     }
                     else{
-                        getGuestCount();
-                        setMessage(data.message);
-                        console.log(data.message);
                         showSuccessNotification(data.message);
+                        getGuestCount();
                     }
                     //need to empty fields after form submission
                     reset({
@@ -221,19 +216,19 @@ export default function Guest(props) {
 
     return (
         <Box component={"div"}>
-            <Typography variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem" }} color={"primary"}>Guest</Typography>
+            <Typography variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem", color: theme.palette.primary.main }} >Guest</Typography>
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center", alignItems : "center" }}>
-                <Box sx={{ boxShadow : 5, padding : "2rem", borderRadius : "0.5rem" }}>
+                <Box sx={{ boxShadow : 5, padding : "2rem", borderRadius: 5 }}>
                     <form onSubmit={handleSubmit(SubmitHandler)}>
-                        <Controller control={control} defaultValue={""} render={({field}) => (<TextField  {...field} label={"Min Guest"} sx={{ marginY : "1rem" }} fullWidth variant={"outlined"} type={"number"} error={!!errors.min} helperText={errors.min?.message} />)} name="min"/>
-                        <Controller control={control} defaultValue={""} render={({field}) => (<TextField {...field} label={"Max Guest"} sx={{ marginY : "1rem" }} fullWidth variant={"outlined"} type={"number"} error={!!errors.max} helperText={errors.max?.message} />)} name="max"/>
-                            <Button type={"submit"} size={"large"}  variant={"contained"} sx={{ color : "white", margin : "0 auto", borderRadius : "0.5rem" }}>Add</Button>
+                        <Controller control={control} defaultValue={""} render={({field}) => (<TextField  {...field} label={"Min Guest"} sx={{ marginY : "1rem" }} fullWidth variant={"standard"} type={"number"} error={!!errors.min} helperText={errors.min?.message} />)} name="min"/>
+                        <Controller control={control} defaultValue={""} render={({field}) => (<TextField {...field} label={"Max Guest"} sx={{ marginY : "1rem" }} fullWidth variant={"standard"} type={"number"} error={!!errors.max} helperText={errors.max?.message} />)} name="max"/>
+                        <Button type={"submit"} size={"large"} disableElevation={true} variant={"contained"} sx={{ color : "white", marginY : "1rem", borderRadius : 2, backgroundColor: theme.palette.primary.main }}>Add</Button>
                     </form>
                 </Box>
             </Box>
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center"}}>
                 <Box sx={{ width : "55rem", margin : "0 auto", paddingY : "3rem" }}>
-                    <DataGrid autoHeight={true}  sx={{ boxShadow : 5, color : "#f08a5d", marginY : "1rem" }} loading={loading} disableSelectionOnClick={true} density={"comfortable"} rows={guests} columns={columns} onCellEditCommit={handleCellEditCommit} />
+                    <DataGrid autoHeight={true}  sx={{ boxShadow : 5, color : theme.palette.primary.main, marginY : "1rem", borderRadius: 5 }} loading={loading} disableSelectionOnClick={true} density={"comfortable"} rows={guests} columns={columns} onCellEditCommit={handleCellEditCommit} />
                 </Box>
             </Box>
         </Box>

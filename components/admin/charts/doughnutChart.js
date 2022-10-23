@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import {ArcElement, Chart as ChartJS, Legend, Tooltip} from "chart.js";
+import Box from "@mui/material/Box";
 
 function DoughnutChart() {
 
@@ -46,9 +47,9 @@ function DoughnutChart() {
     };
 
     return (
-        <div>
+        <Box component={"div"} sx={{ height: 'max-content' }}>
             <Doughnut data={data}/>
-        </div>
+        </Box>
     );
 }
 

@@ -13,13 +13,13 @@ import registerImage from "../public/assets/registerImage.jpg";
 import Link from "next/link";
 import {useTheme} from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import {toast} from "react-toastify";
 
 const Register = () => {
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.down("md"));
 
-    const [message, setMessage ] = useState("");
     const schema = yup.object({
         name : yup.string().required().trim().min(5).max(24),
         email : yup.string().required().email().trim(),
@@ -30,6 +30,30 @@ const Register = () => {
         resolver : yupResolver(schema)
     });
 
+    // for notifications
+    function showSuccessNotification(message) {
+        toast.info(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
+    function showErrorNotification(message) {
+        toast.error(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
 
     const SubmitHandler = async (data) => {
         const { name, email, password } = data;
@@ -47,7 +71,7 @@ const Register = () => {
         }).then(res => res.json())
             .then(data => {
                 if(data?.user){
-                    setMessage(data.message)
+                    showSuccessNotification(data.message)
                     signIn("credentials",{
                         email : email,
                         password : password,
@@ -55,7 +79,7 @@ const Register = () => {
                     })
                 }
                 if(data?.error){
-                    setMessage(data.error)
+                    showErrorNotification(data.error)
                 }
             })
             .catch(e => console.log(e.message));
@@ -73,15 +97,15 @@ const Register = () => {
                 </Box>
                 <Box component={"div"} sx={{ width : "100%", paddingX : "2rem" }} >
                     <form onSubmit={handleSubmit(SubmitHandler)}>
-                        <Controller control={control} render={({field}) => (<TextField {...field} sx={{ marginY : "1rem" }} label={"Name"} type={"text"} variant={"outlined"} fullWidth error={!!errors.name} helperText={errors.name ? errors.name?.message : ""} />)} name="name" />
-                        <Controller name="email" control={ control } defaultValue={""} render={({field}) => (<TextField {...field} sx={{ marginY : "1rem" }} label={"Email"} type={"email"} variant={"outlined"} fullWidth error={!!errors.email} helperText={errors.email ? errors.email?.message : ""} />)} />
-                        <Controller name="password" control={ control } defaultValue={""} render={({field}) => (<TextField {...field} sx={{ marginY : "1rem" }} label={"Password"} type={"password"} variant={"outlined"} fullWidth error={!!errors.password} helperText={errors.password ? errors.password?.message : ""} />)} />
+                        <Controller control={control} render={({field}) => (<TextField {...field} sx={{ marginY : "1rem" }} label={"Name"} type={"text"} variant={"standard"} fullWidth error={!!errors.name} helperText={errors.name ? errors.name?.message : ""} />)} name="name" />
+                        <Controller name="email" control={ control } defaultValue={""} render={({field}) => (<TextField {...field} sx={{ marginY : "1rem" }} label={"Email"} type={"email"} variant={"standard"} fullWidth error={!!errors.email} helperText={errors.email ? errors.email?.message : ""} />)} />
+                        <Controller name="password" control={ control } defaultValue={""} render={({field}) => (<TextField {...field} sx={{ marginY : "1rem" }} label={"Password"} type={"password"} variant={"standard"} fullWidth error={!!errors.password} helperText={errors.password ? errors.password?.message : ""} />)} />
                         <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "start", alignItems : "center", marginTop : 1 }}>
                             <Button type="submit" value={"Submit"} variant={"contained"} sx={{ color : "white", borderRadius : "0.5rem", ":hover" : { backgroundColor: theme.palette.primary.light } }} disableElevation={true} size={"large"}>Register</Button>
                             <Link href={"/login"}><Button color={"primary"} disableElevation={true} sx={{ marginY : "1rem", color : "white", ":hover" : { backgroundColor: theme.palette.primary.light } }} size={"small"} variant={"contained"}>Back</Button></Link>
                         </Box>
                     </form>
-                    { message && <Typography variant={"subtitle1"} color={"red"} fontSize={16} sx={{ padding : "1rem" }}>{message}</Typography> }
+                    {/* message && <Typography variant={"subtitle1"} color={"red"} fontSize={16} sx={{ padding : "1rem" }}>{message}</Typography> */}
                 </Box>
             </Box>
         </Box>

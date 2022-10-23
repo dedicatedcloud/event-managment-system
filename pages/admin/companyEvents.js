@@ -15,21 +15,35 @@ import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import EditIcon from "@mui/icons-material/Edit";
 import ArticleIcon from '@mui/icons-material/Article';
 import Image from "next/image";
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
+import {useTheme} from "@mui/material/styles";
 
 
 export default function CompanyEvents(props) {
 
+    const theme = useTheme();
 
     const [ourEvents, setOurEvents] = useState([]);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
+    // for date picker
+    const [value, setValue] = React.useState(null);
+
+    const handleChange = (newValue) => {
+        setValue(newValue);
+    };
+
     const schema = yup.object({
         name : yup.string().required("Name is required").min(8, "Name must be at least 8 characters long"),
         location : yup.string().required("Location is required").min(5, "Location must be at least 10 characters long"),//change back to 10
         description : yup.string().required("Description is required").min(5, "Description must be at least 100 characters long"),//change back to 10
+        date: yup.date().required("Date is required"),
         picture : yup.mixed().required("Pictures are required")
     });
+
 
     const {control, formState : { errors }, handleSubmit, reset} = useForm({
         resolver : yupResolver(schema),
@@ -124,6 +138,14 @@ export default function CompanyEvents(props) {
                 return { ...props.props, error: !validValue };
             }
         },
+        { field: 'date', headerName: 'Date', flex: 1, editable : true, renderHeader : (props) => {
+            return <Box component={"span"} sx={{ display : "flex", flex : "row", justifyContent : "center", alignItems : "center" }}><ArticleIcon fontSize={"medium"}/><Typography variant={"subtitle2"} sx={{ paddingX : 1 }}>{props.colDef.headerName}</Typography></Box>
+        },
+            preProcessEditCellProps : (props) => {
+            const validValue = props.props.value.length > 10;
+            return { ...props.props, error: !validValue };
+        }
+        },
         {
             field: 'picture', headerName: "Picture", editable: true, flex: 2,
             renderCell : DisplayImage,
@@ -143,11 +165,12 @@ export default function CompanyEvents(props) {
     const SubmitHandler = async (data) => {
         setLoading(true);
         console.log(data)
-        const { name, location, description, picture } = data;
+        const { name, location, description, date, picture } = data;
         const formData = new FormData();
         formData.append("name", name);
         formData.append("location", location);
         formData.append("description", description);
+        formData.append("date", date);
         formData.append("image", picture[0]);
         fetch("/api/companyEvents/addCompanyEvent", {
             method : "POST",
@@ -169,6 +192,7 @@ export default function CompanyEvents(props) {
                     name : "",
                     location : "",
                     description : "",
+                    date: "",
                     picture : ""
                 });
             })
@@ -233,22 +257,31 @@ export default function CompanyEvents(props) {
     return (
         <>
             <Box component={"div"}>
-                <Typography  variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem" }} color={"primary"}>Our Events</Typography>
+                <Typography  variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem", color: theme.palette.primary.main }}>Our Events</Typography>
                 {/*Insert Form*/}
                 <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center", alignItems : "center" }}>
-                    <Box width={"35rem"} sx={{ boxShadow : 5, padding : "2rem", borderRadius : "0.5rem" }}>
+                    <Box width={"35rem"} sx={{ boxShadow : 8, padding : "2rem", borderRadius: 5 }}>
                         <form onSubmit={handleSubmit(SubmitHandler)}>
-                            <Controller control={control} defaultValue={""} render={({field}) => (<TextField  {...field} label={"Name"} type={"text"} sx={{ marginY : "1rem" }} fullWidth error={!!errors.name} helperText={errors.name?.message} />)} name="name"/>
-                            <Controller control={control} defaultValue={""} render={({field}) => (<TextField {...field} label={"Location"} multiline={true} type={"text"} sx={{ marginY : "1rem" }} fullWidth error={!!errors.location} helperText={errors.location?.message} />)} name="location"/>
-                            <Controller control={control} defaultValue={""}  render={({field}) => (<TextField {...field} label={"Description"} multiline={true} type={"text"} sx={{ marginY : "1rem" }} fullWidth error={!!errors.description} helperText={errors.description?.message} />)} name="description"/>
-                            <Controller control={control} render={({field}) => (<TextField type={"file"} onChange={ ({target}) => field.onChange(target.files) } sx={{ marginY : "1rem" }} error={!!errors.picture} helperText={errors.picture?.message} fullWidth />)} name="picture"/>
-                            <Button type={"submit"} size={"large"}  variant={"contained"} sx={{ color : "white", marginY : "1rem", borderRadius : "0.5rem" }}>Add</Button>
-                        </form>
+                            <Controller control={control} defaultValue={""} render={({field}) => (<TextField  {...field} label={"Name"} type={"text"} sx={{ marginY : "1rem" }} variant={"standard"} fullWidth error={!!errors.name} helperText={errors.name?.message} />)} name="name"/>
+                            <Controller control={control} defaultValue={""} render={({field}) => (<TextField {...field} label={"Location"} multiline={true} type={"text"} sx={{ marginY : "1rem" }} variant={"standard"} fullWidth error={!!errors.location} helperText={errors.location?.message} />)} name="location"/>
+                            <Controller control={control} defaultValue={""}  render={({field}) => (<TextField {...field} label={"Description"} multiline={true} type={"text"} sx={{ marginY : "1rem" }} variant={"standard"} fullWidth error={!!errors.description} helperText={errors.description?.message} />)} name="description"/>
+                            <Box component={"div"} sx={{ marginY : "1rem", width: '100%' }}>
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DateTimePicker
+                                    value={value}
+                                    onChange={handleChange}
+                                    label="Date & Time"
+                                    renderInput={(params) => <TextField variant={"standard"} fullWidth {...params} />}
+                                />
+                            </LocalizationProvider>
+                            </Box>
+                            <Controller control={control} render={({field}) => (<TextField type={"file"} onChange={ ({target}) => field.onChange(target.files) } sx={{ marginY : "1rem" }} variant={"standard"} error={!!errors.picture} helperText={errors.picture?.message} fullWidth />)} name="picture"/>
+                            <Button type={"submit"} size={"large"}  variant={"contained"} disableElevation={true} sx={{ color : "white", marginY : "1rem", borderRadius : 2, backgroundColor: theme.palette.primary.main }}>Add</Button>                        </form>
                     </Box>
                 </Box>
                 <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center"}}>
-                    <Box sx={{ width : "80rem", margin : "0 auto", paddingY : "3rem" }}>
-                        <DataGrid autoHeight={true} disableSelectionOnClick={true} loading={loading} sx={{ boxShadow : 5, color : "#f08a5d", marginY : "1rem" }} density={"comfortable"} rows={ourEvents} columns={columns} onCellEditCommit={handleCellEditCommit} />
+                    <Box  sx={{ width : "80rem", margin : "0 auto", paddingY : "3rem" }}>
+                        <DataGrid autoHeight={true} disableSelectionOnClick={true} loading={loading} sx={{ boxShadow : 5, color : theme.palette.primary.main, marginY : "1rem", borderRadius: 5 }} density={"comfortable"} rows={ourEvents} columns={columns} onCellEditCommit={handleCellEditCommit} />
                     </Box>
                 </Box>
             </Box>

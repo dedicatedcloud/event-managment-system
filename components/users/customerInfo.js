@@ -20,20 +20,20 @@ export default function CustomerDetails ({ next, back, props }){
                         <Typography variant={"h5"} color={"primary"} align={"center"}>Customer Details:</Typography><br/>
                     </Grid>
                     <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <TextField  label="Name" aria-readonly={true} value={user.name} InputLabelProps={{ shrink : true }} variant="outlined" fullWidth/>
+                        <TextField  label="Name" aria-readonly={true} value={user.name} InputLabelProps={{ shrink : true }} variant="standard" fullWidth/>
                     </Grid>
                     <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <TextField  label="Email" aria-readonly={true} value={user.email} InputLabelProps={{ shrink : true }} variant="outlined" fullWidth/>
+                        <TextField  label="Email" aria-readonly={true} value={user.email} InputLabelProps={{ shrink : true }} variant="standard" fullWidth/>
                     </Grid>
                     <Grid item xs={12} sm={12} md={6} lg={6}>
                         <FormControl required fullWidth>
-                            <TextField  label="Phone" type={"text"} value={phoneNumber} onChange={ ({target}) => setPhoneNumber(target.value)  }  variant="outlined" fullWidth/>
+                            <TextField  label="Phone" type={"text"} value={phoneNumber} onChange={ ({target}) => setPhoneNumber(target.value)  }  variant="standard" fullWidth/>
                         </FormControl>
                     </Grid>
                     <Grid item xs={12} md={12} sm={12} lg={12}>
                         <Box  component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between"}}>
-                            <Button onClick={ back } variant={"contained"} sx={{ color : "white"}} color={"primary"}>Back</Button>
-                            <Button variant={"contained"} sx={{ color : "white"}} type={"submit"} color={"primary"} disabled={phoneNumber.length !== 11}>Next</Button>
+                            <Button onClick={ back } disableElevation={true} variant={"contained"} sx={{ color : "white"}}  size={"large"} color={"primary"}>Back</Button>
+                            <Button variant={"contained"} disableElevation={true} sx={{ color : "white"}} type={"submit"} size={"large"} color={"primary"} disabled={phoneNumber.length !== 11}>Next</Button>
                         </Box>
                     </Grid>
                 </Grid>

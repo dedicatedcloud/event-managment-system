@@ -60,7 +60,7 @@ export default function Dashboard({user, data}) {
                     {events.map((e, i) => {
                         return (
                             <Grid item key={i}>
-                                <EventCards event={e} data={data}/>
+                                <EventCards event={e} data={data} fetchEvents={fetchEvents}/>
                             </Grid>
                         );
                     })

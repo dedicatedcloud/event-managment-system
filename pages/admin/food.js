@@ -21,15 +21,16 @@ import FactCheckIcon from '@mui/icons-material/FactCheck';
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import EditIcon from "@mui/icons-material/Edit";
 import {toast} from "react-toastify";
+import {useTheme} from "@mui/material/styles";
 
 export default function Food(props) {
 
+    const theme = useTheme();
+
     const [ food, setFood ] = useState();
-    const [ message, setMessage ] = useState("");
     const [ loading, setLoading ] = useState(true);
 
     useEffect(() => {
-        /*getFoods();*/
         setFood(props.food);
         setLoading(false);
     }, []);
@@ -44,7 +45,7 @@ export default function Food(props) {
     const SelectInputType = (props) => {
         const { id, value, api, field } = props;
         return <div>
-            <Select value={value} onChange={ async (e) => {
+            <Select value={value} variant={"standard"} onChange={ async (e) => {
                 api.setEditCellValue({id, field, value: e.target.value}, e);
                 const isValid = await api.commitCellChange({id, field});
                 if (isValid) {
@@ -63,7 +64,7 @@ export default function Food(props) {
     const SelectInputMenu = (props) => {
         const { id, value, api, field } = props;
         return <div>
-            <Select value={value} onChange={ async (e) => {
+            <Select value={value} variant={"standard"} onChange={ async (e) => {
                 api.setEditCellValue({id, field, value: e.target.value}, e);
                 const isValid = await api.commitCellChange({id, field});
                 if (isValid) {
@@ -89,7 +90,7 @@ export default function Food(props) {
 
     const SelectImage = (props) => {
         const { id, field, value, api } = props;
-        return <TextField type={"file"} onChange={ async (e) => {
+        return <TextField type={"file"} variant={"standard"} onChange={ async (e) => {
             api.setEditCellValue({id, field, value: e.target.files[0]}, e);
             const isValid = await api.commitCellChange({id, field});
             if (isValid) {
@@ -102,7 +103,7 @@ export default function Food(props) {
     const deleteButton = (props) => {
         return (
             <>
-                <Button variant={"contained"} color={"error"} onClick={ () => handleDeletion(props.row.id) }>Delete</Button>
+                <Button variant={"contained"} disableElevation={true} color={"error"} onClick={ () => handleDeletion(props.row.id) }>Delete</Button>
             </>
         );
     }
@@ -198,13 +199,11 @@ export default function Food(props) {
         }).then(res => res.json()).then(data => {
             console.log(data);
             if(data.error){
-                setMessage(data.error);
-                showErrorNotification(data.error)
+                showErrorNotification(data.error);
             }
             else{
+                showSuccessNotification(data.message);
                 getFoods();
-                setMessage(data.message);
-                showSuccessNotification(data.message)
             }
         }).catch(e => console.log(e.message));
     };
@@ -276,12 +275,10 @@ export default function Food(props) {
                 setLoading(false);
                 console.log(data);
                 if(data.error){
-                    setMessage(data.error);
                     showErrorNotification(data.error);
                 }else{
-                    getFoods();
-                    setMessage(data.message);
                     showSuccessNotification(data.message);
+                    getFoods();
                 }
             })
             .catch(e => console.log(e.message));
@@ -304,12 +301,10 @@ export default function Food(props) {
             .then(res => res.json())
             .then(data => {
                 if(data.error){
-                    setMessage(data.error);
                     showErrorNotification(data.error);
                 }else{
-                    getFoods();
-                    setMessage(data.message);
                     showSuccessNotification(data.message);
+                    getFoods();
                 }
                 //need to empty fields after form submission !!pending
                 reset({
@@ -324,12 +319,12 @@ export default function Food(props) {
 
     return (
         <Box component={"div"}>
-            <Typography  variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem" }} color={"primary"}>Food</Typography>
+            <Typography  variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem", color: theme.palette.primary.main }}>Food</Typography>
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center", alignItems : "center" }}>
-                <Box width={"35rem"} sx={{ boxShadow : 5, padding : "2rem", borderRadius : "0.5rem" }}>
+                <Box width={"35rem"} sx={{ boxShadow : 5, padding : "2rem", borderRadius : 5 }}>
                     <form onSubmit={handleSubmit(SubmitHandler)}>
-                        <Controller control={control} render={({field}) => (<TextField  {...field} label={"Name"} type={"text"} variant={"outlined"} sx={{ marginY : "1rem" }} fullWidth error={!!errors.name} helperText={errors.name?.message} />)} name="name"/>
-                        <FormControl fullWidth sx={{marginY: "1rem"}}>
+                        <Controller control={control} render={({field}) => (<TextField  {...field} label={"Name"} type={"text"} variant={"standard"} sx={{ marginY : "1rem" }} fullWidth error={!!errors.name} helperText={errors.name?.message} />)} name="name"/>
+                        <FormControl fullWidth variant={"standard"} sx={{marginY: "1rem"}}>
                             <InputLabel id="foodType">Food Type</InputLabel>
                             <Controller render={({ field }) => (<Select {...field} labelId={"foodType"} error={!!errors.type} label="foodType">
                                     <MenuItem value={"Starter"} >Starter</MenuItem>
@@ -340,7 +335,7 @@ export default function Food(props) {
                             } control={control} name="type" defaultValue={""}/>
                             {errors.type && <FormHelperText sx={{color: "red"}}>{errors.type?.message}</FormHelperText>}
                         </FormControl>
-                        <FormControl fullWidth sx={{marginY: "1rem"}}>
+                        <FormControl fullWidth variant={"standard"} sx={{marginY: "1rem"}}>
                             <InputLabel id="menu">Menu</InputLabel>
                             <Controller render={({ field }) => (<Select {...field} labelId={"menu"} error={!!errors.menu} label="Menu">
                                     <MenuItem value={"Menu 1"} >Menu 1</MenuItem>
@@ -351,16 +346,16 @@ export default function Food(props) {
                             } control={control} name="menu" defaultValue={""}/>
                             {errors.menu && <FormHelperText sx={{color: "red"}}>{errors.menu?.message}</FormHelperText>}
                         </FormControl>
-                        <Controller control={control} render={({field}) => (<TextField {...field} variant={"outlined"} sx={{ marginY : "1rem" }} fullWidth label={"Price"} type={"number"} error={!!errors.price} helperText={errors.price?.message} />)} name="price"/>
-                        <Controller control={control} render={({field}) => (<TextField type={"file"} onChange={ ({target}) => field.onChange(target.files) } sx={{ marginY : "1rem" }} error={!!errors.picture} helperText={errors.picture?.message} fullWidth />)} name="picture"/>
-                        <Button type={"submit"} variant={"contained"} sx={{ color : "white" }}>Add</Button>
+                        <Controller control={control} render={({field}) => (<TextField {...field} variant={"standard"} sx={{ marginY : "1rem" }} fullWidth label={"Price"} type={"number"} error={!!errors.price} helperText={errors.price?.message} />)} name="price"/>
+                        <Controller control={control} render={({field}) => (<TextField type={"file"} onChange={ ({target}) => field.onChange(target.files) } sx={{ marginY : "1rem" }} variant={"standard"} error={!!errors.picture} helperText={errors.picture?.message} fullWidth />)} name="picture"/>
+                        <Button type={"submit"} size={"large"} variant={"contained"} disableElevation={true} sx={{ color : "white", marginY : "1rem", borderRadius : 2, backgroundColor: theme.palette.primary.main }}>Add</Button>
                     </form>
                 </Box>
             </Box>
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center"}}>
                 <Box sx={{ width : "80rem", margin : "0 auto", paddingY : "3rem" }}>
                     {/* TODO:set table icon for food type column */}
-                    <DataGrid columns={columns} rows={food ? food : []} autoHeight={true} loading={loading} sx={{ boxShadow : 5, color : "#f08a5d", marginY : "1rem" }}  disableSelectionOnClick={true} density={"comfortable"} onCellEditCommit={handleCellEditCommit} />
+                    <DataGrid columns={columns} rows={food ? food : []} autoHeight={true} loading={loading} sx={{ boxShadow : 5, color : theme.palette.primary.main, marginY : "1rem", borderRadius: 5 }}  disableSelectionOnClick={true} density={"comfortable"} onCellEditCommit={handleCellEditCommit} />
                 </Box>
             </Box>
         </Box>

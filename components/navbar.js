@@ -76,7 +76,7 @@ const Navbar = ({ session, status }) => {
 
     return (
         <div>
-            <AppBar position="sticky" elevation={0} color={"secondary"}>
+            <AppBar position="sticky" elevation={0} sx={{backgroundColor: theme.palette.secondary.light}}>
                 <Toolbar sx={{ display : "flex",flexDirection : "row", justifyContent : "space-between", alignItems : "center", paddingY : 2 }}>
                     <Box sx={{ cursor : "pointer" }} component={motion.div} initial={{ x : '-100vw' }} animate={{ x : 0 }} transition={{ delay : 0.6, type : 'tween', duration : 1  }}>
                         <Link href={"/"}><Image src={logo} width={"75rem"} height={"75rem"} alt={"logo"}/></Link>

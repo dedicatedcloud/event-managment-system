@@ -16,7 +16,7 @@ export default function Footer(props) {
 
     return (
         <Box component={"div"}>
-            <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between", alignItems : "center", paddingX : { xs : 2, sm  : 2, md : 5, lg : 5 }, paddingY : 1,borderTop : 1, borderColor : "#d7d7d7" }}>
+            <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between", alignItems : "center", paddingX : { xs : 2, sm  : 2, md : 5, lg : 5 }, paddingY : 1,/*borderTop : 1, borderColor : "#d7d7d7"*/ }}>
                 <Box component={motion.div} initial={{ x : '-100vw' }} animate={{ x : 0 }} transition={{ delay : 0.6, type : 'tween', duration : 1  }}>
                     <Image src={logo} width={100} height={100} alt={"logo"}/>
                 </Box>
@@ -26,7 +26,7 @@ export default function Footer(props) {
                     <Link href={"#"}><Typography variant={"subtitle1"} sx={{ color : theme.palette.primary.main, textAlign : { xs : "center", sm : "center" }, fontSize : { xs : "16px", sm : "16px", md : "18px",lg : "18px" }, lineHeight : { xs : "25px", sm : "26px", md : "36px", lg : "36px" }, letterSpacing : "1px", fontWeight : 500, textTransform : "uppercase", cursor : "pointer", ':hover' : { color : "#6d6e71" } }}>Contact</Typography></Link>
                 </Box>
             </Box>
-            <Box component={"div"} sx={{ background : "#eee", display : "flex", flexDirection : "row", justifyContent : "space-between", alignItems : "center", paddingX: 3, paddingY : 4 }}>
+            <Box component={"div"} sx={{ backgroundColor: theme.palette.secondary.main, display : "flex", flexDirection : "row", justifyContent : "space-between", alignItems : "center", paddingX: 3, paddingY : 4 }}>
                 <Box sx={{ display : "flex", flexDirection : "row" }} component={motion.div}  initial={{ x : '-100vw' }} animate={{ x : 0 }} transition={{ delay : 0.6, type : 'tween', duration : 1  }}>
                     <FacebookIcon fontSize={"large"} sx={{ color : "#4267B2", ":hover" : { color : theme.palette.primary.main }, cursor : "pointer" }}/>
                     <InstagramIcon fontSize={"large"} sx={{ color : '#b32b6f', ":hover" : { color : theme.palette.primary.main }, marginX : 1, cursor : "pointer"}}/>

@@ -31,13 +31,13 @@ export default function DropDown() {
                     paddingX: 3,
                     paddingY: 1,
                     fontSize: "20px",
+                    color: theme.palette.primary.main
                 }}
                 id="fade-button"
                 aria-controls={open ? 'fade-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
-                color={"primary"}
                 variant={"text"}
             >
                 <AccountCircleIcon fontSize={"large"}/>

@@ -35,7 +35,7 @@ const handler = nc({
         const session = await getSession({ req });
         if(session){
             try{
-                const { name, location, description } = req.body;
+                const { name, location, description, date } = req.body;
                 const { filename } = req.file;
                 console.log(req.body, "req body");
                 const ourEvent = await prisma.companyEvents.create({
@@ -43,6 +43,7 @@ const handler = nc({
                         name : name,
                         location : location,
                         description : description,
+                        date: date,
                         picture : filename
                     }
                 });

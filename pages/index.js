@@ -3,7 +3,7 @@ import Image from 'next/image';
 import img1 from "../public/assets/img1.jpg";
 import img2 from "../public/assets/img2.jpg";
 import img3 from "../public/assets/img3.jpg";
-import Carousel from "../components/users/carousel";
+import CustomCarousel from "../components/users/carousel";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -16,7 +16,7 @@ export default function Home(props) {
     const theme = useTheme();
   return (
       <>
-          <Carousel/>
+          <CustomCarousel/>
           <Box component={"div"}>
               <Box component={"div"} sx={{ paddingX : { xs : 1, sm : 2, md : 0, lg : 0 }, paddingY : 10 , display : "flex", flexDirection : "column", justifyContent : "center", alignItems : "center", backgroundColor : "rgb(239, 239, 239)", overflow : "hidden" }}>
                 <Typography variant={"subtitle1"} color={"black"} sx={{ marginBottom : { xs : 1, sm : 1, md : 2, lg : 2}, color : "rgb(0, 0, 0)", backgroundColor : "rgba(0, 0, 0, 0)", fontSize : "15px", lineHeight : "24px", verticalAlign : "baseline", letterSpacing : "1px", wordSpacing : "0px", fontWeight : "400", fontStyle : "normal",fontVariant : "normal", textTransform : "none", textDecoration : "rgb(0, 0, 0)", textIndent : "o0px" }} component={motion.div} initial={{ x : '-100vw' }} animate={{ x : 0 }} transition={{ delay : 0.4, duration : 1, type : 'spring' }}>UNPARALLELED, STRESS-FREE</Typography>

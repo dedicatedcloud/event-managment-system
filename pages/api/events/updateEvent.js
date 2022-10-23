@@ -5,8 +5,8 @@ export default async function handler(req, res) {
     const session = await getSession({ req });
     if(session){
         try {
-            const {id , eventType, guest, venue, environment, starterFood, mainFood, dessertFood, equipment, date, price} = req.body;
-            let foods = starterFood.concat(mainFood, dessertFood);
+            const {id , eventType, guest, venue, environment, menu1Food, menu2Food, menu3Food, equipment, date, price} = req.body;
+            let foods = menu1Food.concat(menu2Food, menu3Food);
             let event = prisma.events.update({
                 where: {
                     id  : id
@@ -70,7 +70,7 @@ export default async function handler(req, res) {
             }
         }catch (e) {
             return res.json({
-                message : e.message,
+                error : e.message,
             })
         }
     }

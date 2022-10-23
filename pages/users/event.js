@@ -24,8 +24,12 @@ import param from "jquery-param";
 import Close from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import Link from "next/link";
+import {useRouter} from "next/router";
 
 export default function Event(props) {
+
+
+    const router = useRouter();
 
     const [activeStep, setActiveStep] = useState(0);
     const [ isOpen, setIsOpen ] = useState(false);
@@ -108,11 +112,11 @@ export default function Event(props) {
     const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
 
     //for handling payment
-    const loadIframe = () => {
-        sessionStorage.setItem("info", JSON.stringify(data));
-        const request = {
+    const loadIframe = async () => {
+        // sessionStorage.setItem("info", JSON.stringify(data));
+        /*const request = {
             storeId: "13221",
-            amount: /*data.totalPrice*/1,
+            amount: /!*data.totalPrice*!/1,
             postBackURL: `${process.env.APP_URL}/users/confirmation`,
             orderRefNum: "2341",
             autoRedirect: "0",
@@ -123,7 +127,32 @@ export default function Event(props) {
         }
         let $iframe = $('#easypay-iframe');
         let str = param(request);
-        $iframe.attr("src", "https://easypay.easypaisa.com.pk/easypay/Index.jsf?"+str);
+        $iframe.attr("src", "https://easypay.easypaisa.com.pk/easypay/Index.jsf?"+str);*/
+        console.log(data);
+        /*const handleEvents = async () => {
+            await fetch("/api/events/addEvent", {
+                method: 'POST',
+                body: JSON.stringify(data)
+            }).then(res => res.json())
+                .then(data => {
+                    /!*setLoading(false);
+                    sessionStorage.removeItem('info');*!/
+                    console.log(data);
+                    router.push('/users/dashboard');
+                })
+        }
+        handleEvents();*/
+        const response = await fetch("/api/events/addEvent", {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+        const json = await response.json();
+        if(response.ok) {
+            await router.push('/users/dashboard');
+        }
+        else {
+            console.log(response.error)
+        }
     }
 
     const next = (params, e) => {
@@ -164,8 +193,8 @@ export default function Event(props) {
                         <Typography variant={"h5"} align={"center"} color={"primary"} gutterBottom >Confirmation</Typography>
                         <Typography variant={"subtitle1"} color={"danger"} sx={{ marginY : "1rem" }}>By Clicking Confirm, you are affirming the validation of the Info you provided!</Typography>
                         <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between", alignItems : "center" }}>
-                            <Button onClick={ backStep } variant={"contained"} sx={{ color : "white"}} color={"primary"}>Back</Button>
-                            <Button variant={"contained"} sx={{ color : "white"}} type={"submit"} onClick={ () => { setIsOpen(true); loadIframe(); } } color={"primary"}>Confirm</Button>
+                            <Button onClick={ backStep } disableElevation={true} size={"large"} variant={"contained"} sx={{ color : "white"}} color={"primary"}>Back</Button>
+                            <Button variant={"contained"} disableElevation={true} size={"large"} sx={{ color : "white"}} type={"submit"} onClick={ () => { setIsOpen(true); loadIframe(); } } color={"primary"}>Confirm</Button>
                         </Box>
                         {/*  Backdrop for payment  */}
                         <Backdrop

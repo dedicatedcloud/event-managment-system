@@ -28,13 +28,13 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import EventIcon from '@mui/icons-material/Event';
 import Footer from "../components/footer";
 import Head from "next/head";
-import {ToastContainer} from "react-toastify";
+import TodayIcon from '@mui/icons-material/Today';
 
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
     width: drawerWidth,
-    backgroundColor : theme.palette.primary.light,
+    backgroundColor : theme.palette.primary.main,
     transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
@@ -48,10 +48,10 @@ const closedMixin = (theme) => ({
         duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: 'hidden',
-    backgroundColor : theme.palette.primary.light,
+    backgroundColor : theme.palette.primary.main,
     width: `calc(${theme.spacing(7)} + 1px)`,
     [theme.breakpoints.up('sm')]: {
-        width: `calc(${theme.spacing(9)} + 1px)`,
+        width: `calc(${theme.spacing(8)})`,
     },
 });
 
@@ -139,7 +139,7 @@ export default function AdminLayout(props) {
         },
         {
             href : "/admin/companyEvents",
-            icon : <AdminPanelSettingsIcon fontSize={"medium"} color={"secondary"}/>,
+            icon : <TodayIcon fontSize={"medium"} color={"secondary"}/>,
             text : "Our Events"
         },
         {
@@ -164,12 +164,12 @@ export default function AdminLayout(props) {
     };
 
     return (
-        <Box sx={{ display: 'flex', backgroundColor : "#ffffff", overflowX : "hidden" }}>
+        <Box sx={{ display: 'flex', backgroundColor : theme.palette.secondary.light, overflowX : "hidden" }}>
             <Head>
                 <title>W&Decor Event Management</title>
                 <link rel="icon" type="image/x-icon" href="/assets/favicon.png"/>
             </Head>
-            <AppBar position="fixed" elevation={0} color={"secondary"} open={open} sx={{ paddingY : 2 }}>
+            <AppBar position="fixed" elevation={0}  open={open} sx={{ paddingY : 2, backgroundColor: theme.palette.secondary.light }}>
                 <Toolbar>
                     <IconButton
                         color={"primary"}
@@ -184,13 +184,13 @@ export default function AdminLayout(props) {
                         <MenuIcon fontSize={"large"} />
                     </IconButton>
                     <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "end", alignItems : "center", flexGrow : 1 }}>
-                        <Typography sx={{ margin : 0, paddingTop : 1, paddingX : 1, color : theme.palette.primary.light }} variant={"h6"}>Signed In As { status === "authenticated" && session.user.name } </Typography>
+                        <Typography sx={{ margin : 0, paddingTop : 1, paddingX : 1, color : theme.palette.primary.main }} variant={"h6"}>Signed In As { status === "authenticated" && session.user.name } </Typography>
                         <DropDown/>
                     </Box>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open} sx={{ padding : 2 }}>
-                <DrawerHeader sx={{ display : "flex", justifyContent : "space-between", alignItems : "center", margin : 2, padding : 1,  backgroundColor : "#ffffff",borderRadius : 3  }}>
+                <DrawerHeader sx={{ display : "flex", justifyContent : "space-between", alignItems : "center", margin : 2, padding : 1,  backgroundColor : theme.palette.secondary.light,borderRadius : 3  }}>
                       <Box component={"div"} sx={{ cursor : "pointer" }}>
                           <Link href={"/"}><Image src={logo} width={"70rem"} height={"70rem"}/></Link>
                       </Box>
@@ -200,26 +200,26 @@ export default function AdminLayout(props) {
                            </IconButton>
                        </Box>
                 </DrawerHeader>
-                <Divider/>
+                {/*<Divider/>*/}
                 <List>
                     {
                         links.map((link, i) => (
                             <Link href={link.href} key={i}>
-                                <ListItem button>
+                                <ListItem button={true}>
                                     <ListItemIcon>
                                         {link.icon}
                                     </ListItemIcon>
-                                    <ListItemText primary={link.text} sx={{ color : "white" }} />
+                                    <ListItemText primary={link.text} sx={{ color : theme.palette.secondary.light }} />
                                 </ListItem>
                             </Link>
                         ))
                     }
                 </List>
-                <Divider />
+                {/*<Divider />*/}
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1 }}>
+            <Box component="main" sx={{ flexGrow: 1 , height: '100vh'}}>
                 <DrawerHeader/>
-                <Box component={"div"} sx={{ padding : 4 }}>
+                <Box component={"div"} sx={{ padding : 4, backgroundColor: theme.palette.secondary.light }}>
                     {props.children}
                 </Box>
                 <Footer/>

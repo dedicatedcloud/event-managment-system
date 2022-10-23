@@ -5,22 +5,12 @@ import {SessionProvider} from "next-auth/react";
 import LayoutWrapper from "../layouts/layoutWrapper";
 import { ThemeProvider, createTheme } from '@mui/material';
 import NextNProgress from "nextjs-progressbar";
-import createEmotionCache from '../src/createEmotionCache';
-import { CacheProvider } from '@emotion/react';
-import PropTypes from 'prop-types';
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-// Client-side cache shared for the whole session
-// of the user in the browser.
-
-/*const clientSideEmotionCache = createEmotionCache();*/
 function MyApp({ Component, pageProps : { session, ...pageProps } }) {
 
-    /*const { Component, emotionCache =
-        clientSideEmotionCache, pageProps : { session, ...pageProps } } = props;*/
 
-    //TODO: need to change the visuals for the admin pages, so buttons and colors matche the rest of the site
     const theme = createTheme({
         palette : {
             primary : {
@@ -28,13 +18,12 @@ function MyApp({ Component, pageProps : { session, ...pageProps } }) {
                 light: "#f08758",
             },
             secondary : {
-                main : "#ffffff"
+                main : "#f6f6f6",
+                light: "#ffffff",
             },
         },
     });
-    /*<CacheProvider value={emotionCache}>
 
-    </CacheProvider>*/
     return (
     <SessionProvider session={session}>
         <ThemeProvider theme={theme}>
@@ -58,15 +47,11 @@ function MyApp({ Component, pageProps : { session, ...pageProps } }) {
             pauseOnFocusLoss
             draggable={false}
             pauseOnHover
+            limit={1}
         />
     </SessionProvider>
     )
 }
 
-/*MyApp.propTypes = {
-    Component: PropTypes.elementType.isRequired,
-    emotionCache: PropTypes.object,
-    pageProps: PropTypes.object.isRequired,
-};*/
 
 export default MyApp

@@ -19,20 +19,20 @@ export default function CheckOut({ next, back, data, props}) {
     //
     const allFoods = menu1Food.concat(menu2Food, menu3Food);
     //getting food names
-    let starter = [];
-    let main = [];
-    let dessert = [];
+    let menu1 = [];
+    let menu2 = [];
+    let menu3 = [];
         allFoods.map( (al) => {
         props.food.map((f) => {
             if (f.id === al) {
-                if(f.type === "Starter") {
-                    starter.push(f.name);
+                if(f.menu === "Menu 1") {
+                    menu1.push(f.name);
                 }
-                else if(f.type === "Main Course") {
-                    main.push(f.name);
+                else if(f.menu === "Menu 2") {
+                    menu2.push(f.name);
                 }
-                else if(f.type === "Dessert") {
-                    dessert.push(f.name);
+                else if(f.menu === "Menu 3") {
+                    menu2.push(f.name);
                 }
             }
         });
@@ -72,9 +72,9 @@ export default function CheckOut({ next, back, data, props}) {
                     </Grid>
                     <Grid item xs={12} sm={6} md={6} lg={6}>
                         <Typography variant={"h6"} width={"100%"} gutterBottom color={"primary"}>Food Selection:</Typography>
-                        <Typography gutterBottom>Starter: { starter.length === 0 ? "None" : starter.join(", ") }</Typography>
-                        <Typography gutterBottom>Main Course: { main.length === 0 ? "None" : main.join(", ") }</Typography>
-                        <Typography>Dessert: { dessert.length === 0 ? "None" : dessert.join(",") }</Typography>
+                        <Typography gutterBottom>Menu One: { menu1.length === 0 ? "None" : menu1.join(", ") }</Typography>
+                        <Typography gutterBottom>Menu 2: { menu2.length === 0 ? "None" : menu2.join(", ") }</Typography>
+                        <Typography>Menu 3: { menu3.length === 0 ? "None" : menu3.join(",") }</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={6} lg={6}>
                         <Typography variant={"h6"} width={"100%"} gutterBottom color={"primary"}>Equipment Selection:</Typography>
@@ -93,8 +93,8 @@ export default function CheckOut({ next, back, data, props}) {
                         <FormHelperText>To avoid fraud, we&apos;ll ask for a small payment before confirming the Event Registration</FormHelperText>
                     </Grid>
                     <Grid item xs={12} sm={12} md={12} lg={12} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between" }}>
-                        <Button onClick={ back } variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white" }}>Back</Button>
-                        <Button type={"submit"} variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white" }}>Next</Button>
+                        <Button onClick={ back } disableElevation={true} variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white" }}>Back</Button>
+                        <Button type={"submit"} disableElevation={true} variant={"contained"} color={"primary"} size={"large"} sx={{ color : "white" }}>Next</Button>
                     </Grid>
                 </Grid>
             </form>

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
+import Box from "@mui/material/Box";
 
 function PieChart(props) {
 
@@ -43,9 +44,9 @@ function PieChart(props) {
 
 
     return (
-        <div>
+        <Box component={"div"}>
             <Pie  data={data}/>
-        </div>
+        </Box>
     );
 }
 

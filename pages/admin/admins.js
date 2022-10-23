@@ -14,9 +14,11 @@ import bcrypt from "bcryptjs";
 import * as yup from "yup";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {toast} from "react-toastify";
+import {useTheme} from "@mui/material/styles";
 
 export default function Admins(props) {
 
+    const theme = useTheme();
 
     const [ admins, setAdmins ] = useState([]);
     const [ message, setMessage ] = useState("");
@@ -117,18 +119,18 @@ export default function Admins(props) {
 
     return (
         <Box component={"div"}>
-            <Typography variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem" }} color={"primary"}>Admins</Typography>
+            <Typography variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem", color: theme.palette.primary.main }}>Admins</Typography>
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center", alignItems : "center" }}>
-                <Box width={"35rem"} sx={{ boxShadow : 5, padding : "2rem", borderRadius : "0.5rem" }}>
+                <Box width={"35rem"} sx={{ boxShadow : 5, padding : "2rem", borderRadius : 5 }}>
                     <form onSubmit={handleSubmit(SubmitHandler)}>
-                        <Controller control={control} render={({field}) => (<TextField {...field} label={"Name"} variant={"outlined"} fullWidth sx={{ marginY : "1rem" }} type={"text"} error={!!errors.name} helperText={errors.name ? errors.name?.message : ""} />)} name="name" />
+                        <Controller control={control} render={({field}) => (<TextField {...field} label={"Name"} variant={"standard"} fullWidth sx={{ marginY : "1rem" }} type={"text"} error={!!errors.name} helperText={errors.name ? errors.name?.message : ""} />)} name="name" />
                         <br/>
-                        <Controller control={control} render={({field}) => (<TextField {...field} label={"Email"} variant={"outlined"} fullWidth sx={{ marginY : "1rem" }} type={"email"} error={!!errors.email} helperText={errors.email ? errors.email?.message : ""} />)} name="email" />
+                        <Controller control={control} render={({field}) => (<TextField {...field} label={"Email"} variant={"standard"} fullWidth sx={{ marginY : "1rem" }} type={"email"} error={!!errors.email} helperText={errors.email ? errors.email?.message : ""} />)} name="email" />
                         <br/>
-                        <Controller control={control} render={({field}) => (<TextField {...field} label={"Password"} variant={"outlined"} fullWidth sx={{ marginY : "1rem" }} type={"password"} error={!!errors.password} helperText={errors.password ? errors.password?.message : ""} />)} name="password" />
+                        <Controller control={control} render={({field}) => (<TextField {...field} label={"Password"} variant={"standard"} fullWidth sx={{ marginY : "1rem" }} type={"password"} error={!!errors.password} helperText={errors.password ? errors.password?.message : ""} />)} name="password" />
                         <Typography variant={"subtitle1"}>Role: Admin</Typography>
                         <br/>
-                        <Button type={"submit"} variant={"contained"} sx={{ color : "white" }}>Add</Button>
+                        <Button type={"submit"} size={"large"}  variant={"contained"} disableElevation={true} sx={{ color : "white", marginY : "1rem", borderRadius : 2, backgroundColor: theme.palette.primary.main }}>Add</Button>
                         <br/>
                         { message && <span>{message}</span> }
                     </form>
@@ -138,14 +140,14 @@ export default function Admins(props) {
                 {
                     admins.map((a, i) => (
                         <Grid key={i} item lg={2}>
-                            <Card elevation={5}>
+                            <Card elevation={5} sx={{borderRadius: 5, padding: 2}}>
                                 <CardContent>
-                                    <Typography sx={{ marginY : "1rem" }} color={"primary"} variant={"subtitle1"}>Name: <br/> {a.name}</Typography>
-                                    <Typography variant="subtitle1" color={"primary"} sx={{ marginY : "1rem" }}>Email: <br/> {a.email}</Typography>
-                                    <Typography variant="subtitle1" color={"primary"} sx={{ marginY : "1rem" }}>Privilege: <br/> {a.role}</Typography>
+                                    <Typography sx={{ marginY : "0.5rem", color: theme.palette.primary.main }} variant={"subtitle1"}>Name: <br/> {a.name}</Typography>
+                                    <Typography variant="subtitle1" sx={{ marginY : "0.5rem", color: theme.palette.primary.main }}>Email: <br/> {a.email}</Typography>
+                                    <Typography variant="subtitle1" sx={{ marginY : "0.5rem", color: theme.palette.primary.main }}>Privilege: <br/> {a.role}</Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button variant={"contained"} color={"error"} sx={{ marginBottom : 1, borderRadius : "0.5rem" }} size={"large"} onClick={ () => handleDelete(a.id)} startIcon={<DeleteIcon/>}>Delete</Button>
+									<Button variant={"contained"} color={"error"} sx={{ marginBottom: 1, borderRadius: 2 }} disableElevation={true} size={"large"} onClick={ () => handleDelete(a.id)} startIcon={<DeleteIcon/>}>Delete</Button>
                                 </CardActions>
                             </Card>
                         </Grid>

@@ -17,16 +17,18 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import EditIcon from '@mui/icons-material/Edit';
 import {toast} from "react-toastify";
+import {useTheme} from "@mui/material/styles";
 
 
 export default function Events({events : _events, guests, venues, users}) {
 
+    const theme = useTheme();
+
     const [ loading, setLoading ] = useState(true);
     const [ events, setEvents ] = useState([]);
-    const [ message, setMessage ] = useState("");
 
     //for setting the event in the details view
-    const [ event, setEvent ] = useState({
+    /*const [ event, setEvent ] = useState({
         eventType : "",
         guest : "",
         venue : "",
@@ -36,7 +38,7 @@ export default function Events({events : _events, guests, venues, users}) {
         dessertFood : [],
         equipment : [],
         date : new Date()
-    });
+    });*/
 
     //for backdrop
     /*const [open, setOpen] = useState(false);
@@ -117,7 +119,7 @@ export default function Events({events : _events, guests, venues, users}) {
     const paymentStatusEditField = (props) => {
         const { id, value, api, field } = props;
         return <div>
-            <Select value={value} onChange={ async (e) => {
+            <Select variant={"standard"} value={value} onChange={ async (e) => {
                 api.setEditCellValue({id, field, value: e.target.value}, e);
                 const isValid = await api.commitCellChange({id, field});
                 if (isValid) {
@@ -140,7 +142,7 @@ export default function Events({events : _events, guests, venues, users}) {
     const eventStatusEditField = (params) => {
         const { id, value, api, field } = params;
         return <div>
-            <Select value={value} onChange={ async (e) => {
+            <Select variant={"standard"} value={value} onChange={ async (e) => {
                 api.setEditCellValue({id, field, value: e.target.value}, e);
                 const isValid = await api.commitCellChange({id, field});
                 if (isValid) {
@@ -157,7 +159,7 @@ export default function Events({events : _events, guests, venues, users}) {
     const deleteButton = (props) => {
         return (
             <>
-                <Button variant={"contained"} color={"error"} onClick={ () => handleDelete(props.row.id) }>Delete</Button>
+                <Button variant={"contained"} disableElevation={true} color={"error"} onClick={ () => handleDelete(props.row.id) }>Delete</Button>
             </>
         );
     }
@@ -283,7 +285,13 @@ export default function Events({events : _events, guests, venues, users}) {
         })
             .then(res => res.json())
             .then(data => {
-                fetchEvents();
+                if(data.error) {
+                    showErrorNotification(data.message);
+                }
+                else {
+                    showSuccessNotification(data.message);
+                    fetchEvents();
+                }
             })
             .catch(e => console.log(e.message));
     }, []);
@@ -302,12 +310,11 @@ export default function Events({events : _events, guests, venues, users}) {
             }).then(res => res.json()).then(data => {
                 console.log(data);
                 if(data.error){
-                    setMessage(data.error);
-
+                    showErrorNotification(data.message);
                 }
                 else{
+                    showSuccessNotification(data.message);
                     fetchEvents();
-                    setMessage(data.message);
                 }
             }).catch(e => console.log(e.message));
     }
@@ -315,11 +322,11 @@ export default function Events({events : _events, guests, venues, users}) {
 
     return (
         <Box component={"div"} sx={{ margin: "0 auto" }}>
-            <Typography variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem" }} color={"primary"}>Events</Typography>
+            <Typography variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem", color: theme.palette.primary.main }}>Events</Typography>
             <Box component={"div"} sx={{ display : "flex", flexDirection : "row", alignItems : "center"}}>
                 <div style={{ display: 'flex', width : "100%" }}>
                     <div style={{ flexGrow: 1 }}>
-                        <DataGrid sx={{ boxShadow : 5, color : "#f08a5d", marginY : "15rem" }} autoHeight={true} loading={loading} disableSelectionOnClick={true} density={"comfortable"} rows={events} columns={columns} onCellEditCommit={handleCellEditCommit} />
+                        <DataGrid sx={{ boxShadow : 5, color : theme.palette.primary.main, marginY : "15rem", borderRadius : 5 }} autoHeight={true} loading={loading} disableSelectionOnClick={true} density={"comfortable"} rows={events} columns={columns} onCellEditCommit={handleCellEditCommit} />
                     </div>
                 </div>
             </Box>

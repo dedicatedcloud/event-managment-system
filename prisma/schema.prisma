@@ -98,4 +98,5 @@ model CompanyEvents {
   location       String
   description    String
   picture        String
+  date           DateTime
 }

@@ -15,18 +15,18 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import EditIcon from "@mui/icons-material/Edit";
 import {toast} from "react-toastify";
+import {useTheme} from "@mui/material/styles";
 
 export default function Equipment(props) {
 
+    const theme = useTheme();
+
     const [ equipment, setEquipment ] = useState([]);
-    const [ message, setMessage ] = useState("");
-    const [ selectionModel, setSelectionModel ] = useState([]);
     const [ loading, setLoading ] = useState(true);
 
     useEffect(() => {
         setEquipment(props.equipment)
         setLoading(false);
-        /*getEquipment();*/
     }, []);
 
     //for Images & editing them
@@ -36,7 +36,7 @@ export default function Equipment(props) {
 
     const SelectImage = (params) => {
         const { id, field, value, api } = params;
-        return <TextField type={"file"} onChange={ async (e) => {
+        return <TextField type={"file"} variant={"standard"} onChange={ async (e) => {
             api.setEditCellValue({id, field, value: e.target.files[0]}, e);
             const isValid = await api.commitCellChange({id, field});
             if (isValid) {
@@ -49,7 +49,7 @@ export default function Equipment(props) {
     const deleteButton = (props) => {
         return (
             <>
-                <Button variant={"contained"} color={"error"} onClick={ () => handleDeletion(props.row.id) }>Delete</Button>
+                <Button variant={"contained"} disableElevation={true} color={"error"} onClick={ () => handleDeletion(props.row.id) }>Delete</Button>
             </>
         );
     }
@@ -180,13 +180,12 @@ export default function Equipment(props) {
         }).then(res => res.json()).then(data => {
             console.log(data);
             if(data.error){
-                setMessage(data.error);
-                showSuccessNotification(data.error);
+
+                showErrorNotification(data.error);
             }
             else{
+                showSuccessNotification(data.message);
                 getEquipment();
-                setMessage(data.message);
-                showErrorNotification(data.message);
             }
         }).catch(e => console.log(e.message));
     };
@@ -211,13 +210,11 @@ export default function Equipment(props) {
             .then(data => {
                 console.log(data);
                 if(data.error){
-                    setMessage(data.error);
                     showErrorNotification(data.error);
                 }
                 else{
-                    getEquipment();
-                    setMessage(data.message);
                     showSuccessNotification(data.message);
+                    getEquipment();
                 }
             })
             .catch(e => console.log(e.message));
@@ -240,11 +237,11 @@ export default function Equipment(props) {
                 console.log(data);
                 getEquipment();
                 if(data.error){
-                    setMessage(data.error);
+                    showErrorNotification(data.error);
                 }
                 else{
+                    showSuccessNotification(data.message);
                     getEquipment();
-                    setMessage(data.message);
                 }
                 //need to empty fields after form submission
                 reset({
@@ -258,21 +255,21 @@ export default function Equipment(props) {
 
     return (
         <Box component={"div"}>
-            <Typography  variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem" }} color={"primary"}>Equipment</Typography>
+            <Typography  variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem", color: theme.palette.primary.main }} >Equipment</Typography>
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center", alignItems : "center" }}>
-                <Box width={"35rem"} sx={{ boxShadow : 5, padding : "2rem", borderRadius : "0.5rem" }}>
+                <Box width={"35rem"} sx={{ boxShadow : 5, padding : "2rem", borderRadius : 5 }}>
                     <form onSubmit={handleSubmit(SubmitHandler)}>
-                        <Controller control={control} render={({field}) => (<TextField  {...field} label={"Name"} variant={"outlined"} sx={{ marginY : "1rem" }} fullWidth type={"text"} error={!!errors.name} helperText={errors.name?.message} />)} name="name"/>
-                        <Controller control={control} render={({field}) => (<TextField {...field} label={"Price"}  variant={"outlined"} sx={{ marginY : "1rem" }} fullWidth type={"number"} error={!!errors.price} helperText={errors.price?.message} />)} name="price"/>
-                        <Controller control={control} render={({field}) => (<TextField type={"file"} onChange={ ({target}) => field.onChange(target.files) } sx={{ marginY : "1rem" }} error={!!errors.picture} helperText={errors.picture?.message} fullWidth />)} name="picture"/>
-                        <Button type={"submit"} variant={"contained"} sx={{ color : "white" }}>Add</Button>
+                        <Controller control={control} render={({field}) => (<TextField  {...field} label={"Name"} variant={"standard"} sx={{ marginY : "1rem" }} fullWidth type={"text"} error={!!errors.name} helperText={errors.name?.message} />)} name="name"/>
+                        <Controller control={control} render={({field}) => (<TextField {...field} label={"Price"}  variant={"standard"} sx={{ marginY : "1rem" }} fullWidth type={"number"} error={!!errors.price} helperText={errors.price?.message} />)} name="price"/>
+                        <Controller control={control} render={({field}) => (<TextField type={"file"} onChange={ ({target}) => field.onChange(target.files) } sx={{ marginY : "1rem" }} variant={"standard"} error={!!errors.picture} helperText={errors.picture?.message} fullWidth />)} name="picture"/>
+                        <Button type={"submit"} size={"large"}  variant={"contained"} disableElevation={true} sx={{ color : "white", marginY : "1rem", borderRadius : 2, backgroundColor: theme.palette.primary.main }}>Add</Button>
                     </form>
                 </Box>
             </Box>
             {/*Table*/}
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center"}}>
                 <Box sx={{ width : "70rem", margin : "0 auto", paddingY : "3rem" }}>
-                    <DataGrid columns={columns} rows={equipment} loading={loading} sx={{ boxShadow : 5, color : "#f08a5d", marginY : "1rem" }} autoHeight={true} disableSelectionOnClick={true} density={"comfortable"} onCellEditCommit={handleCellEditCommit} />
+                    <DataGrid columns={columns} rows={equipment} loading={loading} sx={{ boxShadow : 5, color : theme.palette.primary.main, marginY : "1rem", borderRadius : 5 }} autoHeight={true} disableSelectionOnClick={true} density={"comfortable"} onCellEditCommit={handleCellEditCommit} />
                 </Box>
             </Box>
         </Box>

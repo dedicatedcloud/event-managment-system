@@ -4,9 +4,10 @@ import sliderImg1 from "../../public/assets/sliderImage1.jpg";
 import sliderImg2 from "../../public/assets/sliderImage2.jpg";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {useTheme} from "@mui/material/styles";
+import Carousel from "nuka-carousel";
 
 
-function Carousel() {
+function CustomCarousel() {
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.down('sm'));
@@ -33,18 +34,23 @@ function Carousel() {
     }, [current])
 
     return (
-        <div style={{ overflow : "hidden", position : "relative" }}>
-            { images.map((image, index) => (
-                <div key={index}  className={index === current ? 'slide active' : 'slide'}>
-                    { index === current && <Image src={image} placeholder={"blur"} layout={"responsive"} height={!matches ? 550 : 600} alt={"sliderImage"}/>}
-                    <div className={"indicators"}>
-                        <div className={ current === 0 ? "dots activeDot" : "dots" } />
-                        <div className={ current === 1 ? "dots activeDot" : "dots" } />
-                    </div>
-                </div>
-            ))}
-        </div>
+            <Carousel animation={"zoom"} autoplay={true} pauseOnHover={true} speed={2000} swiping={true} wrapAround={true}>
+                <Image src={sliderImg1} placeholder={"blur"} layout={"responsive"} height={!matches ? 550 : 600} alt={"sliderImage1"}/>
+                <Image src={sliderImg2} placeholder={"blur"} layout={"responsive"} height={!matches ? 550 : 600} alt={"sliderImage2"}/>
+            </Carousel>
     );
 }
 
-export default Carousel;
+export default CustomCarousel;
+
+{ /*<div style={{ overflow : "hidden", position : "relative" }}>
+{ images.map((image, index) => (
+<div key={index}  className={index === current ? 'slide active' : 'slide'}>
+{ index === current && <Image src={image} placeholder={"blur"} layout={"responsive"} height={!matches ? 550 : 600} alt={"sliderImage"}/>}
+<div className={"indicators"}>
+<div className={ current === 0 ? "dots activeDot" : "dots" } />
+<div className={ current === 1 ? "dots activeDot" : "dots" } />
+</div>
+</div>
+))}
+</div>*/}

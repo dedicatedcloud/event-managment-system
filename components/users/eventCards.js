@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import Close from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 
-function EventCards({event, data}) {
+function EventCards({event, data, fetchEvents}) {
 
     //for backdrop
     const [open, setOpen] = useState(false);
@@ -32,22 +32,22 @@ function EventCards({event, data}) {
 
     return (
             <>
-                <Card elevation={5} sx={{padding: "0.5rem"}}>
+                <Card elevation={5} sx={{padding: 2, borderRadius: 5}}>
                     <CardContent>
-                        <Typography sx={{marginY: "1rem"}} color={"primary"} variant={"subtitle1"}>Event Type: {event.id}</Typography>
+                        <Typography sx={{marginY: "1rem"}} color={"primary"} variant={"subtitle1"}>Event ID: {event.id}</Typography>
                         <Typography sx={{marginY: "1rem"}} color={"primary"} variant={"subtitle1"}>Event Type: {event.event_type}</Typography>
                         <Typography variant="subtitle1" color={"primary"} sx={{marginY: "1rem"}}>Event Planned on: {`${event_date.getDate()}/${event_date.getMonth() + 1}/${event_date.getFullYear()}`}</Typography>
                         <Typography variant="subtitle1" color={"primary"} sx={{marginY: "1rem"}}>Event Status: {event.event_status}</Typography>
                     </CardContent>
                     <CardActions>
-                        <Button variant={"contained"} color={"info"} sx={{marginBottom: 1, borderRadius: "0.5rem"}} size={"large"} onClick={handleToggle} disabled={Difference_In_Days < 4} startIcon={<DeleteIcon/>}>Edit</Button>
+                        <Button variant={"contained"} disableElevation={true} color={"info"} sx={{marginBottom: 1, borderRadius: 2}} size={"large"} onClick={handleToggle} disabled={Difference_In_Days < 4} startIcon={<DeleteIcon/>}>Edit</Button>
                     </CardActions>
                 </Card>
                 <Backdrop
                     sx={{ color : "#f08a5d", zIndex: (theme) => theme.zIndex.drawer + 1 }}
                     open={open}
                 >
-                    <Box sx={{ width : "55rem", height : "65rem", overflowY : "scroll", backgroundColor : "#ffffff", padding : "1rem", borderRadius : "0.5rem" }}>
+                    <Box sx={{ width : "55rem", height : "65rem", overflowY : "scroll", backgroundColor : "#ffffff", padding : "1rem", borderRadius : 5, scrollbarWidth: "none" }}>
                         <IconButton color={"primary"} sx={{
                             cursor: "pointer",
                             borderRadius: 1,
@@ -56,7 +56,7 @@ function EventCards({event, data}) {
                             fontSize: "20px",
                             ':hover': {backgroundColor: "#f08a5d", color: "#fff"}
                         }} onClick={handleClose}><Close fontSize={"large"}/></IconButton>
-                        <EventDetails event={event} eventProps={data}/>
+                        <EventDetails event={event} eventProps={data} fetchEvents={fetchEvents}/>
                     </Box>
                 </Backdrop>
             </>

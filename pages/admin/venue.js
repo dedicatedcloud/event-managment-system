@@ -22,11 +22,14 @@ import NumbersIcon from '@mui/icons-material/Numbers';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import EditIcon from "@mui/icons-material/Edit";
 import {toast} from "react-toastify";
+import {useTheme} from "@mui/material/styles";
 
 export default function Venue(props) {
+
+    const theme = useTheme();
+
     const [ venues, setVenues ] = useState([]);
     const [ guests, setGuests ] = useState([]);
-    const [ message, setMessage ] = useState('');
     const [ loading, setLoading ] = useState(true);
 
 
@@ -34,7 +37,7 @@ export default function Venue(props) {
     const SelectInput = (props) => {
         const { id, value, api, field } = props;
         return <div>
-            <Select value={value} onChange={ async (e) => {
+            <Select variant={"standard"} value={value} onChange={ async (e) => {
                 api.setEditCellValue({id, field, value: e.target.value}, e);
                 const isValid = await api.commitCellChange({id, field});
                 if (isValid) {
@@ -66,7 +69,7 @@ export default function Venue(props) {
 
     const SelectImage = (props) => {
         const { id, field, value, api } = props;
-        return <TextField type={"file"} onChange={ async (e) => {
+        return <TextField variant={"standard"} type={"file"} onChange={ async (e) => {
             api.setEditCellValue({id, field, value: e.target.files[0]}, e);
             const isValid = await api.commitCellChange({id, field});
             if (isValid) {
@@ -80,7 +83,7 @@ export default function Venue(props) {
     const deleteButton = (props) => {
         return (
             <>
-                <Button variant={"contained"} color={"error"} onClick={ () => handleDeletion(props.row.id) }>Delete</Button>
+                <Button variant={"contained"} disableElevation={true} color={"error"} onClick={ () => handleDeletion(props.row.id) }>Delete</Button>
             </>
         );
     }
@@ -196,8 +199,6 @@ export default function Venue(props) {
     ];
 
     useEffect(() => {
-        /*getVenues();
-        fetchGuests();*/
         setVenues(props.venues);
         setGuests(props.guests);
         setLoading(false);
@@ -249,12 +250,10 @@ export default function Venue(props) {
             .then(data => {
                 console.log(data);
                 if(data.error){
-                    setMessage(data.error);
                     showErrorNotification(data.error);
                 }else{
-                    getVenues();
-                    setMessage(data.message);
                     showSuccessNotification(data.message);
+                    getVenues();
                 }
                 //need to empty fields after form submission
                 reset({
@@ -289,12 +288,10 @@ export default function Venue(props) {
                 setLoading(false);
                 console.log(data);
                 if(data.error){
-                    setMessage(data.error);
                     showErrorNotification(data.error);
                 }else{
-                    getVenues();
-                    setMessage(data.message);
                     showSuccessNotification(data.message);
+                    getVenues();
                 }
             })
             .catch(e => console.log(e.message));
@@ -314,28 +311,26 @@ export default function Venue(props) {
         }).then(res => res.json()).then(data => {
             console.log(data);
             if(data.error){
-                setMessage(data.error);
                 showErrorNotification(data.error);
             }
             else{
-                getVenues();
-                setMessage(data.message);
                 showSuccessNotification(data.message);
+                getVenues();
             }
         }).catch(e => console.log(e.message));
     };
 
     return (
         <Box component={"div"}>
-            <Typography  variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem" }} color={"primary"}>Venues</Typography>
+            <Typography  variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem", color: theme.palette.primary.main }} >Venues</Typography>
             {/*Insert Form*/}
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center", alignItems : "center" }}>
-                <Box width={"35rem"} sx={{ boxShadow : 5, padding : "2rem", borderRadius : "0.5rem" }}>
+                <Box width={"35rem"} sx={{ boxShadow : 5, padding : "2rem", borderRadius: 5 }}>
                     <form onSubmit={handleSubmit(SubmitHandler)}>
-                        <Controller control={control} defaultValue={""} render={({field}) => (<TextField  {...field} label={"Name"} type={"text"} sx={{ marginY : "1rem" }} fullWidth error={!!errors.name} helperText={errors.name?.message} />)} name="name"/>
-                        <Controller control={control} defaultValue={""} render={({field}) => (<TextField {...field} label={"Location"} multiline={true} type={"text"} sx={{ marginY : "1rem" }} fullWidth error={!!errors.location} helperText={errors.location?.message} />)} name="location"/>
-                        <Controller control={control} defaultValue={""}  render={({field}) => (<TextField {...field} label={"Price"} type={"number"} sx={{ marginY : "1rem" }} fullWidth error={!!errors.price} helperText={errors.price?.message} />)} name="price"/>
-                            <FormControl fullWidth sx={{marginY: "1rem"}}>
+                        <Controller control={control} defaultValue={""} render={({field}) => (<TextField  {...field} label={"Name"} type={"text"} sx={{ marginY : "1rem" }} variant={"standard"} fullWidth error={!!errors.name} helperText={errors.name?.message} />)} name="name"/>
+                        <Controller control={control} defaultValue={""} render={({field}) => (<TextField {...field} label={"Location"} multiline={true} type={"text"} sx={{ marginY : "1rem" }} variant={"standard"} fullWidth error={!!errors.location} helperText={errors.location?.message} />)} name="location"/>
+                        <Controller control={control} defaultValue={""}  render={({field}) => (<TextField {...field} label={"Price"} type={"number"} sx={{ marginY : "1rem" }} variant={"standard"} fullWidth error={!!errors.price} helperText={errors.price?.message} />)} name="price"/>
+                            <FormControl fullWidth variant={"standard"} sx={{marginY: "1rem"}}>
                                 <InputLabel id="guest">Guest Count</InputLabel>
                                 <Controller render={({ field }) => (<Select {...field} labelId={"guest"} error={!!errors.guestCount} label="Guest Count">
                                     {guests.map((g, i) => (
@@ -346,15 +341,15 @@ export default function Venue(props) {
                                 } control={control} name="guestCount" defaultValue={""}/>
                                 {errors.guestCount && <FormHelperText sx={{color: "red"}}>{errors.guestCount?.message}</FormHelperText>}
                             </FormControl>
-                        <Controller control={control} render={({field}) => (<TextField type={"file"} onChange={ ({target}) => field.onChange(target.files) } sx={{ marginY : "1rem" }} error={!!errors.picture} helperText={errors.picture?.message} fullWidth />)} name="picture"/>
-                        <Button type={"submit"} size={"large"}  variant={"contained"} sx={{ color : "white", marginY : "1rem", borderRadius : "0.5rem" }}>Add</Button>
+                        <Controller control={control} render={({field}) => (<TextField type={"file"} onChange={ ({target}) => field.onChange(target.files) } sx={{ marginY : "1rem" }} variant={"standard"} error={!!errors.picture} helperText={errors.picture?.message} fullWidth />)} name="picture"/>
+                        <Button type={"submit"} size={"large"}  variant={"contained"} disableElevation={true} sx={{ color : "white", marginY : "1rem", borderRadius : 2, backgroundColor: theme.palette.primary.main }}>Add</Button>
                     </form>
                 </Box>
             </Box>
             {/*Table*/}
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center"}}>
                 <Box sx={{ width : "80rem", margin : "0 auto", paddingY : "3rem" }}>
-                    <DataGrid autoHeight={true} disableSelectionOnClick={true} loading={loading} sx={{ boxShadow : 5, color : "#f08a5d", marginY : "1rem" }} density={"comfortable"} rows={venues} columns={columns} onCellEditCommit={handleCellEditCommit} />
+                    <DataGrid autoHeight={true} disableSelectionOnClick={true} loading={loading} sx={{ boxShadow : 5, color : theme.palette.primary.main, marginY : "1rem", borderRadius: 5 }} density={"comfortable"} rows={venues} columns={columns} onCellEditCommit={handleCellEditCommit} />
                 </Box>
             </Box>
         </Box>

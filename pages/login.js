@@ -13,6 +13,7 @@ import loginImage from "../public/assets/loginImage.jpg";
 import Image from "next/image";
 import {useTheme} from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import {toast} from "react-toastify";
 
 export default function Login() {
 
@@ -29,6 +30,36 @@ export default function Login() {
     const {  handleSubmit,formState: { errors }, control } = useForm({
         resolver : yupResolver(schema)
     });
+
+    // for notifications
+    /*function showSuccessNotification(message) {
+        toast.info(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }*/
+
+    function showErrorNotification(message) {
+        toast.error(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
+    if(error){
+        showErrorNotification("Provided Credentials are either Incorrect or Do not Exist!");
+    }
+
     const formSubmit = async (data) => {
         const { email, password } = data;
         await signIn('credentials',
@@ -54,17 +85,20 @@ export default function Login() {
                     <Typography variant={"h5"} color={"primary"}>Login</Typography>
                     <Typography variant={"subtitle1"} color={"primary"}>Please Login to Continue</Typography>
                 </Box>
-                <Box component={"div"} sx={{ paddingX : "2rem" }} >
+                <Box component={"div"} sx={{
+                    width: "100%",
+                    paddingX: '2rem'
+                }} >
                     <form onSubmit={handleSubmit(formSubmit)}>
-                        <Controller name="email" control={ control } defaultValue={""} render={({field}) => (<TextField {...field} sx={{ marginY : "1rem" }} label={"Email"} type={"email"} variant={"outlined"} fullWidth error={!!errors.email} helperText={errors.email ? errors.email?.message : ""} />)} />
-                        <Controller name="password" control={ control } defaultValue={""} render={({field}) => (<TextField {...field} sx={{ marginY : "1rem" }} label={"Password"} type={"password"} variant={"outlined"} fullWidth error={!!errors.password} helperText={errors.password ? errors.password?.message : ""} />)} />
+                        <Controller name="email" control={ control } defaultValue={""} render={({field}) => (<TextField {...field} sx={{ marginY : "1rem" }} label={"Email"} type={"email"} variant={"standard"} fullWidth error={!!errors.email} helperText={errors.email ? errors.email?.message : ""} />)} />
+                        <Controller name="password" control={ control } defaultValue={""} render={({field}) => (<TextField {...field} sx={{ marginY : "1rem" }} label={"Password"} type={"password"} variant={"standard"} fullWidth error={!!errors.password} helperText={errors.password ? errors.password?.message : ""} />)} />
                         <Link href={"/forgotPassword"}><Typography color={"primary"} sx={{ cursor : "pointer", marginY : "1rem", width : "max-content", ":hover" : { color : "#6d6e71" } }} variant={"subtitle1"} >Forgot Password?</Typography></Link>
                         <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "start", alignItems : "center" }}>
                             <Button type="submit" disableElevation={true} color={"primary"} value={"Submit"} variant={"contained"} sx={{ color : "white", borderRadius : "0.5rem", marginRight : "1.5rem", ":hover" : { backgroundColor: theme.palette.primary.light }}} size={"large"}>Login</Button>
                             <Link href={"/register"}><Typography color={"primary"}  sx={{ cursor : "pointer", marginY : "1rem", ":hover" : { color : "#6d6e71" } }} variant={"subtitle1"}>Create an Account</Typography></Link>
                         </Box>
                     </form>
-                    { error && <Typography variant={"subtitle1"} color={"red"} fontSize={16} sx={{ padding : "1rem" }}>Provided Credentials are either Incorrect or Do not Exist!</Typography> }
+                    {/* { error && <Typography variant={"subtitle1"} color={"red"} fontSize={16} sx={{ padding : "1rem" }}>Provided Credentials are either Incorrect or Do not Exist!</Typography> } */}
                 </Box>
             </Box>
         </Box>

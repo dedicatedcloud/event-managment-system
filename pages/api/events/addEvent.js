@@ -9,7 +9,7 @@ export default async function handler(req, res) {
             const userId = session.user.id;
 
             // combine the arrays into a single array
-            let foods = event.starterFood.concat(event.mainFood, event.dessertFood);
+            let foods = event.menu1Food.concat(event.menu2Food, event.menu3Food);
 
 
             let food = foods.map((f) => ({

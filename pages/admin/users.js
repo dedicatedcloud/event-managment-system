@@ -8,12 +8,14 @@ import Tag from "@mui/icons-material/Tag";
 import AbcIcon from "@mui/icons-material/Abc";
 import EmailIcon from '@mui/icons-material/Email';
 import EditIcon from "@mui/icons-material/Edit";
+import {useTheme} from "@mui/material/styles";
+import {toast} from "react-toastify";
 
 export default function Users(props) {
 
+    const theme = useTheme();
 
     const [ users, setUsers ] = useState([]);
-    const [ message, setMessage ] = useState("");
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -26,7 +28,7 @@ export default function Users(props) {
     const deleteButton = (props) => {
         return (
             <>
-                <Button variant={"contained"} color={"error"} onClick={ () => handleDeletion(props.row.id) }>Delete</Button>
+                <Button variant={"contained"} disableElevation={true} color={"error"} onClick={ () => handleDeletion(props.row.id) }>Delete</Button>
             </>
         );
     }
@@ -61,6 +63,31 @@ export default function Users(props) {
         setLoading(false);
     }
 
+    // for notifications
+    function showSuccessNotification(message) {
+        toast.info(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
+    function showErrorNotification(message) {
+        toast.error(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
 
     const handleDeletion = async (id) => {
         setLoading(true);
@@ -77,19 +104,19 @@ export default function Users(props) {
             console.log(data);
             getUsers();
             if(data.error){
-                setMessage(data.error);
+                showErrorNotification(data.error);
             }else{
-                setMessage(data.message);
+                showSuccessNotification(data.message);
             }
         }).catch(e => console.log(e.message));
     }
 
     return (
         <Box component={"div"}>
-            <Typography  variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem" }} color={"primary"}>Users</Typography>
+            <Typography  variant={"h4"} textAlign={"center"} sx={{ marginY : "2rem", color: theme.palette.primary.main }}>Users</Typography>
             <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center", marginY : "8rem"}}>
                 <Box sx={{ width : "50rem", margin : "6rem auto", paddingY : "3rem" }}>
-                    <DataGrid autoHeight={true} loading={loading} disableSelectionOnClick={true} sx={{ boxShadow : 5, color : "#f08a5d", marginY : "1rem" }} density={"comfortable"} rows={users} columns={columns} />
+                    <DataGrid autoHeight={true} loading={loading} disableSelectionOnClick={true} sx={{ boxShadow : 5, color : theme.palette.primary.main, marginY : "1rem", borderRadius : 5 }} density={"comfortable"} rows={users} columns={columns} />
                 </Box>
             </Box>
         </Box>
