@@ -48,7 +48,11 @@ export default function EventDetails(props) {
         menu2Food : [],
         menu3Food : [],
         equipment : [],
-        date : new Date()
+        date : new Date(),
+        userId : "",
+        phoneNumber : "",
+        totalPrice : 0,
+        advancePayment : 0,
     });
 
     // for handling the prices of the selected fields
@@ -99,7 +103,6 @@ export default function EventDetails(props) {
             }
         })[0];
         setGuestCountState(count);
-        console.log("first");
         const returnedVenues = props.eventProps.venues.filter((venue) => venue.guestCountId === event.guest);
         setVenues(returnedVenues);
     }, [event.guest]);
@@ -185,7 +188,9 @@ export default function EventDetails(props) {
 
     //for calculating price on each item change
     useEffect( () => {
-        setTotalPrice(Object.values(prices).reduce((a, b) => a + b));
+        setEvent((prevEvent) => ({
+            ...prevEvent, totalPrice : Object.values(prices).reduce((a, b) => a + b)
+        }));
     }, [prices]);
 
     useEffect(() => {
@@ -228,9 +233,7 @@ export default function EventDetails(props) {
         let Difference_In_Time = date.getTime() - new Date().getTime();
         // To calculate the no. of days between two dates
         let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-        console.log(Difference_In_Days, Difference_In_Days < 4);
         if(filteredDate.length > 0){
-            // TODO: show notification if same date is selected or if the selected date is less than 5 days from today
             showErrorNotification("Select a date different from the pre registered events!");
         } else if(Difference_In_Days < 4) {
             showErrorNotification("Select a date that is 4 days from now or more!");
@@ -255,7 +258,7 @@ export default function EventDetails(props) {
             menu3Food: event.menu3Food,
             equipment: event.equipment,
             date: new Date(event.date),
-            price : totalPrice
+            price : event.totalPrice
         }
         await fetch(`/api/events/updateEvent`, {
             method : 'PUT',
@@ -286,7 +289,6 @@ export default function EventDetails(props) {
 
         }
     }
-
 
     //if the form is being used in the dashboard for editing an event
     useEffect( () => {
@@ -510,7 +512,7 @@ export default function EventDetails(props) {
                     </Grid>
                     <Grid item xs={12} sm={12} lg={12}>
                         <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "space-between"}}>
-                            <Typography variant={"subtitle1"} fontSize={20}>Total Price (Rs): {totalPrice}</Typography>
+                            <Typography variant={"subtitle1"} fontSize={20}>Total Price (Rs): {event.totalPrice}</Typography>
                             <Button type={"submit"} variant={"contained"} disableElevation={true} color={"primary"} size={"large"} sx={{ color : "white"}} disabled={event.guest === "" || event.venue === "" || event.eventType === ""|| event.date.getDate() === new Date().getDate() || (event.menu1Food.length === 0 && event.menu2Food.length === 0 && event.menu3Food.length === 0)}>{props?.event ? "Update" : "Next"}</Button>
                         </Box>
                     </Grid>

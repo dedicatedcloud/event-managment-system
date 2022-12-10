@@ -7,11 +7,10 @@ import FormHelperText from "@mui/material/FormHelperText";
 
 export default function CheckOut({ next, back, data, props}) {
 
-    const { eventType, guest, venue, environment, menu1Food, menu2Food, menu3Food, equipment } = data.event;
+    const { eventType, guest, venue, environment, menu1Food, menu2Food, menu3Food, equipment, totalPrice } = data.event;
     const { phoneNumber } = data;
-    const { totalPrice } = data;
 
-    const advancePayment = totalPrice * 0.3;
+    const advancePayment = Math.ceil(totalPrice * 0.3);
 
     const guestData = props.guests.filter( g => g.id === guest)[0];
     const venueData = props.venues.filter( v => v.id === venue)[0];
