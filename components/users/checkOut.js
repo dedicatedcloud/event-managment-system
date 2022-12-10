@@ -32,7 +32,7 @@ export default function CheckOut({ next, back, data, props}) {
                     menu2.push(f.name);
                 }
                 else if(f.menu === "Menu 3") {
-                    menu2.push(f.name);
+                    menu3.push(f.name);
                 }
             }
         });
