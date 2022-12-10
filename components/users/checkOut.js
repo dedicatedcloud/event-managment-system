@@ -72,9 +72,10 @@ export default function CheckOut({ next, back, data, props}) {
                     </Grid>
                     <Grid item xs={12} sm={6} md={6} lg={6}>
                         <Typography variant={"h6"} width={"100%"} gutterBottom color={"primary"}>Food Selection:</Typography>
-                        <Typography gutterBottom>Menu One: { menu1.length === 0 ? "None" : menu1.join(", ") }</Typography>
-                        <Typography gutterBottom>Menu 2: { menu2.length === 0 ? "None" : menu2.join(", ") }</Typography>
-                        <Typography>Menu 3: { menu3.length === 0 ? "None" : menu3.join(",") }</Typography>
+                        { menu1.length > 0 && <Typography gutterBottom>Menu
+                            One: {menu1.length === 0 ? "None" : menu1.join(", ")}</Typography>}
+                        { menu2.length > 0 && <Typography gutterBottom>Menu 2: {menu2.length === 0 ? "None" : menu2.join(", ")}</Typography>}
+                        { menu3.length > 0 && <Typography>Menu 3: {menu3.length === 0 ? "None" : menu3.join(",")}</Typography>}
                     </Grid>
                     <Grid item xs={12} sm={6} md={6} lg={6}>
                         <Typography variant={"h6"} width={"100%"} gutterBottom color={"primary"}>Equipment Selection:</Typography>

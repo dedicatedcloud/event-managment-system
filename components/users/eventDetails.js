@@ -186,7 +186,7 @@ export default function EventDetails(props) {
     //for calculating price on each item change
     useEffect( () => {
         setTotalPrice(Object.values(prices).reduce((a, b) => a + b));
-    }, [ prices.venuePrice, prices.menu1FoodPrice, prices.menu2FoodPrice, prices.menu3FoodPrice, prices.equipmentPrice ]);
+    }, [prices]);
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -233,7 +233,7 @@ export default function EventDetails(props) {
             // TODO: show notification if same date is selected or if the selected date is less than 5 days from today
             showErrorNotification("Select a date different from the pre registered events!");
         } else if(Difference_In_Days < 4) {
-            showErrorNotification("Select a date that is 5 days from now or more!");
+            showErrorNotification("Select a date that is 4 days from now or more!");
         }
         else{
             setEvent(prevEvent => ({

@@ -25,15 +25,21 @@ export default function Foods(props) {
                 <Typography variant={"h4"} align={"left"}  sx={{ marginY : "2rem" }} color={"primary"}>Menu 1:</Typography>
 <Grid container rowSpacing={5} columnSpacing={6}>
                     {
-                        menu1.map((sf, i) => {
+                        menu1.map((m1, i) => {
                             return (
                                 <Grid item key={i}  xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"}>
                                     <Card sx={{ width : { xs : "20rem", sm : "25rem", md : "25rem", lg : "25rem" } }} elevation={3}>
-                                        <CardContent>
-                                            <Image src={"/Food/"+sf.picture} width={500} height={500} alt={""}/>
-                                            <Typography>{ sf.name }</Typography>
-                                            <Typography>{ sf.type }</Typography>
-                                            <Typography>Rs.{ sf.price }</Typography>
+                                        <CardContent sx={{
+                                            padding: 0
+                                        }}>
+                                            <Image src={"/Food/"+m1.picture} width={500} height={500}/>
+                                            <Box sx={{
+                                                padding: 2
+                                            }}>
+                                                <Typography variant={"h5"} gutterBottom>{ m1.name }</Typography>
+                                                <Typography variant={"h6"} gutterBottom>Rs.{ m1.price }</Typography>
+                                                <Typography variant={"body1"} gutterBottom>{ m1.type }</Typography>
+                                            </Box>
                                         </CardContent>
                                     </Card>
                                 </Grid>
@@ -44,15 +50,21 @@ export default function Foods(props) {
                 <Typography variant={"h4"} align={"left"}  sx={{ marginY : "2rem" }} color={"primary"}>Menu 2:</Typography>
                 <Grid container rowSpacing={5} columnSpacing={6}>
                     {
-                        menu2.map((mf, i) => {
+                        menu2.map((m2, i) => {
                             return (
                                 <Grid item key={i} xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"}>
                                     <Card sx={{ width : { xs : "20rem", sm : "25rem", md : "25rem", lg : "25rem" } }} elevation={3}>
-                                        <CardContent>
-                                            <Image src={"/Food/"+mf.picture} width={500} height={500} alt={""}/>
-                                            <Typography>{ mf.name }</Typography>
-                                            <Typography>{ mf.type }</Typography>
-                                            <Typography>{ mf.price }</Typography>
+                                        <CardContent sx={{
+                                            padding: 0
+                                        }}>
+                                            <Image src={"/Food/"+m2.picture} width={500} height={500}/>
+                                            <Box sx={{
+                                                padding: 2
+                                            }}>
+                                                <Typography variant={"h5"} gutterBottom>{ m2.name }</Typography>
+                                                <Typography variant={"h6"} gutterBottom>Rs.{ m2.price }</Typography>
+                                                <Typography variant={"body1"} gutterBottom>{ m2.type }</Typography>
+                                            </Box>
                                         </CardContent>
                                     </Card>
                                 </Grid>
@@ -63,15 +75,21 @@ export default function Foods(props) {
                 <Typography variant={"h4"} align={"left"}  sx={{ marginY : "2rem" }} color={"primary"}>Menu 3:</Typography>
                 <Grid container rowSpacing={5} columnSpacing={6}>
                     {
-                        menu3.map((df, i) => {
+                        menu3.map((m3, i) => {
                             return (
                                 <Grid item key={i} xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"}>
                                     <Card sx={{ width : { xs : "20rem", sm : "25rem", md : "25rem", lg : "25rem" } }} elevation={3}>
-                                        <CardContent>
-                                            <Image src={"/Food/"+df.picture} width={500} height={500} alt={""}/>
-                                            <Typography>{ df.name }</Typography>
-                                            <Typography>{ df.type }</Typography>
-                                            <Typography>{ df.price }</Typography>
+                                        <CardContent sx={{
+                                            padding: 0
+                                        }}>
+                                            <Image src={"/Food/"+m3.picture} width={500} height={500}/>
+                                            <Box sx={{
+                                                padding: 2
+                                            }}>
+                                                <Typography variant={"h5"} gutterBottom>{ m3.name }</Typography>
+                                                <Typography variant={"h6"} gutterBottom>Rs.{ m3.price }</Typography>
+                                                <Typography variant={"body1"} gutterBottom>{ m3.type }</Typography>
+                                            </Box>
                                         </CardContent>
                                     </Card>
                                 </Grid>

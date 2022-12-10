@@ -37,13 +37,12 @@ const handler = nc({
             try{
                 const { name, location, description, date } = req.body;
                 const { filename } = req.file;
-                console.log(req.body, "req body");
                 const ourEvent = await prisma.companyEvents.create({
                     data : {
                         name : name,
                         location : location,
                         description : description,
-                        date: date,
+                        date: new Date(date),
                         picture : filename
                     }
                 });

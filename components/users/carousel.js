@@ -5,6 +5,9 @@ import sliderImg2 from "../../public/assets/sliderImage2.jpg";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {useTheme} from "@mui/material/styles";
 import Carousel from "nuka-carousel";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import IconButton from "@mui/material/IconButton";
 
 
 function CustomCarousel() {
@@ -12,29 +15,27 @@ function CustomCarousel() {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const images = [sliderImg1, sliderImg2];
+    const CustomIconButton = ({ icon }) => {
+        return <IconButton size={"large"}  sx={{ backgroundColor: theme.palette.secondary.light }}>{ icon }</IconButton>
+    }
 
-    const [current, setCurrent] = useState(0);
-    const length = images.length;
-
-    const nextSlide = () => {
-        setCurrent(current === length - 1 ? 0 : current + 1);
-    };
-
-    const prevSlide = () => {
-        setCurrent(current === 0 ? length - 1 : current - 1);
-    };
-
-    useEffect( () => {
-        const timer = () => setTimeout(() => nextSlide(),4000);
-        const timerId = timer();
-        return () => {
-            clearTimeout(timerId);
-        };
-    }, [current])
+    const config = {
+        nextButtonStyle: {
+            backgroundColor: "transparent",
+        },
+        nextButtonText: <CustomIconButton icon={<ArrowForwardIosIcon sx={{ color: theme.palette.primary.main }} fontSize={"large"}/>}/> ,
+        prevButtonStyle: {
+            backgroundColor: "transparent",
+        },
+        prevButtonText: <CustomIconButton icon={<ArrowBackIosNewIcon sx={{ color: theme.palette.primary.main }} fontSize={"large"}/>}/>,
+        pagingDotsStyle: {
+            fill: theme.palette.primary.main,
+            backgroundColor: "transparent",
+        }
+    }
 
     return (
-            <Carousel animation={"zoom"} autoplay={true} pauseOnHover={true} speed={2000} swiping={true} wrapAround={true}>
+            <Carousel animation={"zoom"} autoplay={true} defaultControlsConfig={config} pauseOnHover={true} speed={2000} swiping={true} wrapAround={true}>
                 <Image src={sliderImg1} placeholder={"blur"} layout={"responsive"} height={!matches ? 550 : 600} alt={"sliderImage1"}/>
                 <Image src={sliderImg2} placeholder={"blur"} layout={"responsive"} height={!matches ? 550 : 600} alt={"sliderImage2"}/>
             </Carousel>
@@ -42,15 +43,3 @@ function CustomCarousel() {
 }
 
 export default CustomCarousel;
-
-{ /*<div style={{ overflow : "hidden", position : "relative" }}>
-{ images.map((image, index) => (
-<div key={index}  className={index === current ? 'slide active' : 'slide'}>
-{ index === current && <Image src={image} placeholder={"blur"} layout={"responsive"} height={!matches ? 550 : 600} alt={"sliderImage"}/>}
-<div className={"indicators"}>
-<div className={ current === 0 ? "dots activeDot" : "dots" } />
-<div className={ current === 1 ? "dots activeDot" : "dots" } />
-</div>
-</div>
-))}
-</div>*/}

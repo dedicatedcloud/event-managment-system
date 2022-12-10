@@ -24,10 +24,16 @@ export default function Venues(props) {
                             return (
                                 <Grid item key={i} xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"}>
                                     <Card sx={{ width : { xs : "20rem", sm : "25rem", md : "25rem", lg : "25rem" } }}>
-                                        <CardContent>
+                                        <CardContent sx={{
+                                            padding: 0
+                                        }}>
                                             <Image src={"/Equipment/"+equipment.picture} width={500} height={500}/>
-                                            <Typography>{ equipment.name }</Typography>
-                                            <Typography>Rs.{ equipment.price }</Typography>
+                                            <Box sx={{
+                                                padding: 2
+                                            }}>
+                                                <Typography variant={"h5"} gutterBottom>{ equipment.name }</Typography>
+                                                <Typography variant={"h6"} gutterBottom>Rs.{ equipment.price }</Typography>
+                                            </Box>
                                         </CardContent>
                                     </Card>
                                 </Grid>

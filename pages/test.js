@@ -1,76 +1,130 @@
-/*
-import * as React from 'react';
-import Document, { Html, Head, Main, NextScript } from 'next/document';
-import createEmotionServer from '@emotion/server/create-instance';
-import createEmotionCache from '../src/createEmotionCache';
+import React from "react";
+import { useForm } from "react-hook-form";
+import Switch from "@mui/material/Switch";
+import { pink } from "@mui/material/colors";
+import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
+const SignUp = () => {
+    const { register, handleSubmit,formState: { errors } } = useForm();
+    console.log(errors);
+    const handleRegister = (data) => {
 
-export default class MyDocument extends Document {
-    render() {
-        return (
-            <Html lang="en">
-                <Head>
-                    {/!* PWA primary color
-                    <meta name="theme-color"
-                          content={theme.palette.primary.main} />
-                    <link rel="shortcut icon"
-                          href="/static/favicon.ico" />
-                    <link
-                        rel="stylesheet"
-                        href=
-                            "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-                    />*!/}
-                    {/!* Inject MUI styles first to match with the prepend: true configuration. *!/}
-                    {this.props.emotionStyleTags}
-                </Head>
-                <body>
-                <Main />
-                <NextScript />
-                </body>
-            </Html>
-        );
+        console.log(data);
     }
-}
 
-// `getInitialProps` belongs to `_document` (instead of `_app`),
-// it's compatible with static-site generation (SSG).
-MyDocument.getInitialProps = async (ctx) => {
+    return (
+            <div className="formContainer">
+                <div className="formHeading">
+                    <h3 className="heading">SIGNUP</h3>
+                </div>
+                <form onSubmit={handleSubmit(handleRegister)}>
+                    <div className="row">
+                        <div className="column">
+                            <label htmlFor="">First Name*</label>
+                            <input type="text" {...register("firstName",{ required: true, maxLength: 20 })}  />
+                            {/* {errors.firstName?.type==="required" && <span className="error">This field is required</span>} */}
+                        </div>
+                        <div className="column">
+                            <label htmlFor="">Last Name*</label>
+                            <input type="text" {...register("lastName",{ required: true, maxLength: 20 })} />
+                            {/* {errors.lastName?.type==="required" && <span className="error">This field is required</span>} */}
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="column">
+                            <label htmlFor="">Mobile Number*</label>
+                            <input type="tel" {...register("mobileNumber",{ required: true, maxLength: 11 })} />
+                            {/* {errors.mobileNumber?.type==="required" && <span className="error">This field is required</span>} */}
+                        </div>
+                        <div className="column">
+                            <label htmlFor="">Email*</label>
+                            <input type="email" {...register("email",{ required: true, maxLength: 30 })} />
+                            {/* {errors.email?.type==="required" && <span className="error">This field is required</span>} */}
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="column">
+                            <label htmlFor="">Cnic*</label>
+                            <input type="text" {...register("cnic",{ required: true, maxLength: 20 },{pattern:"[7-9]{1}[0-9]{9}" })} />
+                            {/* {errors.cnic?.type==="required" && <span className="error">This field is required</span>} */}
+                        </div>
+                        <div className="column">
+                            <label htmlFor="">Address*</label>
+                            <input type="text" {...register("address",{ required: true, maxLength: 20 })} />
+                            {/* {errors.address?.type==="required" && <span className="error">This field is required</span>} */}
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="column">
+                            <label htmlFor="">Password*</label>
+                            <input type="text" {...register("password",{ required: true, maxLength: 20 })} />
+                            {/* {errors.password?.type==="required" && <span className="error">This field is required</span>} */}
+                        </div>
+                        <div className="column">
+                            <label htmlFor="">Confirm Password*</label>
+                            <input type="password" {...register("confirmPassword",{ required: true, maxLength: 20 })} />
+                            {/* {errors.confirmPassword?.type==="required" && <span className="error">This field is required</span>} */}
+                        </div>
+                    </div>
+                    <div className="genderRow">
+                        <p>Gender:</p>
+                        <RadioGroup
+                            row
+                            aria-labelledby="demo-controlled-radio-buttons-group"
+                            name="controlled-radio-buttons-group"
+                            {...register("gender",{ required: true})}
+                            >
+                            <FormControlLabel
+                                sx={{fontSize:"18px",color:"#524242"}}
+                                value="female"
+                                control={
+                                    <Radio
+                                        sx={{
+                                        "&.Mui-checked": {
+                                            color: pink[600],
+                                        },
+                                            '& .MuiSvgIcon-root': {
+                                            fontSize: 20,
+                                            },
+                                        }}
+                                    />
+                                }
+                                label="Female"
+                            />
+                            <FormControlLabel
+                                sx={{fontSize:"18px",color:"#524242",marginLeft:"45px"}}
+                                value="male"
+                                control={
+                                    <Radio
+                                        sx={{
+                                        "&.Mui-checked": {
+                                            color: pink[600],
+                                        },
+                                            '& .MuiSvgIcon-root': {
+                                            fontSize: 20,
+                                            },
+                                        }}
+                                    />
+                                }
+                                label="Male"
+                            />
+                        </RadioGroup>
+                        {/* {errors.gender?.type==="required" && <span className="error">This field is required</span>} */}
+                    </div>
+                    <div className="row">
+                        <div className="switchCheck">
+                            <Switch color="success" {...register("acceptTerms",{ required: true})} /><span className="checkConditionText">
+                            I understand and agree that the use of this Website are subject to the.
+                        </span> <br />
+                            {/* {errors.acceptTerms?.type==="required" && <span className="error">This field is required</span>} */}
+                        </div>
+                    </div>
+                    <div className="formBtn">
+                        {/* <input type="submit" className="signupBtn" value="SIGN UP"/> */}
+                        <button className="signupBtn" type="submit">SIGN UP</button>
+                    </div>
+                </form>
+            </div>
+            );
+};
 
-    const originalRenderPage = ctx.renderPage;
-
-    // You can consider sharing the same emotion cache between
-    // all the SSR requests to speed up performance.
-    // However, be aware that it can have global side effects.
-
-    const cache = createEmotionCache();
-    const { extractCriticalToChunks } = createEmotionServer(cache);
-
-    ctx.renderPage = () =>
-        originalRenderPage({
-            enhanceApp: (App) =>
-                function EnhanceApp(props) {
-                    return <App emotionCache={cache} {...props} />;
-                },
-        });
-
-    const initialProps = await Document.getInitialProps(ctx);
-
-    // This is important. It prevents emotion to render invalid HTML.
-    // See
-// https://github.com/mui-org/material-ui/issues/26561#issuecomment-855286153
-
-    const emotionStyles = extractCriticalToChunks(initialProps.html);
-    const emotionStyleTags = emotionStyles.styles.map((style) => (
-        <style
-            data-emotion={`${style.key} ${style.ids.join(' ')}`}
-            key={style.key}
-
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: style.css }}
-        />
-    ));
-
-    return {
-        ...initialProps,
-        emotionStyleTags,
-    };
-};*/
+export default SignUp;

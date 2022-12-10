@@ -19,6 +19,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import {useTheme} from "@mui/material/styles";
+import {toast} from "react-toastify";
 
 
 export default function CompanyEvents(props) {
@@ -27,7 +28,6 @@ export default function CompanyEvents(props) {
 
     const [ourEvents, setOurEvents] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
 
     // for date picker
     const [value, setValue] = React.useState(null);
@@ -40,7 +40,7 @@ export default function CompanyEvents(props) {
         name : yup.string().required("Name is required").min(8, "Name must be at least 8 characters long"),
         location : yup.string().required("Location is required").min(5, "Location must be at least 10 characters long"),//change back to 10
         description : yup.string().required("Description is required").min(5, "Description must be at least 100 characters long"),//change back to 10
-        date: yup.date().required("Date is required"),
+        // date: yup.string().required("Date is required"),
         picture : yup.mixed().required("Pictures are required")
     });
 
@@ -60,6 +60,30 @@ export default function CompanyEvents(props) {
         setOurEvents(ourEvents);
     }
 
+    // for notifications
+    function showSuccessNotification(message) {
+        toast.info(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
+    function showErrorNotification(message) {
+        toast.error(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
 
     //for Images & editing them
     const DisplayImage = (props) => {
@@ -68,7 +92,7 @@ export default function CompanyEvents(props) {
 
     const SelectImage = (props) => {
         const { id, field, value, api } = props;
-        return <TextField type={"file"} onChange={ async (e) => {
+        return <TextField variant={"standard"} type={"file"} onChange={ async (e) => {
             api.setEditCellValue({id, field, value: e.target.files[0]}, e);
             const isValid = await api.commitCellChange({id, field});
             if (isValid) {
@@ -82,7 +106,7 @@ export default function CompanyEvents(props) {
     const deleteButton = (props) => {
         return (
             <>
-                <Button variant={"contained"} color={"error"} onClick={ () => handleDeletion(props.row.id) }>Delete</Button>
+                <Button variant={"contained"} disableElevation={true} color={"error"} onClick={ () => handleDeletion(props.row.id) }>Delete</Button>
             </>
         );
     }
@@ -170,7 +194,7 @@ export default function CompanyEvents(props) {
         formData.append("name", name);
         formData.append("location", location);
         formData.append("description", description);
-        formData.append("date", date);
+        formData.append("date", value);
         formData.append("image", picture[0]);
         fetch("/api/companyEvents/addCompanyEvent", {
             method : "POST",
@@ -178,23 +202,23 @@ export default function CompanyEvents(props) {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data, "response from server");
                 if(data.error){
                     setLoading(false);
-                    setMessage(data.error);
+                    showErrorNotification(data.error);
+                    console.log(data.error);
                 }else{
+                    showSuccessNotification(data.message);
                     getEvents();
                     setLoading(false);
-                    setMessage(data.message);
                 }
                 //need to empty fields after form submission
-                reset({
+                /*reset({
                     name : "",
                     location : "",
                     description : "",
                     date: "",
                     picture : ""
-                });
+                });*/
             })
             .catch(e => console.log(e.message));
     };
@@ -212,12 +236,13 @@ export default function CompanyEvents(props) {
         }).then(res => res.json()).then(data => {
             console.log(data);
             if(data.error){
-                setMessage(data.error);
+                setLoading(false);
+                showErrorNotification(data.error);
             }
             else{
+                showSuccessNotification(data.message);
                 getEvents();
                 setLoading(false);
-                setMessage(data.message)
             }
         }).catch(e => console.log(e.message));
     };
@@ -242,18 +267,18 @@ export default function CompanyEvents(props) {
             .then(res => res.json())
             .then(data => {
                 setLoading(false);
-                console.log(data);
                 if(data.error){
-                    setMessage(data.error);
+                    showErrorNotification(data.error);
                 }else{
+                    showSuccessNotification(data.message);
                     getEvents();
                     setLoading(false);
-                    setMessage(data.message);
                 }
             })
             .catch(e => console.log(e.message));
     }
 
+    console.log(errors);
     return (
         <>
             <Box component={"div"}>
@@ -276,7 +301,8 @@ export default function CompanyEvents(props) {
                             </LocalizationProvider>
                             </Box>
                             <Controller control={control} render={({field}) => (<TextField type={"file"} onChange={ ({target}) => field.onChange(target.files) } sx={{ marginY : "1rem" }} variant={"standard"} error={!!errors.picture} helperText={errors.picture?.message} fullWidth />)} name="picture"/>
-                            <Button type={"submit"} size={"large"}  variant={"contained"} disableElevation={true} sx={{ color : "white", marginY : "1rem", borderRadius : 2, backgroundColor: theme.palette.primary.main }}>Add</Button>                        </form>
+                            <Button type={"submit"} size={"large"}  variant={"contained"} disableElevation={true} sx={{ color : "white", marginY : "1rem", borderRadius : 2, backgroundColor: theme.palette.primary.main }}>Add</Button>
+                        </form>
                     </Box>
                 </Box>
                 <Box component={"div"} sx={{ display : "flex", flexDirection : "column", justifyContent : "center"}}>
@@ -317,7 +343,7 @@ export async function getServerSideProps({req}){
             return {
                 props : {
                     user: session.user,
-                    ourEvents : ourEvents
+                    ourEvents : ourEvents ?? []
                 },
             }
         }

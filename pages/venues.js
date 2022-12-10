@@ -23,12 +23,18 @@ export default function Venues(props) {
                         venues.map((venue, i) => {
                             return (
                                 <Grid item key={i} xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"} >
-                                    <Card sx={{ width : { xs : "20rem", sm : "25rem", md : "25rem", lg : "25rem", boxShadow : 10 } }}>
-                                        <CardContent>
+                                    <Card sx={{ width : { xs : "20rem", sm : "25rem", md : "25rem", lg : "25rem", boxShadow : 1 } }}>
+                                        <CardContent sx={{
+                                            padding: 0
+                                        }}>
                                             <Image src={"/Venues/"+venue.picture} width={500} height={500}/>
-                                            <Typography>{ venue.name }</Typography>
-                                            <Typography>Rs.{ venue.price }</Typography>
-                                            <Typography>{ venue.location }</Typography>
+                                            <Box sx={{
+                                                padding: 2
+                                            }}>
+                                                <Typography variant={"h5"} gutterBottom>{ venue.name }</Typography>
+                                                <Typography variant={"h6"} gutterBottom>Rs.{ venue.price }</Typography>
+                                                <Typography variant={"body1"} gutterBottom>{ venue.location }</Typography>
+                                            </Box>
                                         </CardContent>
                                     </Card>
                                 </Grid>
