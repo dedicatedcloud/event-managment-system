@@ -40,7 +40,7 @@ function EventCards({event, data, fetchEvents}) {
                         <Typography variant="subtitle1" color={"primary"} sx={{marginY: "1rem"}}>Event Status: {event.event_status}</Typography>
                     </CardContent>
                     <CardActions>
-                        <Button variant={"contained"} disableElevation={true} color={"info"} sx={{marginBottom: 1, borderRadius: 2}} size={"large"} onClick={handleToggle} disabled={Difference_In_Days < 4} startIcon={<DeleteIcon/>}>Edit</Button>
+                        <Button variant={"contained"} disableElevation={true} color={"info"} sx={{marginBottom: 1, borderRadius: 2}} size={"large"} onClick={handleToggle} disabled={Difference_In_Days <= 4} startIcon={<DeleteIcon/>}>Edit</Button>
                     </CardActions>
                 </Card>
                 <Backdrop

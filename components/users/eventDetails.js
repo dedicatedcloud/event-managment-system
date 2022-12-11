@@ -314,6 +314,7 @@ export default function EventDetails(props) {
                     }
                 }
             }
+
             for(let i = 0; i < event.event_equipment.length; i++){
                 for(let j = 0; j < props.eventProps.equipment.length; j++){
                     if(event.event_equipment[i] === props.eventProps.equipment[j].id){
@@ -328,8 +329,6 @@ export default function EventDetails(props) {
                 }
             })[0];
             setGuestCountState(count);
-            console.log(guestCountState, "guest count state");
-            /*setGuestCountState(count.max);*/
 
             setEvent({
                 eventType: event.event_type,

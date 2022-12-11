@@ -1,13 +1,11 @@
-import { getSession } from "next-auth/react";
-import prisma from "../../../lib/prisma";
+import prisma from "../../../..//lib/prisma";
 
 export default async function handler(req, res) {
-    const session = await getSession({ req });
-    if(session) {
+    const {token} = JSON.parse(req.body);
+    if(token) {
         try {
             const { event, phoneNumber, email, advancePayment } = JSON.parse(req.body);
             console.log(event);
-            const userId = session.user.id;
 
             // combine the arrays into a single array
             let foods = event.menu1Food.concat(event.menu2Food, event.menu3Food);
@@ -26,7 +24,7 @@ export default async function handler(req, res) {
                     guestCountId : event.guest,
                     event_environment : event.environment,
                     venueId : event.venue,
-                    userId,
+                    userId : event.userId,
                     phone_number : phoneNumber,
                     date : event.date,
                     total_price : event.totalPrice,
