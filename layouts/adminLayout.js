@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import {styled, useTheme} from '@mui/material/styles';
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
@@ -29,12 +29,13 @@ import EventIcon from '@mui/icons-material/Event';
 import Footer from "../components/footer";
 import Head from "next/head";
 import TodayIcon from '@mui/icons-material/Today';
+import {useState} from "react";
 
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
     width: drawerWidth,
-    backgroundColor : theme.palette.primary.main,
+    backgroundColor: theme.palette.primary.main,
     transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
@@ -48,14 +49,14 @@ const closedMixin = (theme) => ({
         duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: 'hidden',
-    backgroundColor : theme.palette.primary.main,
+    backgroundColor: theme.palette.primary.main,
     width: `calc(${theme.spacing(7)} + 1px)`,
     [theme.breakpoints.up('sm')]: {
         width: `calc(${theme.spacing(8)})`,
     },
 });
 
-const DrawerHeader = styled('div')(({ theme }) => ({
+const DrawerHeader = styled('div')(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -66,7 +67,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
+})(({theme, open}) => ({
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
@@ -82,8 +83,8 @@ const AppBar = styled(MuiAppBar, {
     }),
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
+const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
+    ({theme, open}) => ({
         width: drawerWidth,
         flexShrink: 0,
         whiteSpace: 'nowrap',
@@ -101,56 +102,56 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function AdminLayout(props) {
     const theme = useTheme();
-    const [open, setOpen] = React.useState(true);
-    const { data: session, status } = useSession();
+    const [open, setOpen] = useState(true);
+    const {data: session, status} = useSession();
 
     //For Drawer Links
 
     const links = [
         {
-            href : "/admin/dashboard",
-            icon : <DashboardIcon fontSize={"medium"} color={"secondary"}/>,
-            text : "Home"
+            href: "/admin/dashboard",
+            icon: <DashboardIcon fontSize={"medium"} color={"secondary"}/>,
+            text: "Home"
         },
         {
-            href : "/admin/guest",
-            icon : <PeopleAltIcon fontSize={"medium"} color={"secondary"}/>,
-            text : "Guest"
+            href: "/admin/guest",
+            icon: <PeopleAltIcon fontSize={"medium"} color={"secondary"}/>,
+            text: "Guest"
         },
         {
-            href : "/admin/venue",
-            icon : <HouseIcon fontSize={"medium"} color={"secondary"}/>,
-            text : "Venue"
+            href: "/admin/venue",
+            icon: <HouseIcon fontSize={"medium"} color={"secondary"}/>,
+            text: "Venue"
         },
         {
-            href : "/admin/food",
-            icon : <LocalDiningIcon fontSize={"medium"} color={"secondary"}/>,
-            text : "Food"
+            href: "/admin/food",
+            icon: <LocalDiningIcon fontSize={"medium"} color={"secondary"}/>,
+            text: "Food"
         },
         {
-            href : "/admin/equipment",
-            icon : <SpeakerIcon fontSize={"medium"} color={"secondary"}/>,
-            text : "Equipment"
+            href: "/admin/equipment",
+            icon: <SpeakerIcon fontSize={"medium"} color={"secondary"}/>,
+            text: "Equipment"
         },
         {
-            href : "/admin/events",
-            icon : <EventIcon fontSize={"medium"} color={"secondary"}/>,
-            text : "Events"
+            href: "/admin/events",
+            icon: <EventIcon fontSize={"medium"} color={"secondary"}/>,
+            text: "Events"
         },
         {
-            href : "/admin/companyEvents",
-            icon : <TodayIcon fontSize={"medium"} color={"secondary"}/>,
-            text : "Our Events"
+            href: "/admin/companyEvents",
+            icon: <TodayIcon fontSize={"medium"} color={"secondary"}/>,
+            text: "Our Events"
         },
         {
-            href : "/admin/users",
-            icon : <PersonIcon fontSize={"medium"} color={"secondary"}/>,
-            text : "Users"
+            href: "/admin/users",
+            icon: <PersonIcon fontSize={"medium"} color={"secondary"}/>,
+            text: "Users"
         },
         {
-            href : "/admin/admins",
-            icon : <AdminPanelSettingsIcon fontSize={"medium"} color={"secondary"}/>,
-            text : "Admins"
+            href: "/admin/admins",
+            icon: <AdminPanelSettingsIcon fontSize={"medium"} color={"secondary"}/>,
+            text: "Admins"
         }
 
     ];
@@ -164,12 +165,13 @@ export default function AdminLayout(props) {
     };
 
     return (
-        <Box sx={{ display: 'flex', backgroundColor : theme.palette.secondary.light, overflowX : "hidden" }}>
+        <Box sx={{display: 'flex', backgroundColor: theme.palette.secondary.light, overflowX: "hidden"}}>
             <Head>
                 <title>W&Decor Event Management</title>
                 <link rel="icon" type="image/x-icon" href="/assets/favicon.png"/>
             </Head>
-            <AppBar position="fixed" elevation={0}  open={open} sx={{ paddingY : 2, backgroundColor: theme.palette.secondary.light }}>
+            <AppBar position="fixed" elevation={0} open={open}
+                    sx={{paddingY: 2, backgroundColor: theme.palette.secondary.light}}>
                 <Toolbar>
                     <IconButton
                         color={"primary"}
@@ -178,27 +180,43 @@ export default function AdminLayout(props) {
                         edge="start"
                         sx={{
                             marginRight: '36px',
-                            ...(open && { display: 'none' }),
+                            ...(open && {display: 'none'}),
                         }}
                     >
-                        <MenuIcon fontSize={"large"} />
+                        <MenuIcon fontSize={"large"}/>
                     </IconButton>
-                    <Box component={"div"} sx={{ display : "flex", flexDirection : "row", justifyContent : "end", alignItems : "center", flexGrow : 1 }}>
-                        <Typography sx={{ margin : 0, paddingTop : 1, paddingX : 1, color : theme.palette.primary.main }} variant={"h6"}>Signed In As { status === "authenticated" && session.user.name } </Typography>
+                    <Box component={"div"} sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "end",
+                        alignItems: "center",
+                        flexGrow: 1
+                    }}>
+                        <Typography sx={{margin: 0, paddingTop: 1, paddingX: 1, color: theme.palette.primary.main}}
+                                    variant={"h6"}>Signed In
+                            As {status === "authenticated" && session.user.name} </Typography>
                         <DropDown/>
                     </Box>
                 </Toolbar>
             </AppBar>
-            <Drawer variant="permanent" open={open} sx={{ padding : 2 }}>
-                <DrawerHeader sx={{ display : "flex", justifyContent : "space-between", alignItems : "center", margin : 2, padding : 1,  backgroundColor : theme.palette.secondary.light,borderRadius : 3  }}>
-                      <Box component={"div"} sx={{ cursor : "pointer" }}>
-                          <Link href={"/"}><Image src={logo} width={"70rem"} height={"70rem"}/></Link>
-                      </Box>
-                       <Box component={"div"}>
-                           <IconButton onClick={handleDrawerClose}>
-                               <CloseIcon fontSize={"medium"} color={"primary"}/>
-                           </IconButton>
-                       </Box>
+            <Drawer variant="permanent" open={open} sx={{padding: 2}}>
+                <DrawerHeader sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    margin: 2,
+                    padding: 1,
+                    backgroundColor: theme.palette.secondary.light,
+                    borderRadius: 3
+                }}>
+                    <Box component={"div"} sx={{cursor: "pointer"}}>
+                        <Link href={"/"}><Image src={logo} width={"70rem"} height={"70rem"}/></Link>
+                    </Box>
+                    <Box component={"div"}>
+                        <IconButton onClick={handleDrawerClose}>
+                            <CloseIcon fontSize={"medium"} color={"primary"}/>
+                        </IconButton>
+                    </Box>
                 </DrawerHeader>
                 {/*<Divider/>*/}
                 <List>
@@ -209,7 +227,7 @@ export default function AdminLayout(props) {
                                     <ListItemIcon>
                                         {link.icon}
                                     </ListItemIcon>
-                                    <ListItemText primary={link.text} sx={{ color : theme.palette.secondary.light }} />
+                                    <ListItemText primary={link.text} sx={{color: theme.palette.secondary.light}}/>
                                 </ListItem>
                             </Link>
                         ))
@@ -217,9 +235,9 @@ export default function AdminLayout(props) {
                 </List>
                 {/*<Divider />*/}
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1 , height: '100vh'}}>
+            <Box component="main" sx={{flexGrow: 1, height: '100vh'}}>
                 <DrawerHeader/>
-                <Box component={"div"} sx={{ padding : 4, backgroundColor: theme.palette.secondary.light }}>
+                <Box component={"div"} sx={{padding: 4, backgroundColor: theme.palette.secondary.light}}>
                     {props.children}
                 </Box>
                 <Footer/>

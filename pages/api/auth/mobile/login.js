@@ -30,7 +30,7 @@ const handler = nc({
         });
     }else{
         return res.json({
-            message : "Invalid credentials!",
+            error : "Invalid credentials!",
         });
     }
 })
