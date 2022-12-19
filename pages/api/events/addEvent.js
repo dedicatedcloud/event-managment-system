@@ -1,11 +1,11 @@
-import { getSession } from "next-auth/react";
+import {getSession} from "next-auth/react";
 import prisma from "../../../lib/prisma";
 
 export default async function handler(req, res) {
-    const session = await getSession({ req });
-    if(session) {
+    const session = await getSession({req});
+    if (session) {
         try {
-            const { event, phoneNumber, email, advancePayment } = JSON.parse(req.body);
+            const {event, phoneNumber, email, advancePayment} = JSON.parse(req.body);
             console.log(event);
             const userId = session.user.id;
 
@@ -13,51 +13,51 @@ export default async function handler(req, res) {
             let foods = event.menu1Food.concat(event.menu2Food, event.menu3Food);
 
             let food = foods.map((f) => ({
-                foodId : f
+                foodId: f
             }));
 
             let equipment = event.equipment.map((e) => ({
-                equipmentId : e
+                equipmentId: e
             }));
 
             const _event = await prisma.events.create({
-                data : {
+                data: {
                     event_type: event.eventType,
-                    guestCountId : event.guest,
-                    event_environment : event.environment,
-                    venueId : event.venue,
+                    guestCountId: event.guest,
+                    event_environment: event.environment,
+                    venueId: event.venue,
                     userId,
-                    phone_number : phoneNumber,
-                    date : event.date,
-                    total_price : event.totalPrice,
-                    advance_payment : advancePayment,
-                    payment_status : "pending",
-                    event_status : "pending",
-                    event_foods : {
-                        create : food
+                    phone_number: phoneNumber,
+                    date: event.date,
+                    total_price: event.totalPrice - advancePayment,
+                    advance_payment: advancePayment,
+                    payment_status: "pending",
+                    event_status: "pending",
+                    event_foods: {
+                        create: food
                     },
-                    event_equipment : {
-                        create : equipment
+                    event_equipment: {
+                        create: equipment
                     },
                 }
             });
-            if(await _event){
+            if (await _event) {
                 return res.json({
-                    message : "Event created successfully",
+                    message: "Event created successfully",
                 });
-            } else{
+            } else {
                 return res.json({
-                    error : "Event creation failed!",
+                    error: "Event creation failed!",
                 });
             }
         } catch (e) {
             return res.json({
-                error : e.message
+                error: e.message
             });
         }
     } else {
         return res.json({
-            error : "Not Authenticated!"
+            error: "Not Authenticated!"
         });
     }
 }
